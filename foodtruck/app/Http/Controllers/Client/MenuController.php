@@ -12,12 +12,12 @@ class MenuController extends Controller
 {
     public function index(): Response
     {
-        $categories = Category::with(['products' => function ($q) {
-            $q->where('available', true)->orderBy('name');
-        }])->get();
-
         return Inertia::render('client/Menu', [
-            'categories' => $categories,
+            'categories' => Category::orderBy('name')->get(['id', 'name']),
+            'products'   => Product::with('category')
+                ->where('available', true)
+                ->orderBy('name')
+                ->get(['id', 'category_id', 'name', 'description', 'price', 'image', 'available']),
         ]);
     }
 

@@ -3,18 +3,28 @@
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Client;
 use App\Http\Controllers\PaymentController;
+use App\Models\Location;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
 // ─── Pública ─────────────────────────────────────────────────────────────────
 
-Route::inertia('/', 'Welcome', [
-    'canRegister' => Features::enabled(Features::registration()),
-])->name('home');
+Route::get('/', function () {
+    return inertia('Welcome', [
+        'canRegister'      => Features::enabled(Features::registration()),
+        'featuredProducts' => Product::where('available', true)
+            ->inRandomOrder()
+            ->take(6)
+            ->get(['id', 'name', 'description', 'price', 'image']),
+        'location'         => Location::whereDate('date', today())->first(),
+    ]);
+})->name('home');
 
 Route::get('/menu', [Client\MenuController::class, 'index'])->name('menu');
 Route::get('/menu/{product}', [Client\MenuController::class, 'show'])->name('menu.show');
 Route::post('/contact', [Client\ContactController::class, 'store'])->name('contact.store');
+Route::inertia('/cart', 'client/Cart')->name('cart');
 
 // ─── Stripe webhook (sin CSRF) ────────────────────────────────────────────────
 
