@@ -31,7 +31,7 @@ function submitContact() {
     <section class="relative overflow-hidden bg-amber-500 py-24 text-white">
         <div class="mx-auto max-w-4xl px-4 text-center">
             <p class="mb-2 text-lg font-medium uppercase tracking-widest text-amber-100">Bienvenido a</p>
-            <h1 class="mb-4 text-5xl font-extrabold leading-tight">🚚 FoodTruck</h1>
+            <h1 class="mb-4 text-5xl font-extrabold leading-tight">FoodTruck</h1>
             <p class="mx-auto mb-8 max-w-xl text-xl text-amber-100">
                 Comida fresca y artesanal en la calle. Bocadillos, hamburguesas, tapas y mucho más.
             </p>
@@ -54,7 +54,7 @@ function submitContact() {
                 class="overflow-hidden rounded-2xl bg-white shadow-md transition hover:shadow-lg"
             >
                 <div class="flex h-40 items-center justify-center bg-amber-100 text-5xl">
-                    {{ product.image ? '' : '🍔' }}
+                    {{ product.image ? '' : '' }}
                     <img v-if="product.image" :src="product.image" class="h-full w-full object-cover" :alt="product.name" />
                 </div>
                 <div class="p-4">

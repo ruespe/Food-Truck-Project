@@ -12,7 +12,7 @@ const { count } = useCart();
         <header class="sticky top-0 z-50 border-b border-amber-200 bg-white shadow-sm">
             <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
                 <Link href="/" class="flex items-center gap-2 text-xl font-bold text-amber-600">
-                    🚚 FoodTruck
+                     FoodTruck
                 </Link>
                 <div class="flex items-center gap-6 text-sm font-medium text-gray-700">
                     <Link href="/" class="hover:text-amber-600">Inicio</Link>
