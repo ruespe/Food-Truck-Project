@@ -39,54 +39,56 @@ function submit() {
 
 <template>
     <Head :title="product ? 'Editar producto · Admin' : 'Nuevo producto · Admin'" />
-    <template #header>
-        <h1 class="text-lg font-semibold text-gray-800">{{ product ? 'Editar producto' : 'Nuevo producto' }}</h1>
-    </template>
 
-    <form class="mx-auto max-w-2xl rounded-2xl bg-white p-8 shadow" @submit.prevent="submit">
-        <div class="mb-4">
-            <label class="mb-1 block text-sm font-medium text-gray-700">Nombre</label>
-            <input v-model="form.name" type="text" required class="w-full rounded-lg border px-3 py-2 focus:border-amber-400 focus:outline-none" />
-            <p v-if="form.errors.name" class="mt-1 text-xs text-red-500">{{ form.errors.name }}</p>
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-white">{{ product ? 'Editar producto' : 'Nuevo producto' }}</h1>
+        <p class="mt-1 text-sm text-slate-400">{{ product ? 'Modifica los datos del producto' : 'Añade un nuevo producto al catálogo' }}</p>
+    </div>
+
+    <form class="mx-auto max-w-2xl rounded-2xl bg-slate-800 border border-slate-700/50 p-8" @submit.prevent="submit">
+        <div class="mb-5">
+            <label class="mb-1.5 block text-sm font-medium text-slate-300">Nombre</label>
+            <input v-model="form.name" type="text" required class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none" />
+            <p v-if="form.errors.name" class="mt-1 text-xs text-red-400">{{ form.errors.name }}</p>
         </div>
 
-        <div class="mb-4">
-            <label class="mb-1 block text-sm font-medium text-gray-700">Descripción</label>
-            <textarea v-model="form.description" rows="3" class="w-full rounded-lg border px-3 py-2 focus:border-amber-400 focus:outline-none" />
+        <div class="mb-5">
+            <label class="mb-1.5 block text-sm font-medium text-slate-300">Descripción</label>
+            <textarea v-model="form.description" rows="3" class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none" />
         </div>
 
-        <div class="mb-4 grid grid-cols-2 gap-4">
+        <div class="mb-5 grid grid-cols-2 gap-4">
             <div>
-                <label class="mb-1 block text-sm font-medium text-gray-700">Precio (€)</label>
-                <input v-model="form.price" type="number" step="0.01" min="0" required class="w-full rounded-lg border px-3 py-2 focus:border-amber-400 focus:outline-none" />
+                <label class="mb-1.5 block text-sm font-medium text-slate-300">Precio (€)</label>
+                <input v-model="form.price" type="number" step="0.01" min="0" required class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none" />
             </div>
             <div>
-                <label class="mb-1 block text-sm font-medium text-gray-700">Stock</label>
-                <input v-model="form.stock" type="number" min="0" class="w-full rounded-lg border px-3 py-2 focus:border-amber-400 focus:outline-none" />
+                <label class="mb-1.5 block text-sm font-medium text-slate-300">Stock</label>
+                <input v-model="form.stock" type="number" min="0" class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none" />
             </div>
         </div>
 
-        <div class="mb-4">
-            <label class="mb-1 block text-sm font-medium text-gray-700">Categoría</label>
-            <select v-model="form.category_id" required class="w-full rounded-lg border px-3 py-2 focus:border-amber-400 focus:outline-none">
-                <option value="" disabled>Selecciona categoría</option>
+        <div class="mb-5">
+            <label class="mb-1.5 block text-sm font-medium text-slate-300">Categoría</label>
+            <select v-model="form.category_id" required class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white focus:border-amber-500 focus:outline-none">
+                <option value="" disabled class="text-slate-400">Selecciona categoría</option>
                 <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
             </select>
         </div>
 
-        <div class="mb-4">
-            <label class="mb-1 block text-sm font-medium text-gray-700">Imagen</label>
-            <input type="file" accept="image/*" class="w-full text-sm" @change="(e: Event) => form.image = (e.target as HTMLInputElement).files?.[0] ?? null" />
+        <div class="mb-6">
+            <label class="mb-1.5 block text-sm font-medium text-slate-300">Imagen</label>
+            <input type="file" accept="image/*" class="w-full text-sm text-slate-300 file:mr-3 file:rounded-lg file:border-0 file:bg-amber-500 file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-white hover:file:bg-amber-600" @change="(e: Event) => form.image = (e.target as HTMLInputElement).files?.[0] ?? null" />
         </div>
 
-        <div class="mb-6 flex items-center gap-2">
-            <input id="available" v-model="form.available" type="checkbox" class="rounded" />
-            <label for="available" class="text-sm font-medium text-gray-700">Disponible para la venta</label>
+        <div class="mb-6 flex items-center gap-3">
+            <input id="available" v-model="form.available" type="checkbox" class="h-4 w-4 rounded border-slate-600 bg-slate-700 accent-amber-500" />
+            <label for="available" class="text-sm font-medium text-slate-300">Disponible para la venta</label>
         </div>
 
         <div class="flex justify-end gap-3">
-            <a href="/admin/products" class="rounded-lg border px-5 py-2 text-sm text-gray-600 hover:bg-gray-50">Cancelar</a>
-            <button type="submit" :disabled="form.processing" class="rounded-lg bg-amber-500 px-6 py-2 text-sm font-bold text-white hover:bg-amber-600 disabled:opacity-50">
+            <a href="/admin/products" class="rounded-xl border border-slate-600 px-5 py-2 text-sm text-slate-300 hover:bg-slate-700 transition">Cancelar</a>
+            <button type="submit" :disabled="form.processing" class="rounded-xl bg-amber-500 px-6 py-2 text-sm font-bold text-white hover:bg-amber-600 disabled:opacity-50 transition">
                 {{ product ? 'Guardar cambios' : 'Crear producto' }}
             </button>
         </div>

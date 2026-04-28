@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import { Link, router } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import {
-    BarChart3,
-    ChevronRight,
     FolderOpen,
     LayoutDashboard,
     LogOut,
     MapPin,
     Package,
     ShoppingBag,
+    Truck,
 } from 'lucide-vue-next';
+import { computed } from 'vue';
+
+const page = usePage();
+const currentUrl = computed(() => page.url);
 
 const nav = [
     { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
@@ -17,36 +20,66 @@ const nav = [
     { label: 'Categorías', href: '/admin/categories', icon: FolderOpen },
     { label: 'Pedidos', href: '/admin/orders', icon: ShoppingBag },
     { label: 'Ubicación', href: '/admin/locations', icon: MapPin },
-    { label: 'Estadísticas', href: '/admin', icon: BarChart3 },
 ];
+
+function isActive(href: string) {
+    if (href === '/admin') return currentUrl.value === '/admin';
+    return currentUrl.value.startsWith(href);
+}
 
 function logout() {
     router.post('/logout');
 }
+
+const user = computed(() => (page.props.auth as any)?.user as { name: string; email: string } | undefined);
 </script>
 
 <template>
-    <div class="flex min-h-screen bg-gray-100">
+    <div class="flex min-h-screen bg-slate-900">
         <!-- Sidebar -->
-        <aside class="flex w-64 flex-col bg-gray-900 text-white">
-            <div class="border-b border-gray-700 px-6 py-5 text-xl font-bold text-amber-400">
-                🚚 Admin Panel
+        <aside class="flex w-64 flex-col flex-shrink-0 bg-slate-950 border-r border-slate-800">
+            <!-- Brand -->
+            <div class="flex items-center gap-3 px-5 py-6 border-b border-slate-800">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 flex-shrink-0">
+                    <Truck class="h-5 w-5 text-white" />
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-bold text-white">Food Truck</p>
+                    <p class="text-xs text-slate-500">Panel de administración</p>
+                </div>
             </div>
-            <nav class="flex-1 space-y-1 px-3 py-4">
+
+            <!-- Nav -->
+            <nav class="flex-1 space-y-0.5 px-3 py-4">
                 <Link
                     v-for="item in nav"
                     :key="item.href"
                     :href="item.href"
-                    class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-300 transition hover:bg-gray-800 hover:text-white"
+                    :class="[
+                        'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all',
+                        isActive(item.href)
+                            ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20'
+                            : 'text-slate-400 hover:bg-slate-800 hover:text-white',
+                    ]"
                 >
-                    <component :is="item.icon" class="h-4 w-4" />
+                    <component :is="item.icon" class="h-4 w-4 flex-shrink-0" />
                     {{ item.label }}
-                    <ChevronRight class="ml-auto h-3 w-3 opacity-40" />
                 </Link>
             </nav>
-            <div class="border-t border-gray-700 p-4">
+
+            <!-- User + Logout -->
+            <div class="border-t border-slate-800 p-4 space-y-3">
+                <div v-if="user" class="flex items-center gap-3 px-1">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex-shrink-0">
+                        {{ user.name.charAt(0).toUpperCase() }}
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs font-semibold text-white truncate">{{ user.name }}</p>
+                        <p class="text-xs text-slate-500 truncate">{{ user.email }}</p>
+                    </div>
+                </div>
                 <button
-                    class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white"
+                    class="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-400 transition hover:bg-red-500/10 hover:text-red-400"
                     @click="logout"
                 >
                     <LogOut class="h-4 w-4" />
@@ -55,13 +88,8 @@ function logout() {
             </div>
         </aside>
 
-        <!-- Content -->
-        <div class="flex flex-1 flex-col">
-            <header class="border-b bg-white px-8 py-4 shadow-sm">
-                <slot name="header">
-                    <h1 class="text-lg font-semibold text-gray-800">Admin</h1>
-                </slot>
-            </header>
+        <!-- Main content -->
+        <div class="flex flex-1 flex-col min-w-0">
             <main class="flex-1 overflow-auto p-8">
                 <slot />
             </main>

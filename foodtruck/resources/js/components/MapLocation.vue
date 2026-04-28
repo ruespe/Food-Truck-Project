@@ -21,8 +21,9 @@ const props = withDefaults(
         lng: number;
         draggable?: boolean;
         zoom?: number;
+        scrollZoom?: boolean;
     }>(),
-    { draggable: false, zoom: 15 },
+    { draggable: false, zoom: 15, scrollZoom: true },
 );
 
 const emit = defineEmits<{
@@ -37,7 +38,9 @@ let marker: L.Marker | null = null;
 onMounted(() => {
     if (!mapEl.value) return;
 
-    map = L.map(mapEl.value).setView([props.lat, props.lng], props.zoom);
+    map = L.map(mapEl.value, {
+        scrollWheelZoom: props.scrollZoom,
+    }).setView([props.lat, props.lng], props.zoom);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',

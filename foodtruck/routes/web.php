@@ -26,6 +26,12 @@ Route::get('/menu/{product}', [Client\MenuController::class, 'show'])->name('men
 Route::post('/contact', [Client\ContactController::class, 'store'])->name('contact.store');
 Route::inertia('/cart', 'client/Cart')->name('cart');
 
+// ─── Avisos legales ───────────────────────────────────────────────────────────
+
+Route::inertia('/legal/privacidad', 'legal/Privacy')->name('legal.privacy');
+Route::inertia('/legal/terminos', 'legal/Terms')->name('legal.terms');
+Route::inertia('/legal/cookies', 'legal/Cookies')->name('legal.cookies');
+
 // ─── Stripe webhook (sin CSRF) ────────────────────────────────────────────────
 
 Route::post('/webhook/stripe', [PaymentController::class, 'webhook'])
