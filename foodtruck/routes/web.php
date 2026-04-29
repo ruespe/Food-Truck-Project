@@ -4,7 +4,9 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\Client;
 use App\Http\Controllers\PaymentController;
 use App\Models\Location;
+use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -42,7 +44,44 @@ Route::post('/webhook/stripe', [PaymentController::class, 'webhook'])
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+    Route::get('dashboard', function () {
+        $user = Auth::user();
+        if ($user->role === 'admin') {
+            return inertia('admin/Dashboard', [
+                'stats' => [
+                    'total_orders'   => \App\Models\Order::count(),
+                    'pending_orders' => \App\Models\Order::where('status', 'pending')->count(),
+                    'total_products' => \App\Models\Product::count(),
+                    'total_clients'  => \App\Models\User::where('role', 'client')->count(),
+                    'revenue'        => \App\Models\Order::whereNotIn('status', ['cancelled'])->sum('total_price'),
+                ],
+                'recent_orders' => \App\Models\Order::with('user')->latest()->take(10)->get()
+                    ->map(fn ($o) => [
+                        'id'          => $o->id,
+                        'user'        => $o->user?->name ?? 'Desconocido',
+                        'total_price' => $o->total_price,
+                        'status'      => $o->status,
+                        'created_at'  => $o->created_at->format('d/m/Y H:i'),
+                    ]),
+                'today_location' => Location::whereDate('date', today())->first(),
+            ]);
+        }
+        // Clients go to their order history
+        return redirect()->route('orders.index');
+    })->name('dashboard');
+
+    Route::post('dashboard/location', function (\Illuminate\Http\Request $request) {
+        $data = $request->validate([
+            'name'       => 'required|string|max:255',
+            'latitude'   => 'required|numeric',
+            'longitude'  => 'required|numeric',
+            'start_time' => 'required',
+            'end_time'   => 'required',
+        ]);
+        $data['date'] = today()->toDateString();
+        Location::updateOrCreate(['date' => $data['date']], $data);
+        return back()->with('success', 'Ubicación guardada.');
+    })->middleware('admin')->name('dashboard.location');
 
     // Historial y detalle de pedidos
     Route::get('/orders', [Client\OrderController::class, 'index'])->name('orders.index');
@@ -60,6 +99,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/dashboard/location', [Admin\DashboardController::class, 'saveLocation'])->name('dashboard.location');
 
     // Productos
     Route::resource('products', Admin\ProductController::class);

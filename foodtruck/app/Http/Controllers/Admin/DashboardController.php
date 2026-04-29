@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Location;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -32,6 +33,23 @@ class DashboardController extends Controller
                     'status'      => $order->status,
                     'created_at'  => $order->created_at->format('d/m/Y H:i'),
                 ]),
+            'today_location' => Location::whereDate('date', today())->first(),
         ]);
+    }
+
+    public function saveLocation(\Illuminate\Http\Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $data = $request->validate([
+            'name'       => 'required|string|max:255',
+            'latitude'   => 'required|numeric',
+            'longitude'  => 'required|numeric',
+            'start_time' => 'required',
+            'end_time'   => 'required',
+        ]);
+        $data['date'] = today()->toDateString();
+
+        Location::updateOrCreate(['date' => $data['date']], $data);
+
+        return back()->with('success', 'Ubicación de hoy guardada.');
     }
 }

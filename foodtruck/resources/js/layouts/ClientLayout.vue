@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Link, router } from '@inertiajs/vue3';
-import { Moon, ShoppingCart, Sun } from 'lucide-vue-next';
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import { Moon, ShoppingCart, Sun, ChevronDown, User, LayoutDashboard, LogOut } from 'lucide-vue-next';
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import { useAppearance } from '@/composables/useAppearance';
 import { useCart } from '@/composables/useCart';
 import { useI18n, localeFlags, localeNames } from '@/composables/useI18n';
@@ -10,10 +10,16 @@ import type { Locale } from '@/composables/useI18n';
 const { count } = useCart();
 const { t, locale, setLocale } = useI18n();
 const { resolvedAppearance, updateAppearance } = useAppearance();
+const page = usePage();
+
+const auth = computed(() => (page.props as any).auth as { user: { name: string; role: string } } | null);
+const isAdmin = computed(() => auth.value?.user?.role === 'admin');
 
 const locales: Locale[] = ['es', 'ca', 'en'];
 const langOpen = ref(false);
 const langRef = ref<HTMLElement | null>(null);
+const userOpen = ref(false);
+const userRef = ref<HTMLElement | null>(null);
 
 function toggleTheme() {
     updateAppearance(resolvedAppearance.value === 'dark' ? 'light' : 'dark');
@@ -28,6 +34,13 @@ function handleOutsideClick(e: MouseEvent) {
     if (langRef.value && !langRef.value.contains(e.target as Node)) {
         langOpen.value = false;
     }
+    if (userRef.value && !userRef.value.contains(e.target as Node)) {
+        userOpen.value = false;
+    }
+}
+
+function logout() {
+    router.post('/logout');
 }
 
 onMounted(() => document.addEventListener('mousedown', handleOutsideClick));
@@ -113,13 +126,65 @@ function submitContact() {
                         >{{ count }}</span>
                     </Link>
 
-                    <!-- Login -->
+                    <!-- User: sin sesión -->
                     <Link
+                        v-if="!auth"
                         href="/login"
                         class="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-600"
                     >
-                        {{ t('nav.login') }}
+                        Iniciar sesión
                     </Link>
+
+                    <!-- User: con sesión (dropdown) -->
+                    <div v-else ref="userRef" class="relative">
+                        <button
+                            class="flex items-center gap-2 rounded-full border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-amber-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
+                            @click="userOpen = !userOpen"
+                        >
+                            <span class="flex h-7 w-7 items-center justify-center rounded-full bg-amber-500 text-xs font-bold text-white">
+                                {{ auth.user.name.charAt(0).toUpperCase() }}
+                            </span>
+                            <span class="hidden sm:inline max-w-[100px] truncate">{{ auth.user.name }}</span>
+                            <ChevronDown class="h-3 w-3 opacity-50" />
+                        </button>
+
+                        <div
+                            v-show="userOpen"
+                            class="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900"
+                        >
+                            <!-- Admin panel -->
+                            <Link
+                                v-if="isAdmin"
+                                href="/dashboard"
+                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-gray-800"
+                                @click="userOpen = false"
+                            >
+                                <LayoutDashboard class="h-4 w-4 text-amber-500" />
+                                Panel de administración
+                            </Link>
+
+                            <!-- Perfil -->
+                            <Link
+                                href="/settings/profile"
+                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-gray-800"
+                                @click="userOpen = false"
+                            >
+                                <User class="h-4 w-4 text-gray-400" />
+                                Mi perfil
+                            </Link>
+
+                            <div class="border-t border-gray-100 dark:border-gray-700" />
+
+                            <!-- Cerrar sesión -->
+                            <button
+                                class="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
+                                @click="logout"
+                            >
+                                <LogOut class="h-4 w-4" />
+                                Cerrar sesión
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </header>
