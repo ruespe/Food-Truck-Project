@@ -11,6 +11,7 @@ defineProps<{
         price: number;
         stock: number;
         available: boolean;
+        image: string | null;
         category: { name: string };
     }>;
 }>();
@@ -19,6 +20,10 @@ function destroy(id: number) {
     if (confirm('¿Eliminar este producto?')) {
         router.delete(`/admin/products/${id}`);
     }
+}
+
+function toggleStock(id: number) {
+    router.patch(`/admin/products/${id}/toggle-stock`);
 }
 </script>
 
@@ -39,6 +44,7 @@ function destroy(id: number) {
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-slate-700">
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-400">Imagen</th>
                     <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-400">Nombre</th>
                     <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-400">Categoría</th>
                     <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-400">Precio</th>
@@ -49,24 +55,59 @@ function destroy(id: number) {
             </thead>
             <tbody class="divide-y divide-slate-700/50">
                 <tr v-for="product in products" :key="product.id" class="transition hover:bg-slate-700/30">
+                    <!-- Thumbnail con overlay rojo si sin stock -->
+                    <td class="px-6 py-3">
+                        <div class="relative h-12 w-12 overflow-hidden rounded-lg">
+                            <img
+                                v-if="product.image"
+                                :src="`/storage/${product.image}`"
+                                :alt="product.name"
+                                class="h-full w-full object-cover"
+                                :class="product.stock === 0 ? 'brightness-50' : ''"
+                            />
+                            <div v-else class="flex h-full w-full items-center justify-center bg-slate-700 text-xl"
+                                :class="product.stock === 0 ? 'opacity-40' : ''"
+                            >🍽️</div>
+                            <!-- Overlay rojo sin stock -->
+                            <div
+                                v-if="product.stock === 0"
+                                class="absolute inset-0 flex items-center justify-center bg-red-600/60"
+                            >
+                                <span class="text-[9px] font-bold leading-tight text-white text-center">SIN<br>STOCK</span>
+                            </div>
+                        </div>
+                    </td>
                     <td class="px-6 py-4 font-medium text-white">{{ product.name }}</td>
                     <td class="px-6 py-4 text-slate-400">{{ product.category?.name }}</td>
                     <td class="px-6 py-4 font-semibold text-amber-400">{{ parseFloat(String(product.price)).toFixed(2) }} €</td>
-                    <td class="px-6 py-4 text-slate-300">{{ product.stock }}</td>
+                    <td class="px-6 py-4">
+                        <span :class="product.stock === 0 ? 'text-red-400 font-semibold' : 'text-slate-300'">
+                            {{ product.stock === 0 ? 'Sin stock' : product.stock }}
+                        </span>
+                    </td>
                     <td class="px-6 py-4">
                         <span :class="product.available ? 'text-green-400' : 'text-red-400'">
                             {{ product.available ? '✓ Sí' : '✕ No' }}
                         </span>
                     </td>
                     <td class="px-6 py-4">
-                        <div class="flex gap-2">
+                        <div class="flex flex-wrap gap-2">
                             <Link :href="`/admin/products/${product.id}/edit`" class="rounded-lg px-3 py-1 text-xs font-medium bg-slate-700 text-slate-200 hover:bg-slate-600 transition">Editar</Link>
+                            <button
+                                class="rounded-lg px-3 py-1 text-xs font-medium transition"
+                                :class="product.stock === 0
+                                    ? 'bg-green-500/15 text-green-400 hover:bg-green-500/25'
+                                    : 'bg-orange-500/15 text-orange-400 hover:bg-orange-500/25'"
+                                @click="toggleStock(product.id)"
+                            >
+                                {{ product.stock === 0 ? '↑ Reponer' : '✕ Sin stock' }}
+                            </button>
                             <button class="rounded-lg px-3 py-1 text-xs font-medium bg-red-500/10 text-red-400 hover:bg-red-500/20 transition" @click="destroy(product.id)">Eliminar</button>
                         </div>
                     </td>
                 </tr>
                 <tr v-if="products.length === 0">
-                    <td colspan="6" class="px-6 py-10 text-center text-slate-500">No hay productos aún</td>
+                    <td colspan="7" class="px-6 py-10 text-center text-slate-500">No hay productos aún</td>
                 </tr>
             </tbody>
         </table>

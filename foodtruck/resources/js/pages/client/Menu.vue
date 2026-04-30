@@ -16,6 +16,7 @@ const props = defineProps<{
         price: number;
         image: string | null;
         available: boolean;
+        stock: number;
         category_id: number;
     }>;
 }>();
@@ -68,9 +69,19 @@ function addToCart(product: typeof props.products[number]) {
                 :key="product.id"
                 class="overflow-hidden rounded-2xl bg-white shadow-md dark:bg-gray-800"
             >
-                <div class="flex h-44 items-center justify-center bg-amber-100 dark:bg-amber-900/30">
-                    <img v-if="product.image" :src="product.image" class="h-full w-full object-cover" :alt="product.name" />
-                    <span v-else class="text-5xl">🍽️</span>
+                <div class="relative flex h-44 items-center justify-center bg-amber-100 dark:bg-amber-900/30">
+                    <img
+                        v-if="product.image"
+                        :src="product.image"
+                        class="h-full w-full object-cover transition"
+                        :class="product.stock === 0 ? 'brightness-50 saturate-0' : ''"
+                        :alt="product.name"
+                    />
+                    <span v-else class="text-5xl" :class="product.stock === 0 ? 'opacity-30' : ''">🍽️</span>
+                    <!-- Overlay + badge sin stock -->
+                    <div v-if="product.stock === 0" class="absolute inset-0 flex flex-col items-center justify-center bg-red-600/40">
+                        <span class="rounded-full bg-red-600 px-4 py-1 text-sm font-bold uppercase tracking-wide text-white shadow">Sin stock</span>
+                    </div>
                 </div>
                 <div class="p-4">
                     <h3 class="font-semibold text-gray-800 dark:text-white">{{ product.name }}</h3>
@@ -78,13 +89,14 @@ function addToCart(product: typeof props.products[number]) {
                     <div class="mt-4 flex items-center justify-between">
                         <span class="text-lg font-bold text-amber-600">{{ parseFloat(String(product.price)).toFixed(2) }} €</span>
                         <button
-                            v-if="product.available"
+                            v-if="product.available && product.stock > 0"
                             class="rounded-full px-4 py-1.5 text-sm font-semibold transition"
                             :class="added.has(product.id) ? 'bg-green-500 text-white' : 'bg-amber-500 text-white hover:bg-amber-600'"
                             @click="addToCart(product)"
                         >
                             {{ added.has(product.id) ? t('menu.added') : t('menu.add') }}
                         </button>
+                        <span v-else-if="product.stock === 0" class="text-sm font-semibold text-red-400">Sin stock</span>
                         <span v-else class="text-sm text-gray-400 dark:text-gray-500">{{ t('menu.notAvailable') }}</span>
                     </div>
                 </div>

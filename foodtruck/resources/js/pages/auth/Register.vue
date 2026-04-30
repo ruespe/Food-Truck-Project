@@ -14,10 +14,10 @@ import { store } from '@/routes/register';
 
 <template>
     <AuthBase
-        title="Create an account"
-        description="Enter your details below to create your account"
+        title="Crear cuenta"
+        description="Rellena tus datos para registrarte"
     >
-        <Head title="Register" />
+        <Head title="Registro" />
 
         <Form
             v-bind="store.form()"
@@ -25,9 +25,9 @@ import { store } from '@/routes/register';
             v-slot="{ errors, processing }"
             class="flex flex-col gap-6"
         >
-            <div class="grid gap-6">
+            <div class="grid gap-5">
                 <div class="grid gap-2">
-                    <Label for="name">Name</Label>
+                    <Label for="name" class="text-gray-700 dark:text-gray-300">Nombre completo</Label>
                     <Input
                         id="name"
                         type="text"
@@ -36,13 +36,14 @@ import { store } from '@/routes/register';
                         :tabindex="1"
                         autocomplete="name"
                         name="name"
-                        placeholder="Full name"
+                        placeholder="Tu nombre"
+                        class="rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500"
                     />
                     <InputError :message="errors.name" />
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="email">Email address</Label>
+                    <Label for="email" class="text-gray-700 dark:text-gray-300">Correo electrónico</Label>
                     <Input
                         id="email"
                         type="email"
@@ -50,56 +51,59 @@ import { store } from '@/routes/register';
                         :tabindex="2"
                         autocomplete="email"
                         name="email"
-                        placeholder="email@example.com"
+                        placeholder="tu@email.com"
+                        class="rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500"
                     />
                     <InputError :message="errors.email" />
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="password">Password</Label>
+                    <Label for="password" class="text-gray-700 dark:text-gray-300">Contraseña</Label>
                     <PasswordInput
                         id="password"
                         required
                         :tabindex="3"
                         autocomplete="new-password"
                         name="password"
-                        placeholder="Password"
+                        placeholder="Contraseña"
+                        class="rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500"
                     />
                     <InputError :message="errors.password" />
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="password_confirmation">Confirm password</Label>
+                    <Label for="password_confirmation" class="text-gray-700 dark:text-gray-300">Confirmar contraseña</Label>
                     <PasswordInput
                         id="password_confirmation"
                         required
                         :tabindex="4"
                         autocomplete="new-password"
                         name="password_confirmation"
-                        placeholder="Confirm password"
+                        placeholder="Repite la contraseña"
+                        class="rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500"
                     />
                     <InputError :message="errors.password_confirmation" />
                 </div>
 
-                <Button
+                <button
                     type="submit"
-                    class="mt-2 w-full"
+                    class="mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-amber-500 px-6 py-3 font-bold text-white shadow transition hover:bg-amber-600 disabled:opacity-60"
                     tabindex="5"
                     :disabled="processing"
                     data-test="register-user-button"
                 >
                     <Spinner v-if="processing" />
-                    Create account
-                </Button>
+                    Crear cuenta
+                </button>
             </div>
 
-            <div class="text-center text-sm text-muted-foreground">
-                Already have an account?
+            <div class="text-center text-sm text-gray-500 dark:text-gray-400">
+                ¿Ya tienes cuenta?
                 <TextLink
                     :href="login()"
-                    class="underline underline-offset-4"
+                    class="font-semibold text-amber-600 hover:text-amber-700"
                     :tabindex="6"
-                    >Log in</TextLink
+                    >Iniciar sesión</TextLink
                 >
             </div>
         </Form>

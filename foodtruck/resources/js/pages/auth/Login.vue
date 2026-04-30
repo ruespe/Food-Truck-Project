@@ -22,14 +22,14 @@ defineProps<{
 
 <template>
     <AuthBase
-        title="Log in to your account"
-        description="Enter your email and password below to log in"
+        title="Iniciar sesión"
+        description="Introduce tu email y contraseña para acceder"
     >
-        <Head title="Log in" />
+        <Head title="Iniciar sesión" />
 
         <div
             v-if="status"
-            class="mb-4 text-center text-sm font-medium text-green-600"
+            class="mb-4 rounded-lg bg-green-50 px-4 py-3 text-center text-sm font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400"
         >
             {{ status }}
         </div>
@@ -40,9 +40,9 @@ defineProps<{
             v-slot="{ errors, processing }"
             class="flex flex-col gap-6"
         >
-            <div class="grid gap-6">
+            <div class="grid gap-5">
                 <div class="grid gap-2">
-                    <Label for="email">Email address</Label>
+                    <Label for="email" class="text-gray-700 dark:text-gray-300">Correo electrónico</Label>
                     <Input
                         id="email"
                         type="email"
@@ -51,21 +51,22 @@ defineProps<{
                         autofocus
                         :tabindex="1"
                         autocomplete="email"
-                        placeholder="email@example.com"
+                        placeholder="tu@email.com"
+                        class="rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500"
                     />
                     <InputError :message="errors.email" />
                 </div>
 
                 <div class="grid gap-2">
                     <div class="flex items-center justify-between">
-                        <Label for="password">Password</Label>
+                        <Label for="password" class="text-gray-700 dark:text-gray-300">Contraseña</Label>
                         <TextLink
                             v-if="canResetPassword"
                             :href="request()"
-                            class="text-sm"
+                            class="text-sm text-amber-600 hover:text-amber-700"
                             :tabindex="5"
                         >
-                            Forgot password?
+                            ¿Olvidaste tu contraseña?
                         </TextLink>
                     </div>
                     <PasswordInput
@@ -74,36 +75,37 @@ defineProps<{
                         required
                         :tabindex="2"
                         autocomplete="current-password"
-                        placeholder="Password"
+                        placeholder="Contraseña"
+                        class="rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500"
                     />
                     <InputError :message="errors.password" />
                 </div>
 
-                <div class="flex items-center justify-between">
-                    <Label for="remember" class="flex items-center space-x-3">
+                <div class="flex items-center">
+                    <Label for="remember" class="flex items-center gap-2 cursor-pointer text-sm text-gray-600 dark:text-gray-400">
                         <Checkbox id="remember" name="remember" :tabindex="3" />
-                        <span>Remember me</span>
+                        <span>Recordarme</span>
                     </Label>
                 </div>
 
-                <Button
+                <button
                     type="submit"
-                    class="mt-4 w-full"
                     :tabindex="4"
                     :disabled="processing"
                     data-test="login-button"
+                    class="mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-amber-500 px-6 py-3 font-bold text-white shadow transition hover:bg-amber-600 disabled:opacity-60"
                 >
                     <Spinner v-if="processing" />
-                    Log in
-                </Button>
+                    Entrar
+                </button>
             </div>
 
             <div
-                class="text-center text-sm text-muted-foreground"
+                class="text-center text-sm text-gray-500 dark:text-gray-400"
                 v-if="canRegister"
             >
-                Don't have an account?
-                <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
+                ¿No tienes cuenta?
+                <TextLink :href="register()" :tabindex="5" class="font-semibold text-amber-600 hover:text-amber-700">Regístrate</TextLink>
             </div>
         </Form>
     </AuthBase>

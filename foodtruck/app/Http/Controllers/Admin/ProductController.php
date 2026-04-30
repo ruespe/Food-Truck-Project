@@ -78,6 +78,21 @@ class ProductController extends Controller
             ->with('success', 'Producto eliminado correctamente.');
     }
 
+    public function toggleStock(Product $product): RedirectResponse
+    {
+        if ($product->stock > 0) {
+            // Marcar sin stock
+            $product->update(['stock' => 0]);
+            $message = "'{$product->name}' marcado sin stock.";
+        } else {
+            // Reponer stock mínimo
+            $product->update(['stock' => 1]);
+            $message = "Stock de '{$product->name}' repuesto.";
+        }
+
+        return redirect()->route('admin.products.index')->with('success', $message);
+    }
+
     private function validated(Request $request, ?Product $product = null): array
     {
         return $request->validate([

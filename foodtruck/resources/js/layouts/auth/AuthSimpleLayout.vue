@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { home } from '@/routes';
 
 defineProps<{
@@ -10,33 +9,29 @@ defineProps<{
 </script>
 
 <template>
-    <div
-        class="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10"
-    >
-        <div class="w-full max-w-sm">
-            <div class="flex flex-col gap-8">
-                <div class="flex flex-col items-center gap-4">
-                    <Link
-                        :href="home()"
-                        class="flex flex-col items-center gap-2 font-medium"
-                    >
-                        <div
-                            class="mb-1 flex h-9 w-9 items-center justify-center rounded-md"
-                        >
-                            <AppLogoIcon
-                                class="size-9 fill-current text-[var(--foreground)] dark:text-white"
-                            />
-                        </div>
-                        <span class="sr-only">{{ title }}</span>
-                    </Link>
-                    <div class="space-y-2 text-center">
-                        <h1 class="text-xl font-medium">{{ title }}</h1>
-                        <p class="text-center text-sm text-muted-foreground">
-                            {{ description }}
-                        </p>
+    <div class="min-h-svh bg-gray-50 dark:bg-gray-950 flex flex-col">
+        <!-- Header amber -->
+        <div class="bg-amber-500 py-8 text-center shadow-md">
+            <Link :href="home()" class="inline-flex flex-col items-center gap-1 group">
+                <span class="text-5xl">🍔</span>
+                <span class="text-2xl font-extrabold text-white tracking-tight group-hover:text-amber-100 transition">FoodTruck</span>
+            </Link>
+        </div>
+
+        <!-- Card -->
+        <div class="flex flex-1 items-center justify-center p-6">
+            <div class="w-full max-w-md">
+                <div class="rounded-2xl bg-white dark:bg-gray-900 shadow-xl overflow-hidden">
+                    <!-- Card header -->
+                    <div class="px-8 pt-8 pb-6 border-b border-gray-100 dark:border-gray-800">
+                        <h1 class="text-2xl font-bold text-gray-800 dark:text-white">{{ title }}</h1>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ description }}</p>
+                    </div>
+                    <!-- Card body -->
+                    <div class="px-8 py-8">
+                        <slot />
                     </div>
                 </div>
-                <slot />
             </div>
         </div>
     </div>

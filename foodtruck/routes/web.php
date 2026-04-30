@@ -112,6 +112,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
 
     // Productos
     Route::resource('products', Admin\ProductController::class);
+    Route::patch('products/{product}/toggle-stock', [Admin\ProductController::class, 'toggleStock'])->name('admin.products.toggle-stock');
 
     // Categorías
     Route::resource('categories', Admin\CategoryController::class);

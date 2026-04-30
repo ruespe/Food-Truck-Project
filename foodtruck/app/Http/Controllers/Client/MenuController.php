@@ -17,7 +17,7 @@ class MenuController extends Controller
             'products'   => Product::with('category')
                 ->where('available', true)
                 ->orderBy('name')
-                ->get(['id', 'category_id', 'name', 'description', 'price', 'image', 'available']),
+                ->get(['id', 'category_id', 'name', 'description', 'price', 'image', 'available', 'stock']),
         ]);
     }
 
