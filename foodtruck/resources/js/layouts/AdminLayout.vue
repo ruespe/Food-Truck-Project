@@ -1,98 +1,147 @@
 <script setup lang="ts">
-import { Link, router, usePage } from '@inertiajs/vue3';
+import { Link, router, usePage } from "@inertiajs/vue3";
 import {
     FolderOpen,
     LayoutDashboard,
     LogOut,
     MapPin,
+    Moon,
     Package,
     ShoppingBag,
+    Sun,
     Truck,
-} from 'lucide-vue-next';
-import { computed } from 'vue';
+    ChevronDown,
+    User,
+} from "lucide-vue-next";
+import { computed, ref, onMounted, onBeforeUnmount } from "vue";
+import { useAppearance } from "@/composables/useAppearance";
 
 const page = usePage();
 const currentUrl = computed(() => page.url);
+const { resolvedAppearance, updateAppearance } = useAppearance();
 
 const nav = [
-    { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-    { label: 'Productos', href: '/admin/products', icon: Package },
-    { label: 'Categorías', href: '/admin/categories', icon: FolderOpen },
-    { label: 'Pedidos', href: '/admin/orders', icon: ShoppingBag },
-    { label: 'Ubicación', href: '/admin/locations', icon: MapPin },
+    { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { label: "Productos", href: "/admin/products", icon: Package },
+    { label: "Categorias", href: "/admin/categories", icon: FolderOpen },
+    { label: "Pedidos", href: "/admin/orders", icon: ShoppingBag },
+    { label: "Ubicacion", href: "/admin/locations", icon: MapPin },
 ];
 
 function isActive(href: string) {
-    if (href === '/admin') return currentUrl.value === '/admin';
+    if (href === "/dashboard") return currentUrl.value === "/dashboard";
     return currentUrl.value.startsWith(href);
 }
 
 function logout() {
-    router.post('/logout');
+    router.post("/logout");
 }
 
 const user = computed(() => (page.props.auth as any)?.user as { name: string; email: string } | undefined);
+
+const userOpen = ref(false);
+const userRef = ref<HTMLElement | null>(null);
+
+function handleOutsideClick(e: MouseEvent) {
+    if (userRef.value && !userRef.value.contains(e.target as Node)) {
+        userOpen.value = false;
+    }
+}
+onMounted(() => document.addEventListener("mousedown", handleOutsideClick));
+onBeforeUnmount(() => document.removeEventListener("mousedown", handleOutsideClick));
 </script>
 
 <template>
-    <div class="flex min-h-screen bg-slate-900">
-        <!-- Sidebar -->
-        <aside class="flex w-64 flex-col flex-shrink-0 bg-slate-950 border-r border-slate-800">
-            <!-- Brand -->
-            <div class="flex items-center gap-3 px-5 py-6 border-b border-slate-800">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 flex-shrink-0">
-                    <Truck class="h-5 w-5 text-white" />
-                </div>
-                <div class="min-w-0">
-                    <p class="text-sm font-bold text-white">Food Truck</p>
-                    <p class="text-xs text-slate-500">Panel de administración</p>
-                </div>
-            </div>
+    <div class="flex min-h-screen flex-col bg-gray-100 dark:bg-slate-900">
 
-            <!-- Nav -->
-            <nav class="flex-1 space-y-0.5 px-3 py-4">
-                <Link
-                    v-for="item in nav"
-                    :key="item.href"
-                    :href="item.href"
-                    :class="[
-                        'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all',
-                        isActive(item.href)
-                            ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20'
-                            : 'text-slate-400 hover:bg-slate-800 hover:text-white',
-                    ]"
-                >
-                    <component :is="item.icon" class="h-4 w-4 flex-shrink-0" />
-                    {{ item.label }}
+        <!-- Top Navbar -->
+        <header class="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
+            <nav class="flex items-center justify-between px-5 py-3">
+                <!-- Brand -->
+                <Link href="/" class="flex items-center gap-2.5">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500">
+                        <Truck class="h-4 w-4 text-white" />
+                    </div>
+                    <span class="text-sm font-bold text-gray-900 dark:text-white">Food Truck</span>
+                    <span class="rounded-md bg-amber-500/10 px-2 py-0.5 text-xs font-semibold text-amber-400">Admin</span>
                 </Link>
-            </nav>
 
-            <!-- User + Logout -->
-            <div class="border-t border-slate-800 p-4 space-y-3">
-                <div v-if="user" class="flex items-center gap-3 px-1">
-                    <div class="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex-shrink-0">
-                        {{ user.name.charAt(0).toUpperCase() }}
-                    </div>
-                    <div class="min-w-0">
-                        <p class="text-xs font-semibold text-white truncate">{{ user.name }}</p>
-                        <p class="text-xs text-slate-500 truncate">{{ user.email }}</p>
+                <!-- Nav links -->
+                <div class="hidden items-center gap-1 sm:flex">
+                    <Link
+                        v-for="item in nav"
+                        :key="item.href"
+                        :href="item.href"
+                        :class="[
+                            'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition',
+                            isActive(item.href)
+                                ? 'bg-amber-500 text-white'
+                                : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white',
+                        ]"
+                    >
+                        <component :is="item.icon" class="h-4 w-4 flex-shrink-0" />
+                        {{ item.label }}
+                    </Link>
+                </div>
+
+                <!-- Right controls -->
+                <div class="flex items-center gap-2">
+                    <button
+                        class="rounded-full p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
+                        @click="updateAppearance(resolvedAppearance === 'dark' ? 'light' : 'dark')"
+                    >
+                        <Sun v-if="resolvedAppearance === 'dark'" class="h-4 w-4" />
+                        <Moon v-else class="h-4 w-4" />
+                    </button>
+
+                    <Link
+                        href="/"
+                        class="hidden rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-500 transition hover:border-amber-500 hover:text-amber-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-amber-500 dark:hover:text-amber-400 sm:flex items-center gap-1.5"
+                    >
+                        Ver web
+                    </Link>
+
+                    <div v-if="user" ref="userRef" class="relative">
+                        <button
+                            class="flex items-center gap-2 rounded-full border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                            @click="userOpen = !userOpen"
+                        >
+                            <span class="flex h-6 w-6 items-center justify-center rounded-full bg-amber-500 text-xs font-bold text-white">
+                                {{ user.name.charAt(0).toUpperCase() }}
+                            </span>
+                            <span class="hidden sm:inline max-w-24 truncate">{{ user.name }}</span>
+                            <ChevronDown class="h-3 w-3 opacity-50" />
+                        </button>
+
+                        <div
+                            v-show="userOpen"
+                            class="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-900"
+                        >
+                            <Link
+                                href="/settings/profile"
+                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 transition hover:bg-gray-50 dark:text-slate-300 dark:hover:bg-slate-800"
+                                @click="userOpen = false"
+                            >
+                                <User class="h-4 w-4 text-gray-400 dark:text-slate-400" />
+                                Mi perfil
+                            </Link>
+                            <div class="border-t border-gray-100 dark:border-slate-700" />
+                            <button
+                                class="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-red-400 transition hover:bg-red-500/10"
+                                @click="logout"
+                            >
+                                <LogOut class="h-4 w-4" />
+                                Cerrar sesion
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <button
-                    class="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-400 transition hover:bg-red-500/10 hover:text-red-400"
-                    @click="logout"
-                >
-                    <LogOut class="h-4 w-4" />
-                    Cerrar sesión
-                </button>
-            </div>
-        </aside>
+            </nav>
+        </header>
 
         <!-- Main content -->
-        <div class="flex flex-1 flex-col min-w-0">
-            <main class="flex-1 overflow-auto p-8">
-                <slot />
-            </main>
-        </div>
+        <main class="flex-1 overflow-auto p-8">
+            <slot />
+        </main>
     </div>
 </template>

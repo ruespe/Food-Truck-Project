@@ -128,7 +128,7 @@ function submitContact() {
 
                     <!-- User: sin sesión -->
                     <Link
-                        v-if="!auth"
+                        v-if="!auth?.user"
                         href="/login"
                         class="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-600"
                     >

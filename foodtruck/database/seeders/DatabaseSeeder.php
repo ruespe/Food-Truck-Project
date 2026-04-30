@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
         // Admin
         User::factory()->admin()->create([
             'name'  => 'Admin',
-            'email' => 'admin@foodtruck.com',
+            'email' => 'admin@gmail.com',
         ]);
 
         // Cliente de prueba
@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CategorySeeder::class,
             ProductSeeder::class,
-            LocationSeeder::class,
         ]);
     }
 }

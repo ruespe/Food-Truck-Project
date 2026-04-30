@@ -20,13 +20,13 @@ const props = defineProps<{
 
 const showForm = ref(false);
 const editId = ref<number | null>(null);
-const mapLat = ref(40.4153);
-const mapLng = ref(-3.7074);
+const mapLat = ref(41.5381);
+const mapLng = ref(2.4449);
 
 const form = useForm({
     name: '',
-    latitude: 40.4153,
-    longitude: -3.7074,
+    latitude: 41.5381,
+    longitude: 2.4449,
     date: new Date().toISOString().slice(0, 10),
     start_time: '12:00',
     end_time: '22:00',

@@ -66,7 +66,7 @@ const { t } = useI18n();
                 📍 {{ location.name }} · {{ location.start_time }} – {{ location.end_time }}
             </p>
             <p v-else class="mb-6 text-center text-gray-400">{{ t('home.noLocation') }}</p>
-            <div class="h-72 overflow-hidden rounded-2xl shadow-md">
+            <div class="h-100 overflow-hidden rounded-2xl shadow-md isolate">
                 <MapLocation
                     v-if="location"
                     :lat="location.latitude"

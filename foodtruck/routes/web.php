@@ -13,13 +13,21 @@ use Laravel\Fortify\Features;
 // ─── Pública ─────────────────────────────────────────────────────────────────
 
 Route::get('/', function () {
+    $location = Location::whereDate('date', today())->first() ?? new Location([
+        'name'       => 'Mataró, Barcelona',
+        'latitude'   => 41.5336796,
+        'longitude'  => 2.4377341,
+        'start_time' => '12:00:00',
+        'end_time'   => '22:00:00',
+    ]);
+
     return inertia('Welcome', [
         'canRegister'      => Features::enabled(Features::registration()),
         'featuredProducts' => Product::where('available', true)
             ->inRandomOrder()
             ->take(6)
             ->get(['id', 'name', 'description', 'price', 'image']),
-        'location'         => Location::whereDate('date', today())->first(),
+        'location'         => $location,
     ]);
 })->name('home');
 

@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Payment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 use Stripe\Checkout\Session;
@@ -22,7 +23,7 @@ class PaymentController extends Controller
     /**
      * Crear una Stripe Checkout Session para el pedido dado.
      */
-    public function createSession(Order $order): RedirectResponse
+    public function createSession(Order $order): HttpResponse|RedirectResponse
     {
         abort_unless($order->user_id === auth()->id(), 403);
         abort_unless($order->status === 'pending', 422, 'El pedido ya fue procesado.');
@@ -60,7 +61,7 @@ class PaymentController extends Controller
             ]
         );
 
-        return redirect($session->url);
+        return Inertia::location($session->url);
     }
 
     /**
