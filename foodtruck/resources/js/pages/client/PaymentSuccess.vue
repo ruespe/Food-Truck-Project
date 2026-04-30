@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import ClientLayout from '@/layouts/ClientLayout.vue';
 import { useI18n } from '@/composables/useI18n';
+import { useCart } from '@/composables/useCart';
 import { Head } from '@inertiajs/vue3';
+import { onMounted } from 'vue';
 
 defineOptions({ layout: ClientLayout });
 
@@ -10,6 +12,11 @@ defineProps<{
 }>();
 
 const { t } = useI18n();
+const { clear } = useCart();
+
+onMounted(() => {
+    clear();
+});
 </script>
 
 <template>

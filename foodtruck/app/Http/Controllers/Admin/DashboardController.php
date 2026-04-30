@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -14,6 +16,33 @@ class DashboardController extends Controller
 {
     public function index(): Response
     {
+        // Ingresos por día — últimos 14 días
+        $revenueByDay = Order::whereNotIn('status', ['cancelled'])
+            ->where('created_at', '>=', now()->subDays(13)->startOfDay())
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(total_price) as total'))
+            ->groupBy('date')
+            ->orderBy('date')
+            ->pluck('total', 'date');
+
+        // Rellenar días sin ventas con 0
+        $days = collect();
+        for ($i = 13; $i >= 0; $i--) {
+            $date = now()->subDays($i)->toDateString();
+            $days[$date] = round((float) ($revenueByDay[$date] ?? 0), 2);
+        }
+
+        // Productos más vendidos — top 8
+        $topProducts = OrderItem::select('product_id', DB::raw('SUM(quantity) as total_sold'))
+            ->with('product:id,name')
+            ->groupBy('product_id')
+            ->orderByDesc('total_sold')
+            ->take(8)
+            ->get()
+            ->map(fn ($item) => [
+                'name'       => $item->product?->name ?? 'Eliminado',
+                'total_sold' => (int) $item->total_sold,
+            ]);
+
         return Inertia::render('admin/Dashboard', [
             'stats' => [
                 'total_orders'   => Order::count(),
@@ -22,6 +51,11 @@ class DashboardController extends Controller
                 'total_clients'  => User::where('role', 'client')->count(),
                 'revenue'        => Order::whereNotIn('status', ['cancelled'])->sum('total_price'),
             ],
+            'revenue_chart' => [
+                'labels' => $days->keys()->map(fn ($d) => \Carbon\Carbon::parse($d)->format('d/m'))->values(),
+                'data'   => $days->values(),
+            ],
+            'top_products' => $topProducts,
             'recent_orders' => Order::with('user')
                 ->latest()
                 ->take(10)

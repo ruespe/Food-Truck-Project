@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import AdminLayout from '@/layouts/AdminLayout.vue';
 import MapLocation from '@/components/MapLocation.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, useForm, router } from '@inertiajs/vue3';
 import { Clock, Package, ShoppingCart, TrendingUp, Users, MapPin, Check } from 'lucide-vue-next';
-import { ref, watch } from 'vue';
+import { ref, watch, computed, onMounted, onUnmounted } from 'vue';
+import { Bar, Line } from 'vue-chartjs';
+import {
+    Chart as ChartJS,
+    Title, Tooltip, Legend,
+    BarElement, LineElement, PointElement,
+    CategoryScale, LinearScale, Filler,
+} from 'chart.js';
+
+ChartJS.register(Title, Tooltip, Legend, BarElement, LineElement, PointElement, CategoryScale, LinearScale, Filler);
 
 defineOptions({ layout: AdminLayout });
 
@@ -15,6 +24,11 @@ const props = defineProps<{
         total_clients: number;
         revenue: number;
     };
+    revenue_chart?: {
+        labels: string[];
+        data: number[];
+    };
+    top_products?: Array<{ name: string; total_sold: number }>;
     recent_orders: Array<{
         id: number;
         user: string;
@@ -32,6 +46,60 @@ const props = defineProps<{
         end_time: string;
     } | null;
 }>();
+
+// ── Chart configs ────────────────────────────────────────────────────────────
+
+const revenueData = computed(() => ({
+    labels: props.revenue_chart?.labels ?? [],
+    datasets: [{
+        label: 'Ingresos (€)',
+        data: props.revenue_chart?.data ?? [],
+        fill: true,
+        backgroundColor: 'rgba(245,158,11,0.15)',
+        borderColor: 'rgba(245,158,11,1)',
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: 'rgba(245,158,11,1)',
+        tension: 0.4,
+    }],
+}));
+
+const revenueOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx: any) => ` ${ctx.parsed.y.toFixed(2)} €` } } },
+    scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 11 } } },
+        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 11 }, callback: (v: any) => v + ' €' }, beginAtZero: true },
+    },
+};
+
+const topProductsData = computed(() => ({
+    labels: props.top_products?.map((p) => p.name) ?? [],
+    datasets: [{
+        label: 'Unidades vendidas',
+        data: props.top_products?.map((p) => p.total_sold) ?? [],
+        backgroundColor: [
+            'rgba(245,158,11,0.8)', 'rgba(251,191,36,0.8)', 'rgba(252,211,77,0.8)', 'rgba(253,230,138,0.8)',
+            'rgba(234,88,12,0.8)',  'rgba(249,115,22,0.8)', 'rgba(251,146,60,0.8)', 'rgba(253,186,116,0.8)',
+        ],
+        borderRadius: 6,
+        borderWidth: 0,
+    }],
+}));
+
+const topProductsOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y' as const,
+    plugins: { legend: { display: false } },
+    scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 11 } }, beginAtZero: true },
+        y: { grid: { display: false }, ticks: { color: '#e2e8f0', font: { size: 12 } } },
+    },
+};
+
+// ── Status helpers ───────────────────────────────────────────────────────────
 
 const statusColor: Record<string, string> = {
     pending:   'bg-yellow-500/10 text-yellow-400 ring-1 ring-inset ring-yellow-500/20',
@@ -51,7 +119,24 @@ const statusLabel: Record<string, string> = {
     cancelled: 'Cancelado',
 };
 
-// Mataró, Barcelona
+// ── Auto-refresh ─────────────────────────────────────────────────────────────
+const lastRefresh = ref(new Date());
+let refreshTimer: ReturnType<typeof setInterval> | null = null;
+
+function refreshData() {
+    router.reload({ only: ['stats', 'revenue_chart', 'top_products', 'recent_orders'] });
+    lastRefresh.value = new Date();
+}
+
+onMounted(() => {
+    refreshTimer = setInterval(refreshData, 30_000);
+});
+onUnmounted(() => {
+    if (refreshTimer) clearInterval(refreshTimer);
+});
+
+// ── Location form ─────────────────────────────────────────────────────────────
+
 const DEFAULT_LAT = 41.5336796;
 const DEFAULT_LNG = 2.4377341;
 
@@ -80,9 +165,18 @@ function saveLocation() {
 <template>
     <Head title="Dashboard · Admin" />
 
-    <div class="mb-8">
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
-        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Resumen del negocio en tiempo real</p>
+    <div class="mb-8 flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Resumen del negocio en tiempo real</p>
+        </div>
+        <button
+            class="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 text-xs text-slate-500 dark:text-slate-400 transition hover:border-amber-400 hover:text-amber-600 dark:hover:text-amber-400"
+            @click="refreshData"
+        >
+            <TrendingUp class="h-3.5 w-3.5" />
+            Actualizar · {{ lastRefresh.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}
+        </button>
     </div>
 
     <!-- Stat cards -->
@@ -121,6 +215,41 @@ function saveLocation() {
                 <div class="rounded-lg bg-green-500/10 p-1.5"><TrendingUp class="h-4 w-4 text-green-500 dark:text-green-400" /></div>
             </div>
             <p class="text-3xl font-extrabold text-green-600 dark:text-green-400">{{ parseFloat(String(stats.revenue)).toFixed(2) }} €</p>
+        </div>
+    </div>
+
+    <!-- Gráficas -->
+    <div class="mb-8 grid gap-6 lg:grid-cols-5">
+
+        <!-- Ingresos últimos 14 días -->
+        <div class="lg:col-span-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 shadow-sm p-6">
+            <div class="mb-4 flex items-center justify-between">
+                <div>
+                    <h2 class="font-semibold text-slate-900 dark:text-white">Ingresos diarios</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Últimos 14 días (pedidos no cancelados)</p>
+                </div>
+                <TrendingUp class="h-5 w-5 text-amber-500" />
+            </div>
+            <div style="height: 220px;">
+                <Line :data="revenueData" :options="revenueOptions" />
+            </div>
+        </div>
+
+        <!-- Productos más vendidos -->
+        <div class="lg:col-span-2 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 shadow-sm p-6">
+            <div class="mb-4 flex items-center justify-between">
+                <div>
+                    <h2 class="font-semibold text-slate-900 dark:text-white">Más vendidos</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Top 8 por unidades</p>
+                </div>
+                <Package class="h-5 w-5 text-amber-500" />
+            </div>
+            <div v-if="top_products && top_products.length > 0" style="height: 220px;">
+                <Bar :data="topProductsData" :options="topProductsOptions" />
+            </div>
+            <div v-else class="flex h-[220px] items-center justify-center text-sm text-slate-400 dark:text-slate-500">
+                Sin datos de ventas aún
+            </div>
         </div>
     </div>
 

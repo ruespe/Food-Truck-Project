@@ -7,7 +7,7 @@ import { useCart } from '@/composables/useCart';
 import { useI18n, localeFlags, localeNames } from '@/composables/useI18n';
 import type { Locale } from '@/composables/useI18n';
 
-const { count } = useCart();
+const { count, clear: clearCart } = useCart();
 const { t, locale, setLocale } = useI18n();
 const { resolvedAppearance, updateAppearance } = useAppearance();
 const page = usePage();
@@ -40,6 +40,7 @@ function handleOutsideClick(e: MouseEvent) {
 }
 
 function logout() {
+    clearCart();
     router.post('/logout');
 }
 
@@ -155,7 +156,7 @@ function submitContact() {
                             <!-- Admin panel -->
                             <Link
                                 v-if="isAdmin"
-                                href="/dashboard"
+                                href="/admin/"
                                 class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-gray-800"
                                 @click="userOpen = false"
                             >

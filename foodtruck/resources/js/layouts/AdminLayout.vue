@@ -5,6 +5,7 @@ import {
     LayoutDashboard,
     LogOut,
     MapPin,
+    MessageSquare,
     Moon,
     Package,
     ShoppingBag,
@@ -12,32 +13,40 @@ import {
     Truck,
     ChevronDown,
     User,
+    Users,
 } from "lucide-vue-next";
 import { computed, ref, onMounted, onBeforeUnmount } from "vue";
 import { useAppearance } from "@/composables/useAppearance";
+import { useCart } from "@/composables/useCart";
 
 const page = usePage();
 const currentUrl = computed(() => page.url);
 const { resolvedAppearance, updateAppearance } = useAppearance();
 
 const nav = [
-    { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { label: "Dashboard", href: "/admin/", icon: LayoutDashboard },
     { label: "Productos", href: "/admin/products", icon: Package },
     { label: "Categorias", href: "/admin/categories", icon: FolderOpen },
     { label: "Pedidos", href: "/admin/orders", icon: ShoppingBag },
     { label: "Ubicacion", href: "/admin/locations", icon: MapPin },
+    { label: "Mensajes", href: "/admin/contact", icon: MessageSquare },
+    { label: "Usuarios", href: "/admin/users", icon: Users },
 ];
 
 function isActive(href: string) {
-    if (href === "/dashboard") return currentUrl.value === "/dashboard";
+    if (href === "/admin/") return currentUrl.value === "/admin/" || currentUrl.value === "/admin";
     return currentUrl.value.startsWith(href);
 }
 
+const { clear: clearCart } = useCart();
+
 function logout() {
+    clearCart();
     router.post("/logout");
 }
 
 const user = computed(() => (page.props.auth as any)?.user as { name: string; email: string } | undefined);
+const unreadMessages = computed(() => (page.props as any).unread_messages as number ?? 0);
 
 const userOpen = ref(false);
 const userRef = ref<HTMLElement | null>(null);
@@ -81,6 +90,11 @@ onBeforeUnmount(() => document.removeEventListener("mousedown", handleOutsideCli
                     >
                         <component :is="item.icon" class="h-4 w-4 flex-shrink-0" />
                         {{ item.label }}
+                        <!-- Badge mensajes no leídos -->
+                        <span
+                            v-if="item.href === '/admin/contact' && unreadMessages > 0"
+                            class="ml-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white"
+                        >{{ unreadMessages }}</span>
                     </Link>
                 </div>
 

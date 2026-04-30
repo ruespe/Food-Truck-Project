@@ -55,24 +55,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         $user = Auth::user();
         if ($user->role === 'admin') {
-            return inertia('admin/Dashboard', [
-                'stats' => [
-                    'total_orders'   => \App\Models\Order::count(),
-                    'pending_orders' => \App\Models\Order::where('status', 'pending')->count(),
-                    'total_products' => \App\Models\Product::count(),
-                    'total_clients'  => \App\Models\User::where('role', 'client')->count(),
-                    'revenue'        => \App\Models\Order::whereNotIn('status', ['cancelled'])->sum('total_price'),
-                ],
-                'recent_orders' => \App\Models\Order::with('user')->latest()->take(10)->get()
-                    ->map(fn ($o) => [
-                        'id'          => $o->id,
-                        'user'        => $o->user?->name ?? 'Desconocido',
-                        'total_price' => $o->total_price,
-                        'status'      => $o->status,
-                        'created_at'  => $o->created_at->format('d/m/Y H:i'),
-                    ]),
-                'today_location' => Location::whereDate('date', today())->first(),
-            ]);
+            return redirect('/admin/');
         }
         // Clients go to their order history
         return redirect()->route('orders.index');
@@ -126,6 +109,17 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('locations', [Admin\LocationController::class, 'store'])->name('locations.store');
     Route::patch('locations/{location}', [Admin\LocationController::class, 'update'])->name('locations.update');
     Route::delete('locations/{location}', [Admin\LocationController::class, 'destroy'])->name('locations.destroy');
+
+    // Mensajes de contacto
+    Route::get('contact', [Admin\ContactMessageController::class, 'index'])->name('contact.index');
+    Route::patch('contact/{contactMessage}/read', [Admin\ContactMessageController::class, 'markRead'])->name('contact.read');
+    Route::delete('contact/{contactMessage}', [Admin\ContactMessageController::class, 'destroy'])->name('contact.destroy');
+
+    // Gestión de usuarios
+    Route::get('users', [Admin\UserController::class, 'index'])->name('users.index');
+    Route::patch('users/{user}/role', [Admin\UserController::class, 'updateRole'])->name('users.role');
+    Route::patch('users/{user}/toggle-active', [Admin\UserController::class, 'toggleActive'])->name('users.toggle-active');
+    Route::delete('users/{user}', [Admin\UserController::class, 'destroy'])->name('users.destroy');
 });
 
 require __DIR__.'/settings.php';
