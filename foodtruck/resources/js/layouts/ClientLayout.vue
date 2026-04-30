@@ -132,7 +132,7 @@ function submitContact() {
                         href="/login"
                         class="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-600"
                     >
-                        Iniciar sesión
+                        {{ t('nav.login') }}
                     </Link>
 
                     <!-- User: con sesión (dropdown) -->
@@ -160,7 +160,18 @@ function submitContact() {
                                 @click="userOpen = false"
                             >
                                 <LayoutDashboard class="h-4 w-4 text-amber-500" />
-                                Panel de administración
+                                {{ t('nav.adminPanel') }}
+                            </Link>
+
+                            <!-- Mis pedidos (solo clientes) -->
+                            <Link
+                                v-if="!isAdmin"
+                                href="/orders"
+                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-gray-800"
+                                @click="userOpen = false"
+                            >
+                                <ShoppingCart class="h-4 w-4 text-gray-400" />
+                                {{ t('nav.myOrders') }}
                             </Link>
 
                             <!-- Perfil -->
@@ -170,7 +181,7 @@ function submitContact() {
                                 @click="userOpen = false"
                             >
                                 <User class="h-4 w-4 text-gray-400" />
-                                Mi perfil
+                                {{ t('nav.profile') }}
                             </Link>
 
                             <div class="border-t border-gray-100 dark:border-gray-700" />
@@ -181,7 +192,7 @@ function submitContact() {
                                 @click="logout"
                             >
                                 <LogOut class="h-4 w-4" />
-                                Cerrar sesión
+                                {{ t('nav.logout') }}
                             </button>
                         </div>
                     </div>

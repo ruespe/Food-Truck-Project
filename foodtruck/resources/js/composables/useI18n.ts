@@ -77,6 +77,8 @@ const messages = {
         'orderDetail.total': 'Total',
         'orderDetail.status': 'Estado',
         'orderDetail.back': '← Volver a mis pedidos',
+        'orderDetail.cancel': 'Cancelar pedido',
+        'orderDetail.cancelConfirm': '¿Seguro que quieres cancelar este pedido?',
         // Payment success
         'payment.success.title': '¡Pago completado!',
         'payment.success.order': 'Pedido #',
@@ -86,6 +88,10 @@ const messages = {
         'payment.cancel.text': 'El pedido no ha sido pagado.',
         'payment.cancel.retry': 'Reintentar pago',
         'payment.cancel.backMenu': 'Volver al menú',
+        // Navbar user dropdown
+        'nav.profile': 'Mi perfil',
+        'nav.adminPanel': 'Panel de administración',
+        'nav.logout': 'Cerrar sesión',
     },
     en: {
         // Navbar
@@ -95,6 +101,10 @@ const messages = {
         'nav.contact': 'Contact',
         'nav.login': 'Login',
         'nav.myOrders': 'My orders',
+        'nav.profile': 'My profile',
+        'nav.adminPanel': 'Admin panel',
+        'nav.logout': 'Log out',
+        'home.welcome': 'Welcome to',
         'footer.rights': 'All rights reserved',
         'footer.tagline': 'Fresh handcrafted street food.',
         'footer.contactTitle': 'Contact',
@@ -159,6 +169,8 @@ const messages = {
         'orderDetail.total': 'Total',
         'orderDetail.status': 'Status',
         'orderDetail.back': '← Back to my orders',
+        'orderDetail.cancel': 'Cancel order',
+        'orderDetail.cancelConfirm': 'Are you sure you want to cancel this order?',
         // Payment success
         'payment.success.title': 'Payment complete!',
         'payment.success.order': 'Order #',
@@ -177,6 +189,9 @@ const messages = {
         'nav.contact': 'Contacte',
         'nav.login': 'Entrar',
         'nav.myOrders': 'Les meves comandes',
+        'nav.profile': 'El meu perfil',
+        'nav.adminPanel': 'Tauler d\'administració',
+        'nav.logout': 'Tancar sessió',
         'footer.rights': 'Tots els drets reservats',
         'footer.tagline': 'Menjar fresc i artesà al carrer.',
         'footer.contactTitle': 'Contacte',
@@ -243,6 +258,8 @@ const messages = {
         'orderDetail.total': 'Total',
         'orderDetail.status': 'Estat',
         'orderDetail.back': '← Tornar a les meves comandes',
+        'orderDetail.cancel': 'Cancel·lar comanda',
+        'orderDetail.cancelConfirm': 'Segur que vols cancel·lar aquesta comanda?',
         // Payment success
         'payment.success.title': 'Pagament completat!',
         'payment.success.order': 'Comanda #',

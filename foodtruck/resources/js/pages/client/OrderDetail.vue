@@ -2,11 +2,11 @@
 import ClientLayout from '@/layouts/ClientLayout.vue';
 import { useI18n } from '@/composables/useI18n';
 import type { MessageKey } from '@/composables/useI18n';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 
 defineOptions({ layout: ClientLayout });
 
-defineProps<{
+const props = defineProps<{
     order: {
         id: number;
         total_price: number;
@@ -19,6 +19,12 @@ defineProps<{
 const { t } = useI18n();
 function statusLabel(status: string): string {
     return t(`status.${status}` as MessageKey);
+}
+
+function cancelOrder() {
+    if (confirm(t('orderDetail.cancelConfirm'))) {
+        router.delete(`/orders/${props.order.id}`);
+    }
 }
 </script>
 
@@ -39,6 +45,16 @@ function statusLabel(status: string): string {
             </div>
             <div class="mt-4 text-sm text-gray-500 dark:text-gray-400">
                 {{ t('orderDetail.status') }}: <span class="font-medium capitalize text-gray-700 dark:text-gray-200">{{ statusLabel(order.status) }}</span>
+            </div>
+
+            <!-- Cancelar pedido (solo si está pendiente) -->
+            <div v-if="order.status === 'pending'" class="mt-5 border-t pt-4 dark:border-gray-700">
+                <button
+                    class="w-full rounded-xl border border-red-300 py-2 text-sm font-semibold text-red-500 transition hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10"
+                    @click="cancelOrder"
+                >
+                    {{ t('orderDetail.cancel') }}
+                </button>
             </div>
         </div>
         <div class="mt-4 text-center">

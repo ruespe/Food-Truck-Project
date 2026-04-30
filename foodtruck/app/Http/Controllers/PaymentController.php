@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Mail\OrderConfirmedAdmin;
+use App\Mail\OrderConfirmedClient;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 use Stripe\Webhook;
@@ -112,6 +116,21 @@ class PaymentController extends Controller
                 if ($order) {
                     $order->update(['status' => 'confirmed']);
                     Payment::where('order_id', $orderId)->update(['status' => 'paid']);
+
+                    $order->load(['items.product', 'user']);
+
+                    // Encolar email al cliente (se envía de forma asíncrona)
+                    Mail::to($order->user->email)
+                        ->later(now()->addSeconds(2), new OrderConfirmedClient($order));
+
+                    // Encolar email al admin con 10s de retraso (evita rate limit de Mailtrap)
+                    $adminEmail = config('mail.admin_address');
+                    if ($adminEmail) {
+                        Mail::to($adminEmail)
+                            ->later(now()->addSeconds(10), new OrderConfirmedAdmin($order));
+                    }
+
+                    \Illuminate\Support\Facades\Log::info('Emails encolados — pedido #' . $order->id);
                 }
             }
         }

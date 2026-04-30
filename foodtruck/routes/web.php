@@ -95,6 +95,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/orders', [Client\OrderController::class, 'index'])->name('orders.index');
     Route::post('/orders', [Client\OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}', [Client\OrderController::class, 'show'])->name('orders.show');
+    Route::delete('/orders/{order}', [Client\OrderController::class, 'destroy'])->name('orders.destroy');
 
     // Checkout con Stripe
     Route::get('/checkout/{order}', [PaymentController::class, 'createSession'])->name('checkout');

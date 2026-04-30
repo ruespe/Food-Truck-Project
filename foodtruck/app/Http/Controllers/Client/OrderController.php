@@ -79,4 +79,13 @@ class OrderController extends Controller
             'order' => $order->load(['items.product', 'payment']),
         ]);
     }
-}
+
+    public function destroy(Order $order): RedirectResponse
+    {
+        abort_unless($order->user_id === auth()->id(), 403);
+        abort_unless($order->status === 'pending', 422, 'Solo se pueden cancelar pedidos pendientes.');
+
+        $order->update(['status' => 'cancelled']);
+
+        return redirect()->route('orders.index')->with('success', 'Pedido cancelado correctamente.');
+    }}

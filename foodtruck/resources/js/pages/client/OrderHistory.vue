@@ -2,7 +2,7 @@
 import ClientLayout from '@/layouts/ClientLayout.vue';
 import { useI18n } from '@/composables/useI18n';
 import type { MessageKey } from '@/composables/useI18n';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 
 defineOptions({ layout: ClientLayout });
 
@@ -44,7 +44,8 @@ function statusLabel(status: string): string {
         </div>
 
         <ul v-else class="space-y-4">
-            <li v-for="order in orders" :key="order.id" class="rounded-2xl bg-white p-5 shadow dark:bg-gray-800">
+            <li v-for="order in orders" :key="order.id">
+                <Link :href="`/orders/${order.id}`" class="block rounded-2xl bg-white p-5 shadow transition hover:shadow-md dark:bg-gray-800">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-gray-400">{{ t('orders.order') }}{{ order.id }}</p>
@@ -62,6 +63,7 @@ function statusLabel(status: string): string {
                 <div class="mt-3 text-right text-lg font-bold text-amber-600">
                     {{ t('orders.total') }} {{ parseFloat(String(order.total_price)).toFixed(2) }} €
                 </div>
+                </Link>
             </li>
         </ul>
     </div>
