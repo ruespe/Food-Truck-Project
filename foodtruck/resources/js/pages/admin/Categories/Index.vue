@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@/layouts/AdminLayout.vue';
-import { Head, Link, router, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
 
 defineOptions({ layout: AdminLayout });
 
@@ -13,6 +13,8 @@ const showForm = ref(false);
 const editId = ref<number | null>(null);
 
 const form = useForm({ name: '', description: '' });
+const page = usePage();
+const deleteError = computed(() => (page.props.errors as any)?.category as string | undefined);
 
 function openCreate() {
     editId.value = null;
@@ -51,6 +53,11 @@ function destroy(id: number) {
         <button class="rounded-xl bg-amber-500 px-4 py-2 text-sm font-bold text-white hover:bg-amber-600 transition" @click="openCreate">
             + Nueva categoría
         </button>
+    </div>
+
+    <!-- Error al eliminar -->
+    <div v-if="deleteError" class="mb-5 flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+        ⚠️ {{ deleteError }}
     </div>
 
     <!-- Formulario inline -->

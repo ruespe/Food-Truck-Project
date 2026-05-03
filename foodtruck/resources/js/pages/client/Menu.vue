@@ -2,37 +2,45 @@
 import ClientLayout from '@/layouts/ClientLayout.vue';
 import { useCart } from '@/composables/useCart';
 import { useI18n } from '@/composables/useI18n';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 
 defineOptions({ layout: ClientLayout });
 
+type Product = {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    image: string | null;
+    available: boolean;
+    stock: number;
+    category_id: number;
+};
+
+type Paginator = {
+    data: Product[];
+    current_page: number;
+    last_page: number;
+    total: number;
+    links: Array<{ url: string | null; label: string; active: boolean }>;
+};
+
 const props = defineProps<{
     categories: Array<{ id: number; name: string }>;
-    products: Array<{
-        id: number;
-        name: string;
-        description: string;
-        price: number;
-        image: string | null;
-        available: boolean;
-        stock: number;
-        category_id: number;
-    }>;
+    products: Paginator;
+    selectedCategory?: number | null;
 }>();
 
 const { add, count } = useCart();
 const { t } = useI18n();
-const selectedCategory = ref<number | null>(null);
 
-const filtered = computed(() =>
-    selectedCategory.value
-        ? props.products.filter((p) => p.category_id === selectedCategory.value)
-        : props.products,
-);
+function selectCategory(id: number | null) {
+    router.get('/menu', id ? { category: id } : {}, { preserveScroll: true });
+}
 
 const added = ref<Set<number>>(new Set());
-function addToCart(product: typeof props.products[number]) {
+function addToCart(product: Product) {
     add({ id: product.id, name: product.name, price: product.price, image: product.image });
     added.value.add(product.id);
     setTimeout(() => added.value.delete(product.id), 1500);
@@ -47,8 +55,8 @@ function addToCart(product: typeof props.products[number]) {
         <!-- Filtro categorías -->
         <div class="mb-8 flex flex-wrap gap-2">
             <button
-                :class="['rounded-full px-4 py-1.5 text-sm font-medium transition', selectedCategory === null ? 'bg-amber-500 text-white' : 'border bg-white text-gray-600 hover:border-amber-400 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200']"
-                @click="selectedCategory = null"
+                :class="['rounded-full px-4 py-1.5 text-sm font-medium transition', !selectedCategory ? 'bg-amber-500 text-white' : 'border bg-white text-gray-600 hover:border-amber-400 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200']"
+                @click="selectCategory(null)"
             >
                 {{ t('menu.all') }}
             </button>
@@ -56,7 +64,7 @@ function addToCart(product: typeof props.products[number]) {
                 v-for="cat in categories"
                 :key="cat.id"
                 :class="['rounded-full px-4 py-1.5 text-sm font-medium transition', selectedCategory === cat.id ? 'bg-amber-500 text-white' : 'border bg-white text-gray-600 hover:border-amber-400 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200']"
-                @click="selectedCategory = cat.id"
+                @click="selectCategory(cat.id)"
             >
                 {{ cat.name }}
             </button>
@@ -65,7 +73,7 @@ function addToCart(product: typeof props.products[number]) {
         <!-- Grid productos -->
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <div
-                v-for="product in filtered"
+                v-for="product in products.data"
                 :key="product.id"
                 class="overflow-hidden rounded-2xl bg-white shadow-md dark:bg-gray-800"
             >
@@ -101,6 +109,29 @@ function addToCart(product: typeof props.products[number]) {
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Paginación -->
+        <div v-if="products.last_page > 1" class="mt-10 flex items-center justify-center gap-2">
+            <template v-for="link in products.links" :key="link.label">
+                <Link
+                    v-if="link.url"
+                    :href="link.url"
+                    preserve-scroll
+                    :class="[
+                        'flex h-9 min-w-9 items-center justify-center rounded-full px-3 text-sm font-medium transition',
+                        link.active
+                            ? 'bg-amber-500 text-white'
+                            : 'border border-gray-200 text-gray-600 hover:border-amber-400 dark:border-gray-600 dark:text-gray-300',
+                    ]"
+                    v-html="link.label"
+                />
+                <span
+                    v-else
+                    class="flex h-9 min-w-9 items-center justify-center rounded-full px-3 text-sm text-gray-300 dark:text-gray-600"
+                    v-html="link.label"
+                />
+            </template>
         </div>
 
         <!-- Ir al carrito -->

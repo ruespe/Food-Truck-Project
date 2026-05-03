@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -16,7 +15,7 @@ class ProductController extends Controller
     public function index(): Response
     {
         return Inertia::render('admin/Products/Index', [
-            'products' => Product::with('category')->orderBy('name')->get(),
+            'products' => Product::with('category')->orderBy('name')->paginate(15),
         ]);
     }
 
@@ -32,7 +31,12 @@ class ProductController extends Controller
         $data = $this->validated($request);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $uploaded = cloudinary()->uploadApi()->upload(
+                $request->file('image')->getRealPath(),
+                ['folder' => 'foodtruck/products']
+            );
+            $data['image']     = $uploaded['secure_url'];
+            $data['public_id'] = $uploaded['public_id'];
         }
 
         Product::create($data);
@@ -54,10 +58,15 @@ class ProductController extends Controller
         $data = $this->validated($request, $product);
 
         if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
+            if ($product->public_id) {
+                cloudinary()->uploadApi()->destroy($product->public_id);
             }
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $uploaded = cloudinary()->uploadApi()->upload(
+                $request->file('image')->getRealPath(),
+                ['folder' => 'foodtruck/products']
+            );
+            $data['image']     = $uploaded['secure_url'];
+            $data['public_id'] = $uploaded['public_id'];
         }
 
         $product->update($data);
@@ -68,8 +77,8 @@ class ProductController extends Controller
 
     public function destroy(Product $product): RedirectResponse
     {
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
+        if ($product->public_id) {
+            cloudinary()->uploadApi()->destroy($product->public_id);
         }
 
         $product->delete();

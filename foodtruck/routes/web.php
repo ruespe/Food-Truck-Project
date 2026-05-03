@@ -102,6 +102,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
 
     // Pedidos
     Route::get('orders', [Admin\OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [Admin\OrderController::class, 'show'])->name('orders.show');
     Route::patch('orders/{order}/status', [Admin\OrderController::class, 'updateStatus'])->name('orders.status');
 
     // Ubicación

@@ -30,7 +30,7 @@ const form = useForm({
 
 function submit() {
     if (props.product) {
-        form.post(`/admin/products/${props.product.id}`, { forceFormData: true, _method: 'PUT' } as any);
+        form.put(`/admin/products/${props.product.id}`, { forceFormData: true } as any);
     } else {
         form.post('/admin/products', { forceFormData: true } as any);
     }
