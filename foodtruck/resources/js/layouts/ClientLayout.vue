@@ -4,8 +4,9 @@ import { Moon, ShoppingCart, Sun, ChevronDown, User, LayoutDashboard, LogOut } f
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import { useAppearance } from '@/composables/useAppearance';
 import { useCart } from '@/composables/useCart';
-import { useI18n, localeFlags, localeNames } from '@/composables/useI18n';
+import { useI18n, localeNames } from '@/composables/useI18n';
 import type { Locale } from '@/composables/useI18n';
+import LocaleFlag from '@/components/LocaleFlag.vue';
 
 const { count, clear: clearCart } = useCart();
 const { t, locale, setLocale } = useI18n();
@@ -97,7 +98,7 @@ function submitContact() {
                             class="flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-amber-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
                             @click="langOpen = !langOpen"
                         >
-                            <span>{{ localeFlags[locale] }}</span>
+                            <LocaleFlag :locale="locale" flagClass="h-4 w-6 rounded-sm" />
                             <span>{{ localeNames[locale] }}</span>
                             <svg class="h-3 w-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
@@ -112,7 +113,7 @@ function submitContact() {
                                 :class="l === locale ? 'font-semibold text-amber-600 dark:text-amber-400' : ''"
                                 @click="selectLocale(l)"
                             >
-                                <span>{{ localeFlags[l] }}</span>
+                                <LocaleFlag :locale="l" flagClass="h-4 w-6 rounded-sm" />
                                 <span>{{ t(`lang.${l}` as any) }}</span>
                             </button>
                         </div>
