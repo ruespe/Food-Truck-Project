@@ -32,7 +32,11 @@ const passwordInput = useTemplateRef('passwordInput');
             </div>
             <Dialog>
                 <DialogTrigger as-child>
-                    <Button variant="destructive" data-test="delete-user-button">{{ t('settings.delete.btn') }}</Button>
+                    <Button
+                        variant="destructive"
+                        data-test="delete-user-button"
+                        >{{ t('settings.delete.btn') }}</Button
+                    >
                 </DialogTrigger>
                 <DialogContent>
                     <Form
@@ -46,17 +50,25 @@ const passwordInput = useTemplateRef('passwordInput');
                         v-slot="{ errors, processing, reset, clearErrors }"
                     >
                         <DialogHeader class="space-y-3">
-                            <DialogTitle>{{ t('settings.delete.confirmTitle') }}</DialogTitle>
-                            <DialogDescription>{{ t('settings.delete.confirmDesc') }}</DialogDescription>
+                            <DialogTitle>{{
+                                t('settings.delete.confirmTitle')
+                            }}</DialogTitle>
+                            <DialogDescription>{{
+                                t('settings.delete.confirmDesc')
+                            }}</DialogDescription>
                         </DialogHeader>
 
                         <div class="grid gap-2">
-                            <label for="password" class="sr-only">{{ t('settings.delete.passwordPlaceholder') }}</label>
+                            <label for="password" class="sr-only">{{
+                                t('settings.delete.passwordPlaceholder')
+                            }}</label>
                             <PasswordInput
                                 id="password"
                                 name="password"
                                 ref="passwordInput"
-                                :placeholder="t('settings.delete.passwordPlaceholder')"
+                                :placeholder="
+                                    t('settings.delete.passwordPlaceholder')
+                                "
                             />
                             <InputError :message="errors.password" />
                         </div>
@@ -65,7 +77,12 @@ const passwordInput = useTemplateRef('passwordInput');
                             <DialogClose as-child>
                                 <Button
                                     variant="secondary"
-                                    @click="() => { clearErrors(); reset(); }"
+                                    @click="
+                                        () => {
+                                            clearErrors();
+                                            reset();
+                                        }
+                                    "
                                 >
                                     {{ t('settings.delete.cancel') }}
                                 </Button>

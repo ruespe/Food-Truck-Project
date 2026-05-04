@@ -103,7 +103,11 @@ function submitContact() {
             >
                 <!-- Brand -->
                 <Link href="/" class="flex items-center">
-                    <img src="/logoFoodtruck.png" alt="FoodTruck" class="h-[75px] w-auto" />
+                    <img
+                        src="/logoFoodtruck.png"
+                        alt="FoodTruck"
+                        class="h-[75px] w-auto"
+                    />
                 </Link>
 
                 <!-- Nav links -->
@@ -129,7 +133,7 @@ function submitContact() {
                 <div class="flex items-center gap-2">
                     <!-- Hamburguesa XS (< 430px): abre offcanvas -->
                     <button
-                        class="xs:hidden rounded-full p-2 text-gray-600 transition hover:bg-amber-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                        class="rounded-full p-2 text-gray-600 transition hover:bg-amber-100 xs:hidden dark:text-gray-300 dark:hover:bg-gray-800"
                         @click="xsOpen = true"
                         aria-label="Abrir menú"
                     >
@@ -137,175 +141,179 @@ function submitContact() {
                     </button>
 
                     <!-- Controles ocultos por debajo de 430px -->
-                    <div class="hidden xs:flex items-center gap-2">
-                    <!-- Hamburguesa SM (430–640px): despliega menú -->
-                    <button
-                        class="hidden xs:flex sm:hidden rounded-full p-2 text-gray-600 transition hover:bg-amber-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                        @click="mobileOpen = !mobileOpen"
-                        :aria-label="mobileOpen ? 'Cerrar menú' : 'Abrir menú'"
-                    >
-                        <X v-if="mobileOpen" class="h-5 w-5" />
-                        <Menu v-else class="h-5 w-5" />
-                    </button>
-                    <!-- Dark/Light toggle -->
-                    <button
-                        class="rounded-full p-2 text-gray-600 transition hover:bg-amber-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                        :title="
-                            resolvedAppearance === 'dark'
-                                ? t('theme.light')
-                                : t('theme.dark')
-                        "
-                        @click="toggleTheme"
-                    >
-                        <Sun
-                            v-if="resolvedAppearance === 'dark'"
-                            class="h-5 w-5"
-                        />
-                        <Moon v-else class="h-5 w-5" />
-                    </button>
-
-                    <!-- Language selector -->
-                    <div ref="langRef" class="relative">
+                    <div class="hidden items-center gap-2 xs:flex">
+                        <!-- Hamburguesa SM (430–640px): despliega menú -->
                         <button
-                            class="flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-amber-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
-                            @click="langOpen = !langOpen"
+                            class="hidden rounded-full p-2 text-gray-600 transition hover:bg-amber-100 xs:flex sm:hidden dark:text-gray-300 dark:hover:bg-gray-800"
+                            @click="mobileOpen = !mobileOpen"
+                            :aria-label="
+                                mobileOpen ? 'Cerrar menú' : 'Abrir menú'
+                            "
                         >
-                            <LocaleFlag
-                                :locale="locale"
-                                flagClass="h-4 w-6 rounded-sm"
-                            />
-                            <span>{{ localeNames[locale] }}</span>
-                            <svg
-                                class="h-3 w-3 opacity-50"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M19 9l-7 7-7-7"
-                                />
-                            </svg>
+                            <X v-if="mobileOpen" class="h-5 w-5" />
+                            <Menu v-else class="h-5 w-5" />
                         </button>
-                        <div
-                            v-show="langOpen"
-                            class="absolute right-0 mt-1.5 w-36 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900"
+                        <!-- Dark/Light toggle -->
+                        <button
+                            class="rounded-full p-2 text-gray-600 transition hover:bg-amber-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                            :title="
+                                resolvedAppearance === 'dark'
+                                    ? t('theme.light')
+                                    : t('theme.dark')
+                            "
+                            @click="toggleTheme"
                         >
+                            <Sun
+                                v-if="resolvedAppearance === 'dark'"
+                                class="h-5 w-5"
+                            />
+                            <Moon v-else class="h-5 w-5" />
+                        </button>
+
+                        <!-- Language selector -->
+                        <div ref="langRef" class="relative">
                             <button
-                                v-for="l in locales"
-                                :key="l"
-                                class="flex w-full items-center gap-2 px-3 py-2 text-sm text-gray-700 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-gray-800"
-                                :class="
-                                    l === locale
-                                        ? 'font-semibold text-amber-600 dark:text-amber-400'
-                                        : ''
-                                "
-                                @click="selectLocale(l)"
+                                class="flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-amber-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
+                                @click="langOpen = !langOpen"
                             >
                                 <LocaleFlag
-                                    :locale="l"
+                                    :locale="locale"
                                     flagClass="h-4 w-6 rounded-sm"
                                 />
-                                <span>{{ t(`lang.${l}` as any) }}</span>
+                                <span>{{ localeNames[locale] }}</span>
+                                <svg
+                                    class="h-3 w-3 opacity-50"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M19 9l-7 7-7-7"
+                                    />
+                                </svg>
                             </button>
+                            <div
+                                v-show="langOpen"
+                                class="absolute right-0 mt-1.5 w-36 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900"
+                            >
+                                <button
+                                    v-for="l in locales"
+                                    :key="l"
+                                    class="flex w-full items-center gap-2 px-3 py-2 text-sm text-gray-700 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-gray-800"
+                                    :class="
+                                        l === locale
+                                            ? 'font-semibold text-amber-600 dark:text-amber-400'
+                                            : ''
+                                    "
+                                    @click="selectLocale(l)"
+                                >
+                                    <LocaleFlag
+                                        :locale="l"
+                                        flagClass="h-4 w-6 rounded-sm"
+                                    />
+                                    <span>{{ t(`lang.${l}` as any) }}</span>
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Cart (solo visible si hay sesión) -->
-                    <Link
-                        v-if="auth?.user"
-                        href="/cart"
-                        class="relative rounded-full p-2 transition hover:bg-amber-100 dark:hover:bg-gray-800"
-                    >
-                        <ShoppingCart class="h-5 w-5 text-amber-600" />
-                        <span
-                            v-if="count > 0"
-                            class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-xs text-white"
-                            >{{ count }}</span
+                        <!-- Cart (solo visible si hay sesión) -->
+                        <Link
+                            v-if="auth?.user"
+                            href="/cart"
+                            class="relative rounded-full p-2 transition hover:bg-amber-100 dark:hover:bg-gray-800"
                         >
-                    </Link>
-
-                    <!-- User: sin sesión -->
-                    <Link
-                        v-if="!auth?.user"
-                        href="/login"
-                        class="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-600"
-                    >
-                        {{ t('nav.login') }}
-                    </Link>
-
-                    <!-- User: con sesión (dropdown) -->
-                    <div v-else ref="userRef" class="relative">
-                        <button
-                            class="flex items-center gap-2 rounded-full border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-amber-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
-                            @click="userOpen = !userOpen"
-                        >
+                            <ShoppingCart class="h-5 w-5 text-amber-600" />
                             <span
-                                class="flex h-7 w-7 items-center justify-center rounded-full bg-amber-500 text-xs font-bold text-white"
+                                v-if="count > 0"
+                                class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-xs text-white"
+                                >{{ count }}</span
                             >
-                                {{ auth.user.name.charAt(0).toUpperCase() }}
-                            </span>
-                            <span
-                                class="hidden max-w-[100px] truncate sm:inline"
-                                >{{ auth.user.name }}</span
-                            >
-                            <ChevronDown class="h-3 w-3 opacity-50" />
-                        </button>
+                        </Link>
 
-                        <div
-                            v-show="userOpen"
-                            class="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900"
+                        <!-- User: sin sesión -->
+                        <Link
+                            v-if="!auth?.user"
+                            href="/login"
+                            class="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-600"
                         >
-                            <!-- Admin panel -->
-                            <Link
-                                v-if="isAdmin"
-                                href="/admin/"
-                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-gray-800"
-                                @click="userOpen = false"
-                            >
-                                <LayoutDashboard
-                                    class="h-4 w-4 text-amber-500"
-                                />
-                                {{ t('nav.adminPanel') }}
-                            </Link>
+                            {{ t('nav.login') }}
+                        </Link>
 
-                            <!-- Mis pedidos (solo clientes) -->
-                            <Link
-                                v-if="!isAdmin"
-                                href="/orders"
-                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-gray-800"
-                                @click="userOpen = false"
+                        <!-- User: con sesión (dropdown) -->
+                        <div v-else ref="userRef" class="relative">
+                            <button
+                                class="flex items-center gap-2 rounded-full border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-amber-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
+                                @click="userOpen = !userOpen"
                             >
-                                <ShoppingCart class="h-4 w-4 text-gray-400" />
-                                {{ t('nav.myOrders') }}
-                            </Link>
-
-                            <!-- Perfil -->
-                            <Link
-                                href="/settings/profile"
-                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-gray-800"
-                                @click="userOpen = false"
-                            >
-                                <User class="h-4 w-4 text-gray-400" />
-                                {{ t('nav.profile') }}
-                            </Link>
+                                <span
+                                    class="flex h-7 w-7 items-center justify-center rounded-full bg-amber-500 text-xs font-bold text-white"
+                                >
+                                    {{ auth.user.name.charAt(0).toUpperCase() }}
+                                </span>
+                                <span
+                                    class="hidden max-w-[100px] truncate sm:inline"
+                                    >{{ auth.user.name }}</span
+                                >
+                                <ChevronDown class="h-3 w-3 opacity-50" />
+                            </button>
 
                             <div
-                                class="border-t border-gray-100 dark:border-gray-700"
-                            />
-
-                            <!-- Cerrar sesión -->
-                            <button
-                                class="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
-                                @click="logout"
+                                v-show="userOpen"
+                                class="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900"
                             >
-                                <LogOut class="h-4 w-4" />
-                                {{ t('nav.logout') }}
-                            </button>
+                                <!-- Admin panel -->
+                                <Link
+                                    v-if="isAdmin"
+                                    href="/admin/"
+                                    class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-gray-800"
+                                    @click="userOpen = false"
+                                >
+                                    <LayoutDashboard
+                                        class="h-4 w-4 text-amber-500"
+                                    />
+                                    {{ t('nav.adminPanel') }}
+                                </Link>
+
+                                <!-- Mis pedidos (solo clientes) -->
+                                <Link
+                                    v-if="!isAdmin"
+                                    href="/orders"
+                                    class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-gray-800"
+                                    @click="userOpen = false"
+                                >
+                                    <ShoppingCart
+                                        class="h-4 w-4 text-gray-400"
+                                    />
+                                    {{ t('nav.myOrders') }}
+                                </Link>
+
+                                <!-- Perfil -->
+                                <Link
+                                    href="/settings/profile"
+                                    class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-gray-800"
+                                    @click="userOpen = false"
+                                >
+                                    <User class="h-4 w-4 text-gray-400" />
+                                    {{ t('nav.profile') }}
+                                </Link>
+
+                                <div
+                                    class="border-t border-gray-100 dark:border-gray-700"
+                                />
+
+                                <!-- Cerrar sesión -->
+                                <button
+                                    class="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
+                                    @click="logout"
+                                >
+                                    <LogOut class="h-4 w-4" />
+                                    {{ t('nav.logout') }}
+                                </button>
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </nav>
@@ -314,20 +322,67 @@ function submitContact() {
         <!-- Menú móvil (430–640px) -->
         <div
             v-show="mobileOpen"
-            class="max-xs:hidden border-b border-amber-200 bg-white px-4 pb-4 pt-2 shadow-md dark:border-gray-800 dark:bg-gray-900 sm:hidden"
+            class="border-b border-amber-200 bg-white px-4 pt-2 pb-4 shadow-md max-xs:hidden sm:hidden dark:border-gray-800 dark:bg-gray-900"
         >
-            <div class="flex flex-col gap-1 text-sm font-medium text-gray-700 dark:text-gray-200">
-                <Link href="/" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.home') }}</Link>
-                <Link href="/menu" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.menu') }}</Link>
-                <Link href="/#location" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.location') }}</Link>
-                <div class="my-1 border-t border-gray-100 dark:border-gray-700" />
+            <div
+                class="flex flex-col gap-1 text-sm font-medium text-gray-700 dark:text-gray-200"
+            >
+                <Link
+                    href="/"
+                    class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                    @click="mobileOpen = false"
+                    >{{ t('nav.home') }}</Link
+                >
+                <Link
+                    href="/menu"
+                    class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                    @click="mobileOpen = false"
+                    >{{ t('nav.menu') }}</Link
+                >
+                <Link
+                    href="/#location"
+                    class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                    @click="mobileOpen = false"
+                    >{{ t('nav.location') }}</Link
+                >
+                <div
+                    class="my-1 border-t border-gray-100 dark:border-gray-700"
+                />
                 <template v-if="auth?.user">
-                    <Link v-if="isAdmin" href="/admin/" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.adminPanel') }}</Link>
-                    <Link v-else href="/orders" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.myOrders') }}</Link>
-                    <Link href="/settings/profile" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.profile') }}</Link>
-                    <button class="rounded-lg px-3 py-2 text-left text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10" @click="logout">{{ t('nav.logout') }}</button>
+                    <Link
+                        v-if="isAdmin"
+                        href="/admin/"
+                        class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                        @click="mobileOpen = false"
+                        >{{ t('nav.adminPanel') }}</Link
+                    >
+                    <Link
+                        v-else
+                        href="/orders"
+                        class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                        @click="mobileOpen = false"
+                        >{{ t('nav.myOrders') }}</Link
+                    >
+                    <Link
+                        href="/settings/profile"
+                        class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                        @click="mobileOpen = false"
+                        >{{ t('nav.profile') }}</Link
+                    >
+                    <button
+                        class="rounded-lg px-3 py-2 text-left text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
+                        @click="logout"
+                    >
+                        {{ t('nav.logout') }}
+                    </button>
                 </template>
-                <Link v-else href="/login" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.login') }}</Link>
+                <Link
+                    v-else
+                    href="/login"
+                    class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                    @click="mobileOpen = false"
+                    >{{ t('nav.login') }}</Link
+                >
             </div>
         </div>
 
@@ -344,7 +399,11 @@ function submitContact() {
                 <div class="grid gap-10 sm:grid-cols-3">
                     <!-- Col 1: Brand + redes sociales -->
                     <div>
-                        <img src="/logoFoodtruck.png" alt="FoodTruck" class="mb-3 h-[40px] w-auto" />
+                        <img
+                            src="/logoFoodtruck.png"
+                            alt="FoodTruck"
+                            class="mb-3 h-[40px] w-auto"
+                        />
                         <p
                             class="mb-5 text-sm text-gray-500 dark:text-gray-400"
                         >
@@ -500,15 +559,30 @@ function submitContact() {
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-if="xsOpen" class="fixed inset-0 z-[60] flex" @keydown.esc="xsOpen = false">
+                <div
+                    v-if="xsOpen"
+                    class="fixed inset-0 z-[60] flex"
+                    @keydown.esc="xsOpen = false"
+                >
                     <!-- Backdrop -->
-                    <div class="absolute inset-0 bg-black/50" @click="xsOpen = false" />
+                    <div
+                        class="absolute inset-0 bg-black/50"
+                        @click="xsOpen = false"
+                    />
 
                     <!-- Panel -->
-                    <div class="relative z-10 flex w-72 flex-col overflow-y-auto bg-white shadow-xl dark:bg-gray-900">
+                    <div
+                        class="relative z-10 flex w-72 flex-col overflow-y-auto bg-white shadow-xl dark:bg-gray-900"
+                    >
                         <!-- Header -->
-                        <div class="flex items-center justify-between border-b border-amber-100 px-4 py-3 dark:border-gray-800">
-                            <img src="/logoFoodtruck.png" alt="FoodTruck" class="h-10 w-auto" />
+                        <div
+                            class="flex items-center justify-between border-b border-amber-100 px-4 py-3 dark:border-gray-800"
+                        >
+                            <img
+                                src="/logoFoodtruck.png"
+                                alt="FoodTruck"
+                                class="h-10 w-auto"
+                            />
                             <button
                                 class="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 dark:hover:bg-gray-800"
                                 @click="xsOpen = false"
@@ -519,31 +593,95 @@ function submitContact() {
                         </div>
 
                         <!-- Nav links -->
-                        <div class="flex flex-col gap-1 p-3 text-sm font-medium text-gray-700 dark:text-gray-200">
-                            <Link href="/" class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">{{ t('nav.home') }}</Link>
-                            <Link href="/menu" class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">{{ t('nav.menu') }}</Link>
-                            <Link href="/#location" class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">{{ t('nav.location') }}</Link>
+                        <div
+                            class="flex flex-col gap-1 p-3 text-sm font-medium text-gray-700 dark:text-gray-200"
+                        >
+                            <Link
+                                href="/"
+                                class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                                @click="xsOpen = false"
+                                >{{ t('nav.home') }}</Link
+                            >
+                            <Link
+                                href="/menu"
+                                class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                                @click="xsOpen = false"
+                                >{{ t('nav.menu') }}</Link
+                            >
+                            <Link
+                                href="/#location"
+                                class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                                @click="xsOpen = false"
+                                >{{ t('nav.location') }}</Link
+                            >
                         </div>
 
-                        <div class="mx-4 border-t border-gray-100 dark:border-gray-700" />
+                        <div
+                            class="mx-4 border-t border-gray-100 dark:border-gray-700"
+                        />
 
                         <!-- Auth section -->
-                        <div class="flex flex-col gap-1 p-3 text-sm font-medium text-gray-700 dark:text-gray-200">
+                        <div
+                            class="flex flex-col gap-1 p-3 text-sm font-medium text-gray-700 dark:text-gray-200"
+                        >
                             <template v-if="auth?.user">
-                                <Link v-if="isAdmin" href="/admin/" class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">{{ t('nav.adminPanel') }}</Link>
-                                <Link v-else href="/orders" class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">{{ t('nav.myOrders') }}</Link>
-                                <Link href="/settings/profile" class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">{{ t('nav.profile') }}</Link>
-                                <Link href="/cart" class="flex items-center gap-2 rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">
-                                    <ShoppingCart class="h-4 w-4 text-amber-600" />
+                                <Link
+                                    v-if="isAdmin"
+                                    href="/admin/"
+                                    class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                                    @click="xsOpen = false"
+                                    >{{ t('nav.adminPanel') }}</Link
+                                >
+                                <Link
+                                    v-else
+                                    href="/orders"
+                                    class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                                    @click="xsOpen = false"
+                                    >{{ t('nav.myOrders') }}</Link
+                                >
+                                <Link
+                                    href="/settings/profile"
+                                    class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                                    @click="xsOpen = false"
+                                    >{{ t('nav.profile') }}</Link
+                                >
+                                <Link
+                                    href="/cart"
+                                    class="flex items-center gap-2 rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                                    @click="xsOpen = false"
+                                >
+                                    <ShoppingCart
+                                        class="h-4 w-4 text-amber-600"
+                                    />
                                     Cart
-                                    <span v-if="count > 0" class="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-amber-500 text-xs text-white">{{ count }}</span>
+                                    <span
+                                        v-if="count > 0"
+                                        class="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-amber-500 text-xs text-white"
+                                        >{{ count }}</span
+                                    >
                                 </Link>
-                                <button class="rounded-lg px-3 py-2.5 text-left text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10" @click="logout; xsOpen = false">{{ t('nav.logout') }}</button>
+                                <button
+                                    class="rounded-lg px-3 py-2.5 text-left text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
+                                    @click="
+                                        logout;
+                                        xsOpen = false;
+                                    "
+                                >
+                                    {{ t('nav.logout') }}
+                                </button>
                             </template>
-                            <Link v-else href="/login" class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">{{ t('nav.login') }}</Link>
+                            <Link
+                                v-else
+                                href="/login"
+                                class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800"
+                                @click="xsOpen = false"
+                                >{{ t('nav.login') }}</Link
+                            >
                         </div>
 
-                        <div class="mx-4 border-t border-gray-100 dark:border-gray-700" />
+                        <div
+                            class="mx-4 border-t border-gray-100 dark:border-gray-700"
+                        />
 
                         <!-- Theme + Language -->
                         <div class="flex items-center justify-between p-4">
@@ -551,16 +689,27 @@ function submitContact() {
                                 class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-700 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-gray-800"
                                 @click="toggleTheme"
                             >
-                                <Sun v-if="resolvedAppearance === 'dark'" class="h-4 w-4" />
+                                <Sun
+                                    v-if="resolvedAppearance === 'dark'"
+                                    class="h-4 w-4"
+                                />
                                 <Moon v-else class="h-4 w-4" />
-                                {{ resolvedAppearance === 'dark' ? t('theme.light') : t('theme.dark') }}
+                                {{
+                                    resolvedAppearance === 'dark'
+                                        ? t('theme.light')
+                                        : t('theme.dark')
+                                }}
                             </button>
                             <div class="flex gap-1">
                                 <button
                                     v-for="l in locales"
                                     :key="l"
                                     class="rounded px-2 py-1 text-xs font-semibold transition"
-                                    :class="l === locale ? 'bg-amber-500 text-white' : 'text-gray-500 hover:bg-amber-50 dark:text-gray-400 dark:hover:bg-gray-800'"
+                                    :class="
+                                        l === locale
+                                            ? 'bg-amber-500 text-white'
+                                            : 'text-gray-500 hover:bg-amber-50 dark:text-gray-400 dark:hover:bg-gray-800'
+                                    "
                                     @click="selectLocale(l)"
                                 >
                                     {{ l.toUpperCase() }}

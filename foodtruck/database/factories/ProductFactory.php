@@ -26,6 +26,6 @@ class ProductFactory extends Factory
 
     public function unavailable(): static
     {
-        return $this->state(fn (array $attributes) => ['available' => false]);
+        return $this->state(fn(array $attributes) => ['available' => false]);
     }
 }

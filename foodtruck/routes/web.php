@@ -125,4 +125,4 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::delete('users/{user}', [Admin\UserController::class, 'destroy'])->name('users.destroy');
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';
