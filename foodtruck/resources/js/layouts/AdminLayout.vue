@@ -10,7 +10,6 @@ import {
     Package,
     ShoppingBag,
     Sun,
-    Truck,
     ChevronDown,
     User,
     Users,
@@ -68,10 +67,7 @@ onBeforeUnmount(() => document.removeEventListener("mousedown", handleOutsideCli
             <nav class="flex items-center justify-between px-5 py-3">
                 <!-- Brand -->
                 <Link href="/" class="flex items-center gap-2.5">
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500">
-                        <Truck class="h-4 w-4 text-white" />
-                    </div>
-                    <span class="text-sm font-bold text-gray-900 dark:text-white">Food Truck</span>
+                    <img src="/logoFoodtruck.png" alt="FoodTruck" class="h-[40px] w-auto" />
                     <span class="rounded-md bg-amber-500/10 px-2 py-0.5 text-xs font-semibold text-amber-400">Admin</span>
                 </Link>
 

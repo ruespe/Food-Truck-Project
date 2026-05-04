@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@/layouts/AdminLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import ImagePlaceholder from '@/components/ImagePlaceholder.vue';
 
 defineOptions({ layout: AdminLayout });
 
@@ -56,7 +57,6 @@ function toggleStock(id: number) {
                     <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-400">Nombre</th>
                     <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-400">Categoría</th>
                     <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-400">Precio</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-400">Stock</th>
                     <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-400">Disponible</th>
                     <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-400">Acciones</th>
                 </tr>
@@ -73,9 +73,9 @@ function toggleStock(id: number) {
                                 class="h-full w-full object-cover"
                                 :class="product.stock === 0 ? 'brightness-50' : ''"
                             />
-                            <div v-else class="flex h-full w-full items-center justify-center bg-slate-700 text-xl"
+                            <div v-else class="flex h-full w-full items-center justify-center bg-slate-700"
                                 :class="product.stock === 0 ? 'opacity-40' : ''"
-                            >🍽️</div>
+                            ><ImagePlaceholder class="h-8 w-8 text-slate-400" /></div>
                             <!-- Overlay rojo sin stock -->
                             <div
                                 v-if="product.stock === 0"
@@ -88,11 +88,6 @@ function toggleStock(id: number) {
                     <td class="px-6 py-4 font-medium text-white">{{ product.name }}</td>
                     <td class="px-6 py-4 text-slate-400">{{ product.category?.name }}</td>
                     <td class="px-6 py-4 font-semibold text-amber-400">{{ parseFloat(String(product.price)).toFixed(2) }} €</td>
-                    <td class="px-6 py-4">
-                        <span :class="product.stock === 0 ? 'text-red-400 font-semibold' : 'text-slate-300'">
-                            {{ product.stock === 0 ? 'Sin stock' : product.stock }}
-                        </span>
-                    </td>
                     <td class="px-6 py-4">
                         <span :class="product.available ? 'text-green-400' : 'text-red-400'">
                             {{ product.available ? '✓ Sí' : '✕ No' }}
@@ -115,7 +110,7 @@ function toggleStock(id: number) {
                     </td>
                 </tr>
                 <tr v-if="products.data.length === 0">
-                    <td colspan="7" class="px-6 py-10 text-center text-slate-500">No hay productos aún</td>
+                    <td colspan="6" class="px-6 py-10 text-center text-slate-500">No hay productos aún</td>
                 </tr>
             </tbody>
         </table>

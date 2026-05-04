@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@/layouts/AdminLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import ImagePlaceholder from '@/components/ImagePlaceholder.vue';
 
 defineOptions({ layout: AdminLayout });
 
@@ -83,7 +84,7 @@ function updateStatus(status: string) {
                                 :alt="item.product.name"
                                 class="h-full w-full object-cover"
                             />
-                            <div v-else class="flex h-full w-full items-center justify-center text-2xl">🍽️</div>
+                            <div v-else class="flex h-full w-full items-center justify-center"><ImagePlaceholder class="h-8 w-8 text-amber-300 dark:text-amber-700" /></div>
                         </div>
 
                         <!-- Info -->

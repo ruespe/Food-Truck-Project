@@ -5,6 +5,7 @@ import { useI18n } from '@/composables/useI18n';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import { ShoppingCart } from 'lucide-vue-next';
+import ImagePlaceholder from '@/components/ImagePlaceholder.vue';
 
 defineOptions({ layout: ClientLayout });
 
@@ -86,7 +87,7 @@ function addToCart(product: Product) {
                         :class="product.stock === 0 ? 'brightness-50 saturate-0' : ''"
                         :alt="product.name"
                     />
-                    <span v-else class="text-5xl" :class="product.stock === 0 ? 'opacity-30' : ''">🍽️</span>
+                    <span v-else class="flex items-center justify-center" :class="product.stock === 0 ? 'opacity-30' : ''"><ImagePlaceholder class="h-14 w-14 text-amber-300 dark:text-amber-700" /></span>
                     <!-- Overlay + badge sin stock -->
                     <div v-if="product.stock === 0" class="absolute inset-0 flex flex-col items-center justify-center bg-red-600/40">
                         <span class="rounded-full bg-red-600 px-4 py-1 text-sm font-bold uppercase tracking-wide text-white shadow">{{ t('menu.outOfStock') }}</span>

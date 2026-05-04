@@ -54,10 +54,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('dashboard', function () {
         $user = Auth::user();
+        // Limpiar la URL "intended" para evitar que Fortify la use en el próximo login
+        session()->forget('url.intended');
         if ($user->role === 'admin') {
             return redirect('/admin/');
         }
-        // Clients go to their order history
+        // Los clientes van a su historial de pedidos
         return redirect()->route('orders.index');
     })->name('dashboard');
 

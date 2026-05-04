@@ -99,11 +99,8 @@ function submitContact() {
                 class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3"
             >
                 <!-- Brand -->
-                <Link
-                    href="/"
-                    class="flex items-center gap-2 text-xl font-bold text-amber-600"
-                >
-                    🚚 FoodTruck
+                <Link href="/" class="flex items-center">
+                    <img src="/logoFoodtruck.png" alt="FoodTruck" class="h-[75px] w-auto" />
                 </Link>
 
                 <!-- Nav links -->
@@ -337,9 +334,7 @@ function submitContact() {
                 <div class="grid gap-10 sm:grid-cols-3">
                     <!-- Col 1: Brand + redes sociales -->
                     <div>
-                        <p class="mb-1 text-xl font-bold text-amber-600">
-                            🚚 FoodTruck
-                        </p>
+                        <img src="/logoFoodtruck.png" alt="FoodTruck" class="mb-3 h-[40px] w-auto" />
                         <p
                             class="mb-5 text-sm text-gray-500 dark:text-gray-400"
                         >

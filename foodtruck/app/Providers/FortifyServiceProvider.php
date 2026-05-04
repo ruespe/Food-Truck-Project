@@ -41,7 +41,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::createUsersUsing(CreateNewUser::class);
 
-        // After login, always go to /dashboard (the route handles admin vs client)
+        // After login, redirect según el rol del usuario
         Fortify::redirects('login', '/dashboard');
         Fortify::redirects('register', '/dashboard');
     }

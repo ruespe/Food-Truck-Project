@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import MapLocation from '@/components/MapLocation.vue';
+import ImagePlaceholder from '@/components/ImagePlaceholder.vue';
 import { useI18n } from '@/composables/useI18n';
 import ClientLayout from '@/layouts/ClientLayout.vue';
 
@@ -43,7 +44,7 @@ const { t } = useI18n();
             >
                 <div class="flex h-40 items-center justify-center bg-amber-100 dark:bg-amber-900/30">
                     <img v-if="product.image" :src="product.image" class="h-full w-full object-cover" :alt="product.name" />
-                    <span v-else class="text-5xl">🍽️</span>
+                    <span v-else class="flex items-center justify-center"><ImagePlaceholder class="h-14 w-14 text-amber-300 dark:text-amber-700" /></span>
                 </div>
                 <div class="p-4">
                     <h3 class="font-semibold text-gray-800 dark:text-white">{{ product.name }}</h3>

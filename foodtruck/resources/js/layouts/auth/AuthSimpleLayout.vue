@@ -11,10 +11,9 @@ defineProps<{
 <template>
     <div class="min-h-svh bg-gray-50 dark:bg-gray-950 flex flex-col">
         <!-- Header amber -->
-        <div class="bg-amber-500 py-8 text-center shadow-md">
-            <Link :href="home()" class="inline-flex flex-col items-center gap-1 group">
-                <span class="text-5xl">🍔</span>
-                <span class="text-2xl font-extrabold text-white tracking-tight group-hover:text-amber-100 transition">FoodTruck</span>
+        <div class="bg-amber-500 py-6 text-center shadow-md">
+            <Link :href="home()" class="inline-flex items-center justify-center group">
+                <img src="/logoFoodtruck.png" alt="FoodTruck" class="h-[40px] w-auto transition group-hover:opacity-80" />
             </Link>
         </div>
 

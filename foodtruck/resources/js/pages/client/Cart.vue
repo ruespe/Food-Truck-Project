@@ -4,6 +4,7 @@ import { useCart } from '@/composables/useCart';
 import { useI18n } from '@/composables/useI18n';
 import { Head, router } from '@inertiajs/vue3';
 import { X } from 'lucide-vue-next';
+import ImagePlaceholder from '@/components/ImagePlaceholder.vue';
 
 defineOptions({ layout: ClientLayout });
 
@@ -33,7 +34,7 @@ function checkout() {
                 <li v-for="item in items" :key="item.id" class="flex items-center gap-4 p-4">
                     <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-2xl dark:bg-amber-900/30">
                         <img v-if="item.image" :src="item.image" class="h-full w-full rounded-xl object-cover" :alt="item.name" />
-                        <span v-else>🍽️</span>
+                        <span v-else><ImagePlaceholder class="h-8 w-8 text-amber-300 dark:text-amber-700" /></span>
                     </div>
                     <div class="flex-1">
                         <p class="font-semibold text-gray-800 dark:text-white">{{ item.name }}</p>
