@@ -3,6 +3,7 @@ import ClientLayout from '@/layouts/ClientLayout.vue';
 import { useCart } from '@/composables/useCart';
 import { useI18n } from '@/composables/useI18n';
 import { Head, router } from '@inertiajs/vue3';
+import { X } from 'lucide-vue-next';
 
 defineOptions({ layout: ClientLayout });
 
@@ -44,7 +45,9 @@ function checkout() {
                         <button class="rounded-full bg-gray-100 px-2 py-1 text-sm font-bold hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600" @click="updateQty(item.id, item.quantity + 1)">+</button>
                     </div>
                     <p class="w-16 text-right font-bold text-gray-700 dark:text-gray-200">{{ (parseFloat(String(item.price)) * item.quantity).toFixed(2) }} €</p>
-                    <button class="ml-2 text-red-400 hover:text-red-600" @click="remove(item.id)">✕</button>
+                    <button class="ml-2 rounded-full p-1 text-red-400 transition hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10" @click="remove(item.id)">
+                        <X class="h-4 w-4" />
+                    </button>
                 </li>
             </ul>
 

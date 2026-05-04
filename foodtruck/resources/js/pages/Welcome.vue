@@ -39,7 +39,7 @@ const { t } = useI18n();
             <div
                 v-for="product in featuredProducts"
                 :key="product.id"
-                class="overflow-hidden rounded-2xl bg-white shadow-md transition hover:shadow-lg dark:bg-gray-800"
+                class="overflow-hidden rounded-2xl bg-white shadow-md transition hover:shadow-xl hover:scale-[1.02] dark:bg-gray-800"
             >
                 <div class="flex h-40 items-center justify-center bg-amber-100 dark:bg-amber-900/30">
                     <img v-if="product.image" :src="product.image" class="h-full w-full object-cover" :alt="product.name" />
@@ -55,7 +55,7 @@ const { t } = useI18n();
                 </div>
             </div>
         </div>
-        <p v-else class="text-center text-gray-500 dark:text-gray-400">{{ t('home.loading') }}</p>
+        <p v-else class="text-center text-gray-500 dark:text-gray-400">{{ t('home.noProducts') }}</p>
     </section>
 
     <!-- Ubicación -->

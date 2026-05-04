@@ -33,6 +33,7 @@ const messages = {
         // Welcome – Popular
         'home.popular': 'Lo más popular',
         'home.loading': 'Cargando productos...',
+        'home.noProducts': 'No hay productos disponibles en este momento.',
         'home.seeMenu': 'Ver menú',
         // Welcome – Location
         'home.where': '¿Dónde estamos hoy?',
@@ -44,13 +45,15 @@ const messages = {
         'home.email': 'Tu email',
         'home.message': 'Tu mensaje',
         'home.send': 'Enviar mensaje',
-        'home.sent': '✅ Mensaje enviado. ¡Gracias!',
+        'home.sent': 'Mensaje enviado. ¡Gracias!',
         // Menu
         'menu.title': 'Nuestro menú',
         'menu.all': 'Todos',
         'menu.add': 'Añadir',
         'menu.added': '✓ Añadido',
         'menu.notAvailable': 'No disponible',
+        'menu.outOfStock': 'Sin stock',
+        'menu.noProducts': 'No hay productos en esta categoría.',
         'menu.seeCart': 'Ver carrito',
         // Cart
         'cart.title': 'Tu carrito',
@@ -125,6 +128,7 @@ const messages = {
         // Welcome – Popular
         'home.popular': 'Most popular',
         'home.loading': 'Loading products...',
+        'home.noProducts': 'No products available at this time.',
         'home.seeMenu': 'See menu',
         // Welcome – Location
         'home.where': 'Where are we today?',
@@ -136,13 +140,15 @@ const messages = {
         'home.email': 'Your email',
         'home.message': 'Your message',
         'home.send': 'Send message',
-        'home.sent': '✅ Message sent. Thank you!',
+        'home.sent': 'Message sent. Thank you!',
         // Menu
         'menu.title': 'Our menu',
         'menu.all': 'All',
         'menu.add': 'Add',
         'menu.added': '✓ Added',
         'menu.notAvailable': 'Not available',
+        'menu.outOfStock': 'Out of stock',
+        'menu.noProducts': 'No products in this category.',
         'menu.seeCart': 'See cart',
         // Cart
         'cart.title': 'Your cart',
@@ -214,6 +220,7 @@ const messages = {
         // Welcome – Popular
         'home.popular': 'El més popular',
         'home.loading': 'Carregant productes...',
+        'home.noProducts': 'No hi ha productes disponibles en aquest moment.',
         'home.seeMenu': 'Veure el menú',
         // Welcome – Location
         'home.where': 'On som avui?',
@@ -225,13 +232,15 @@ const messages = {
         'home.email': 'El teu correu',
         'home.message': 'El teu missatge',
         'home.send': 'Enviar missatge',
-        'home.sent': '✅ Missatge enviat. Gràcies!',
+        'home.sent': 'Missatge enviat. Gràcies!',
         // Menu
         'menu.title': 'El nostre menú',
         'menu.all': 'Tots',
         'menu.add': 'Afegir',
         'menu.added': '✓ Afegit',
         'menu.notAvailable': 'No disponible',
+        'menu.outOfStock': 'Sense estoc',
+        'menu.noProducts': 'No hi ha productes en aquesta categoria.',
         'menu.seeCart': 'Veure cistella',
         // Cart
         'cart.title': 'La teva cistella',

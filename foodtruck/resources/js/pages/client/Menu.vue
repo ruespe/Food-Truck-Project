@@ -4,6 +4,7 @@ import { useCart } from '@/composables/useCart';
 import { useI18n } from '@/composables/useI18n';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
+import { ShoppingCart } from 'lucide-vue-next';
 
 defineOptions({ layout: ClientLayout });
 
@@ -71,11 +72,11 @@ function addToCart(product: Product) {
         </div>
 
         <!-- Grid productos -->
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div v-if="products.data.length > 0" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <div
                 v-for="product in products.data"
                 :key="product.id"
-                class="overflow-hidden rounded-2xl bg-white shadow-md dark:bg-gray-800"
+                class="overflow-hidden rounded-2xl bg-white shadow-md transition hover:shadow-xl hover:scale-[1.02] dark:bg-gray-800"
             >
                 <div class="relative flex h-44 items-center justify-center bg-amber-100 dark:bg-amber-900/30">
                     <img
@@ -88,7 +89,7 @@ function addToCart(product: Product) {
                     <span v-else class="text-5xl" :class="product.stock === 0 ? 'opacity-30' : ''">🍽️</span>
                     <!-- Overlay + badge sin stock -->
                     <div v-if="product.stock === 0" class="absolute inset-0 flex flex-col items-center justify-center bg-red-600/40">
-                        <span class="rounded-full bg-red-600 px-4 py-1 text-sm font-bold uppercase tracking-wide text-white shadow">Sin stock</span>
+                        <span class="rounded-full bg-red-600 px-4 py-1 text-sm font-bold uppercase tracking-wide text-white shadow">{{ t('menu.outOfStock') }}</span>
                     </div>
                 </div>
                 <div class="p-4">
@@ -104,11 +105,14 @@ function addToCart(product: Product) {
                         >
                             {{ added.has(product.id) ? t('menu.added') : t('menu.add') }}
                         </button>
-                        <span v-else-if="product.stock === 0" class="text-sm font-semibold text-red-400">Sin stock</span>
+                        <span v-else-if="product.stock === 0" class="text-sm font-semibold text-red-400">{{ t('menu.outOfStock') }}</span>
                         <span v-else class="text-sm text-gray-400 dark:text-gray-500">{{ t('menu.notAvailable') }}</span>
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-else class="mt-4 rounded-2xl bg-white p-10 text-center text-gray-500 shadow dark:bg-gray-800 dark:text-gray-400">
+            {{ t('menu.noProducts') }}
         </div>
 
         <!-- Paginación -->
@@ -135,9 +139,10 @@ function addToCart(product: Product) {
         </div>
 
         <!-- Ir al carrito -->
-        <div v-if="count > 0" class="fixed bottom-6 right-6">
-            <a href="/cart" class="flex items-center gap-2 rounded-full bg-amber-500 px-6 py-3 font-bold text-white shadow-xl hover:bg-amber-600">
-                🛒 {{ t('menu.seeCart') }} ({{ count }})
+        <div v-if="count > 0" class="fixed bottom-6 right-6 z-50">
+            <a href="/cart" class="flex items-center gap-2 rounded-full bg-amber-500 px-6 py-3 font-bold text-white shadow-xl transition hover:bg-amber-600">
+                <ShoppingCart class="h-5 w-5" />
+                {{ t('menu.seeCart') }} ({{ count }})
             </a>
         </div>
     </div>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, router, usePage } from '@inertiajs/vue3';
-import { Moon, ShoppingCart, Sun, ChevronDown, User, LayoutDashboard, LogOut } from 'lucide-vue-next';
+import { Moon, ShoppingCart, Sun, ChevronDown, User, LayoutDashboard, LogOut, Menu, X } from 'lucide-vue-next';
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import { useAppearance } from '@/composables/useAppearance';
 import { useCart } from '@/composables/useCart';
@@ -21,6 +21,7 @@ const langOpen = ref(false);
 const langRef = ref<HTMLElement | null>(null);
 const userOpen = ref(false);
 const userRef = ref<HTMLElement | null>(null);
+const mobileOpen = ref(false);
 
 function toggleTheme() {
     updateAppearance(resolvedAppearance.value === 'dark' ? 'light' : 'dark');
@@ -82,6 +83,15 @@ function submitContact() {
 
                 <!-- Controls -->
                 <div class="flex items-center gap-2">
+                    <!-- Hamburguesa (móvil) -->
+                    <button
+                        class="rounded-full p-2 text-gray-600 transition hover:bg-amber-100 dark:text-gray-300 dark:hover:bg-gray-800 sm:hidden"
+                        @click="mobileOpen = !mobileOpen"
+                        :aria-label="mobileOpen ? 'Cerrar menú' : 'Abrir menú'"
+                    >
+                        <X v-if="mobileOpen" class="h-5 w-5" />
+                        <Menu v-else class="h-5 w-5" />
+                    </button>
                     <!-- Dark/Light toggle -->
                     <button
                         class="rounded-full p-2 text-gray-600 transition hover:bg-amber-100 dark:text-gray-300 dark:hover:bg-gray-800"
@@ -201,6 +211,27 @@ function submitContact() {
                 </div>
             </nav>
         </header>
+
+        <!-- Menú móvil -->
+        <div
+            v-show="mobileOpen"
+            class="border-b border-amber-200 bg-white px-4 pb-4 pt-2 shadow-md dark:border-gray-800 dark:bg-gray-900 sm:hidden"
+        >
+            <div class="flex flex-col gap-1 text-sm font-medium text-gray-700 dark:text-gray-200">
+                <Link href="/" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.home') }}</Link>
+                <Link href="/menu" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.menu') }}</Link>
+                <Link href="/#location" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.location') }}</Link>
+                <a href="#contact" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.contact') }}</a>
+                <div class="my-1 border-t border-gray-100 dark:border-gray-700" />
+                <template v-if="auth?.user">
+                    <Link v-if="isAdmin" href="/admin/" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.adminPanel') }}</Link>
+                    <Link v-else href="/orders" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.myOrders') }}</Link>
+                    <Link href="/settings/profile" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.profile') }}</Link>
+                    <button class="rounded-lg px-3 py-2 text-left text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10" @click="logout">{{ t('nav.logout') }}</button>
+                </template>
+                <Link v-else href="/login" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.login') }}</Link>
+            </div>
+        </div>
 
         <!-- Content -->
         <main class="flex-1">
