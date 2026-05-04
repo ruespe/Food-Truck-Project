@@ -495,7 +495,10 @@ type Messages = typeof messages.es;
 export type MessageKey = keyof Messages;
 
 function getInitialLocale(): Locale {
-    if (typeof window === 'undefined') return 'es';
+    if (typeof window === 'undefined') {
+return 'es';
+}
+
     return (localStorage.getItem('foodtruck_locale') as Locale) ?? 'es';
 }
 
@@ -517,11 +520,13 @@ export const localeNames: Record<Locale, string> = {
 export function useI18n() {
     function t(key: MessageKey): string {
         const dict = messages[locale.value] as Messages;
+
         return dict[key] ?? (messages.es as Messages)[key] ?? key;
     }
 
     function setLocale(l: Locale) {
         locale.value = l;
+
         if (typeof window !== 'undefined') {
             localStorage.setItem('foodtruck_locale', l);
         }
