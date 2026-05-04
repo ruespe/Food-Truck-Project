@@ -48,9 +48,19 @@ function logout() {
 onMounted(() => document.addEventListener('mousedown', handleOutsideClick));
 onBeforeUnmount(() => document.removeEventListener('mousedown', handleOutsideClick));
 
-// Contact form
+// Contact modal
+const contactModalOpen = ref(false);
 const contact = ref({ name: '', email: '', message: '' });
 const contactSent = ref(false);
+function openContactModal() {
+    contactModalOpen.value = true;
+    contactSent.value = false;
+}
+function closeContactModal() {
+    contactModalOpen.value = false;
+    contact.value = { name: '', email: '', message: '' };
+    contactSent.value = false;
+}
 function submitContact() {
     router.post('/contact', contact.value, {
         preserveScroll: true,
@@ -239,41 +249,17 @@ function submitContact() {
                         </div>
                     </div>
 
-                    <!-- Col 2: Formulario de contacto -->
+                    <!-- Col 2: Botón de contacto -->
                     <div id="contact">
                         <p class="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-400">{{ t('footer.contactTitle') }}</p>
-                        <div v-if="contactSent" class="rounded-xl bg-green-100 p-4 text-sm font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                            {{ t('home.sent') }}
-                        </div>
-                        <form v-else class="space-y-2" @submit.prevent="submitContact">
-                            <input
-                                v-model="contact.name"
-                                type="text"
-                                :placeholder="t('home.name')"
-                                required
-                                class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-amber-400 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
-                            />
-                            <input
-                                v-model="contact.email"
-                                type="email"
-                                :placeholder="t('home.email')"
-                                required
-                                class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-amber-400 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
-                            />
-                            <textarea
-                                v-model="contact.message"
-                                :placeholder="t('home.message')"
-                                required
-                                rows="3"
-                                class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-amber-400 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
-                            />
-                            <button
-                                type="submit"
-                                class="w-full rounded-lg bg-amber-500 py-2 text-sm font-bold text-white hover:bg-amber-600"
-                            >
-                                {{ t('home.send') }}
-                            </button>
-                        </form>
+                        <button
+                            type="button"
+                            class="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2"
+                            @click="openContactModal"
+                        >
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            {{ t('footer.contactBtn') }}
+                        </button>
                     </div>
 
                     <!-- Col 3: Avisos legales -->
@@ -304,5 +290,105 @@ function submitContact() {
                 © {{ new Date().getFullYear() }} FoodTruck · {{ t('footer.rights') }}
             </div>
         </footer>
+
+        <!-- Contact modal -->
+        <Teleport to="body">
+            <Transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+                leave-active-class="transition duration-150 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+            >
+                <div
+                    v-if="contactModalOpen"
+                    class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                    role="dialog"
+                    aria-modal="true"
+                    @keydown.esc="closeContactModal"
+                >
+                    <!-- Backdrop -->
+                    <div
+                        class="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                        @click="closeContactModal"
+                    />
+
+                    <!-- Panel -->
+                    <Transition
+                        enter-active-class="transition duration-200 ease-out"
+                        enter-from-class="opacity-0 scale-95"
+                        enter-to-class="opacity-100 scale-100"
+                        leave-active-class="transition duration-150 ease-in"
+                        leave-from-class="opacity-100 scale-100"
+                        leave-to-class="opacity-0 scale-95"
+                    >
+                        <div
+                            v-if="contactModalOpen"
+                            class="relative z-10 w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-gray-900"
+                        >
+                            <!-- Header -->
+                            <div class="mb-5 flex items-start justify-between">
+                                <div>
+                                    <h2 class="text-xl font-bold text-gray-800 dark:text-white">{{ t('footer.contactTitle') }}</h2>
+                                    <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">{{ t('footer.tagline') }}</p>
+                                </div>
+                                <button
+                                    type="button"
+                                    class="ml-4 rounded-full p-1.5 text-gray-400 transition hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                                    @click="closeContactModal"
+                                    aria-label="Cerrar"
+                                >
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+
+                            <!-- Success -->
+                            <div v-if="contactSent" class="rounded-xl bg-green-100 p-5 text-center dark:bg-green-900/30">
+                                <p class="text-base font-semibold text-green-700 dark:text-green-400">{{ t('home.sent') }}</p>
+                                <button
+                                    type="button"
+                                    class="mt-4 rounded-lg bg-amber-500 px-5 py-2 text-sm font-semibold text-white hover:bg-amber-600"
+                                    @click="closeContactModal"
+                                >
+                                    Cerrar
+                                </button>
+                            </div>
+
+                            <!-- Form -->
+                            <form v-else class="space-y-3" @submit.prevent="submitContact">
+                                <input
+                                    v-model="contact.name"
+                                    type="text"
+                                    :placeholder="t('home.name')"
+                                    required
+                                    class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:border-amber-400 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+                                />
+                                <input
+                                    v-model="contact.email"
+                                    type="email"
+                                    :placeholder="t('home.email')"
+                                    required
+                                    class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:border-amber-400 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+                                />
+                                <textarea
+                                    v-model="contact.message"
+                                    :placeholder="t('home.message')"
+                                    required
+                                    rows="4"
+                                    class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:border-amber-400 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+                                />
+                                <button
+                                    type="submit"
+                                    class="w-full rounded-lg bg-amber-500 py-2.5 text-sm font-bold text-white hover:bg-amber-600"
+                                >
+                                    {{ t('home.send') }}
+                                </button>
+                            </form>
+                        </div>
+                    </Transition>
+                </div>
+            </Transition>
+        </Teleport>
     </div>
 </template>

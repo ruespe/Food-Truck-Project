@@ -15,7 +15,7 @@ const { t } = useI18n();
 </script>
 
 <template>
-    <Head title="FoodTruck - Comida en la calle" />
+    <Head title="Sabor sobre Ruedas"/>
 
     <!-- Hero -->
     <section class="relative overflow-hidden bg-amber-500 py-24 text-white">
