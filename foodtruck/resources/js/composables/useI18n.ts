@@ -55,6 +55,7 @@ const messages = {
         'menu.outOfStock': 'Sin stock',
         'menu.noProducts': 'No hay productos en esta categoría.',
         'menu.seeCart': 'Ver carrito',
+        'menu.loginRequired': 'Debes iniciar sesión para añadir productos al carrito.',
         // Cart
         'cart.title': 'Tu carrito',
         'cart.empty': 'El carrito está vacío.',
@@ -97,6 +98,24 @@ const messages = {
         'nav.logout': 'Cerrar sesión',
         // Footer contact button
         'footer.contactBtn': 'Escríbenos',
+        // Settings – Profile
+        'settings.password.title': 'Cambiar contraseña',
+        'settings.password.subtitle': 'Usa una contraseña larga y segura',
+        'settings.password.current': 'Contraseña actual',
+        'settings.password.new': 'Nueva contraseña',
+        'settings.password.confirm': 'Confirmar contraseña',
+        'settings.password.save': 'Guardar contraseña',
+        'settings.password.saved': 'Contraseña actualizada',
+        'settings.delete.danger': 'Zona de peligro',
+        'settings.delete.irreversible': 'Esta acción es irreversible',
+        'settings.delete.warning': 'Aviso',
+        'settings.delete.warningText': 'Por favor, procede con cuidado, esta acción no se puede deshacer.',
+        'settings.delete.btn': 'Eliminar cuenta',
+        'settings.delete.confirmTitle': '¿Seguro que quieres eliminar tu cuenta?',
+        'settings.delete.confirmDesc': 'Una vez eliminada, todos los datos serán borrados permanentemente. Introduce tu contraseña para confirmar.',
+        'settings.delete.passwordPlaceholder': 'Contraseña',
+        'settings.delete.cancel': 'Cancelar',
+        'settings.delete.confirm': 'Eliminar cuenta',
         // Legal pages – common
         'legal.back': '← Volver al inicio',
         'legal.updated': 'Última actualización: abril de 2026',
@@ -223,6 +242,7 @@ const messages = {
         'menu.outOfStock': 'Out of stock',
         'menu.noProducts': 'No products in this category.',
         'menu.seeCart': 'See cart',
+        'menu.loginRequired': 'You must be logged in to add products to the cart.',
         // Cart
         'cart.title': 'Your cart',
         'cart.empty': 'Your cart is empty.',
@@ -261,6 +281,24 @@ const messages = {
         'payment.cancel.backMenu': 'Back to menu',
         // Footer contact button
         'footer.contactBtn': 'Get in touch',
+        // Settings – Profile
+        'settings.password.title': 'Change password',
+        'settings.password.subtitle': 'Use a long, secure password',
+        'settings.password.current': 'Current password',
+        'settings.password.new': 'New password',
+        'settings.password.confirm': 'Confirm password',
+        'settings.password.save': 'Save password',
+        'settings.password.saved': 'Password updated',
+        'settings.delete.danger': 'Danger zone',
+        'settings.delete.irreversible': 'This action is irreversible',
+        'settings.delete.warning': 'Warning',
+        'settings.delete.warningText': 'Please proceed with caution, this cannot be undone.',
+        'settings.delete.btn': 'Delete account',
+        'settings.delete.confirmTitle': 'Are you sure you want to delete your account?',
+        'settings.delete.confirmDesc': 'Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm.',
+        'settings.delete.passwordPlaceholder': 'Password',
+        'settings.delete.cancel': 'Cancel',
+        'settings.delete.confirm': 'Delete account',
         // Legal pages – common
         'legal.back': '← Back to home',
         'legal.updated': 'Last updated: April 2026',
@@ -388,6 +426,7 @@ const messages = {
         'menu.outOfStock': 'Sense estoc',
         'menu.noProducts': 'No hi ha productes en aquesta categoria.',
         'menu.seeCart': 'Veure cistella',
+        'menu.loginRequired': 'Has d\'iniciar sessió per afegir productes al carret',
         // Cart
         'cart.title': 'La teva cistella',
         'cart.empty': 'La cistella és buida.',
@@ -426,6 +465,24 @@ const messages = {
         'payment.cancel.backMenu': 'Tornar al menú',
         // Footer contact button
         'footer.contactBtn': 'Escriu-nos',
+        // Settings – Profile
+        'settings.password.title': 'Canviar contrasenya',
+        'settings.password.subtitle': 'Usa una contrasenya llarga i segura',
+        'settings.password.current': 'Contrasenya actual',
+        'settings.password.new': 'Nova contrasenya',
+        'settings.password.confirm': 'Confirmar contrasenya',
+        'settings.password.save': 'Desar contrasenya',
+        'settings.password.saved': 'Contrasenya actualitzada',
+        'settings.delete.danger': 'Zona de perill',
+        'settings.delete.irreversible': 'Aquesta acció és irreversible',
+        'settings.delete.warning': 'Avís',
+        'settings.delete.warningText': 'Si us plau, procedeix amb cura, aquesta acció no es pot desfer.',
+        'settings.delete.btn': 'Eliminar compte',
+        'settings.delete.confirmTitle': 'Segur que vols eliminar el teu compte?',
+        'settings.delete.confirmDesc': 'Un cop eliminat, totes les dades seran esborrades permanentment. Introdueix la teva contrasenya per confirmar.',
+        'settings.delete.passwordPlaceholder': 'Contrasenya',
+        'settings.delete.cancel': "Cancel·lar",
+        'settings.delete.confirm': 'Eliminar compte',
         // Legal pages – common
         'legal.back': "← Tornar a l'inici",
         'legal.updated': 'Última actualització: abril de 2026',
@@ -526,6 +583,22 @@ export const localeNames: Record<Locale, string> = {
     en: 'EN',
 };
 
+/**
+ * Translate a dynamic DB value stored as { es: '...', ca: '...', en: '...' }.
+ * Falls back to 'es' or an empty string if the locale key is missing.
+ */
+export function td(value: Record<string, string> | string | null | undefined): string {
+    if (!value) {
+        return '';
+    }
+
+    if (typeof value === 'string') {
+        return value;
+    }
+
+    return value[locale.value] ?? value['es'] ?? '';
+}
+
 export function useI18n() {
     function t(key: MessageKey): string {
         const dict = messages[locale.value] as Messages;
@@ -538,6 +611,8 @@ export function useI18n() {
 
         if (typeof window !== 'undefined') {
             localStorage.setItem('foodtruck_locale', l);
+            const maxAge = 60 * 60 * 24 * 365;
+            document.cookie = `foodtruck_locale=${l};path=/;max-age=${maxAge};SameSite=Lax`;
         }
     }
 

@@ -16,7 +16,7 @@ class MenuController extends Controller
 
         $products = Product::with('category')
             ->where('available', true)
-            ->when($categoryId, fn ($q) => $q->where('category_id', $categoryId))
+            ->when($categoryId, fn($q) => $q->where('category_id', $categoryId))
             ->orderBy('name')
             ->paginate(6, ['id', 'category_id', 'name', 'description', 'price', 'image', 'available', 'stock'])
             ->withQueryString();

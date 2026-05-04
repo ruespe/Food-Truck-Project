@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { Form, Head, Link, usePage } from '@inertiajs/vue3';
+import { CheckCircle, Lock, Mail, Trash2, User } from 'lucide-vue-next';
 import { computed } from 'vue';
-import { User, Mail, Trash2, CheckCircle } from 'lucide-vue-next';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
+import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
 import DeleteUser from '@/components/DeleteUser.vue';
 import InputError from '@/components/InputError.vue';
+import PasswordInput from '@/components/PasswordInput.vue';
+import { useI18n } from '@/composables/useI18n';
 import ClientLayout from '@/layouts/ClientLayout.vue';
-import { edit } from '@/routes/profile';
 import { send } from '@/routes/verification';
-import { edit as editSecurity } from '@/routes/security';
-import { edit as editAppearance } from '@/routes/appearance';
 
 defineOptions({ layout: ClientLayout });
 
@@ -20,6 +20,7 @@ type Props = {
 
 defineProps<Props>();
 
+const { t } = useI18n();
 const page = usePage();
 const user = computed(() => page.props.auth.user as { name: string; email: string; email_verified_at: string | null });
 </script>
@@ -33,19 +34,6 @@ const user = computed(() => page.props.auth.user as { name: string; email: strin
         <div class="mb-8">
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Ajustes de cuenta</h1>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Gestiona tu perfil y preferencias</p>
-        </div>
-
-        <!-- Tabs -->
-        <div class="mb-6 flex gap-1 rounded-xl bg-amber-100 p-1 dark:bg-gray-800">
-            <Link :href="edit()" class="flex-1 rounded-lg py-2 text-center text-sm font-semibold bg-white shadow text-amber-600 dark:bg-gray-700 dark:text-amber-400">
-                Perfil
-            </Link>
-            <Link :href="editSecurity()" class="flex-1 rounded-lg py-2 text-center text-sm font-medium text-gray-600 transition hover:bg-white/60 dark:text-gray-300 dark:hover:bg-gray-700/60">
-                Seguridad
-            </Link>
-            <Link :href="editAppearance()" class="flex-1 rounded-lg py-2 text-center text-sm font-medium text-gray-600 transition hover:bg-white/60 dark:text-gray-300 dark:hover:bg-gray-700/60">
-                Apariencia
-            </Link>
         </div>
 
         <!-- Profile card -->
@@ -132,6 +120,77 @@ const user = computed(() => page.props.auth.user as { name: string; email: strin
             </div>
         </div>
 
+        <!-- Change password card -->
+        <div class="mt-6 rounded-2xl border border-amber-100 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <div class="flex items-center gap-3 border-b border-amber-100 px-6 py-4 dark:border-gray-700">
+                <div class="rounded-lg bg-amber-100 p-1.5 dark:bg-amber-900/30">
+                    <Lock class="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div>
+                    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">{{ t('settings.password.title') }}</h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ t('settings.password.subtitle') }}</p>
+                </div>
+            </div>
+            <div class="px-6 py-6">
+                <Form
+                    v-bind="SecurityController.update.form()"
+                    :options="{ preserveScroll: true }"
+                    reset-on-success
+                    :reset-on-error="['password', 'password_confirmation', 'current_password']"
+                    class="space-y-5"
+                    v-slot="{ errors, processing, recentlySuccessful }"
+                >
+                    <div>
+                        <label for="current_password" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t('settings.password.current') }}</label>
+                        <PasswordInput
+                            id="current_password"
+                            name="current_password"
+                            autocomplete="current-password"
+                            :placeholder="t('settings.password.current')"
+                            class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+                        />
+                        <InputError :message="errors.current_password" />
+                    </div>
+                    <div>
+                        <label for="password" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t('settings.password.new') }}</label>
+                        <PasswordInput
+                            id="password"
+                            name="password"
+                            autocomplete="new-password"
+                            :placeholder="t('settings.password.new')"
+                            class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+                        />
+                        <InputError :message="errors.password" />
+                    </div>
+                    <div>
+                        <label for="password_confirmation" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t('settings.password.confirm') }}</label>
+                        <PasswordInput
+                            id="password_confirmation"
+                            name="password_confirmation"
+                            autocomplete="new-password"
+                            :placeholder="t('settings.password.confirm')"
+                            class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+                        />
+                        <InputError :message="errors.password_confirmation" />
+                    </div>
+                    <div class="flex items-center justify-between pt-2">
+                        <Transition enter-active-class="transition ease-in-out" enter-from-class="opacity-0" leave-active-class="transition ease-in-out" leave-to-class="opacity-0">
+                            <p v-show="recentlySuccessful" class="flex items-center gap-1.5 text-sm font-medium text-green-600 dark:text-green-400">
+                                <CheckCircle class="h-4 w-4" /> {{ t('settings.password.saved') }}
+                            </p>
+                        </Transition>
+                        <button
+                            type="submit"
+                            :disabled="processing"
+                            class="ml-auto rounded-xl bg-amber-500 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600 disabled:opacity-50"
+                        >
+                            {{ t('settings.password.save') }}
+                        </button>
+                    </div>
+                </Form>
+            </div>
+        </div>
+
         <!-- Delete account card -->
         <div class="mt-6 rounded-2xl border border-red-100 bg-white shadow-sm dark:border-red-900/40 dark:bg-gray-900">
             <div class="flex items-center gap-3 border-b border-red-100 px-6 py-4 dark:border-red-900/40">
@@ -139,8 +198,8 @@ const user = computed(() => page.props.auth.user as { name: string; email: strin
                     <Trash2 class="h-4 w-4 text-red-500 dark:text-red-400" />
                 </div>
                 <div>
-                    <h2 class="text-sm font-semibold text-red-600 dark:text-red-400">Zona de peligro</h2>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Esta acción es irreversible</p>
+                    <h2 class="text-sm font-semibold text-red-600 dark:text-red-400">{{ t('settings.delete.danger') }}</h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ t('settings.delete.irreversible') }}</p>
                 </div>
             </div>
             <div class="px-6 py-5">

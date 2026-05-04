@@ -59,8 +59,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         if ($user->role === 'admin') {
             return redirect('/admin/');
         }
-        // Los clientes van a su historial de pedidos
-        return redirect()->route('orders.index');
+        // Los clientes van a la landing page
+        return redirect('/');
     })->name('dashboard');
 
     Route::post('dashboard/location', function (\Illuminate\Http\Request $request) {

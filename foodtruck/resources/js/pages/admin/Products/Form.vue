@@ -10,7 +10,7 @@ const props = defineProps<{
         name: string;
         description: string;
         price: number;
-        stock: number;
+        stock: boolean;
         available: boolean;
         category_id: number;
         image: string | null;
@@ -20,9 +20,13 @@ const props = defineProps<{
 
 const form = useForm({
     name: props.product?.name ?? '',
-    description: props.product?.description ?? '',
+    description: {
+        es: (props.product?.description as any)?.es ?? '',
+        ca: (props.product?.description as any)?.ca ?? '',
+        en: (props.product?.description as any)?.en ?? '',
+    },
     price: props.product?.price ?? '',
-    stock: props.product?.stock ?? 0,
+    stock: props.product?.stock ?? true,
     available: props.product?.available ?? true,
     category_id: props.product?.category_id ?? '',
     image: null as File | null,
@@ -54,18 +58,25 @@ function submit() {
 
         <div class="mb-5">
             <label class="mb-1.5 block text-sm font-medium text-slate-300">Descripción</label>
-            <textarea v-model="form.description" rows="3" class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none" />
+            <div class="space-y-2">
+                <div class="flex items-start gap-2">
+                    <span class="mt-2.5 w-6 shrink-0 text-center text-xs font-bold text-slate-400">ES</span>
+                    <textarea v-model="form.description.es" rows="2" placeholder="Español" class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none" />
+                </div>
+                <div class="flex items-start gap-2">
+                    <span class="mt-2.5 w-6 shrink-0 text-center text-xs font-bold text-slate-400">CA</span>
+                    <textarea v-model="form.description.ca" rows="2" placeholder="Català" class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none" />
+                </div>
+                <div class="flex items-start gap-2">
+                    <span class="mt-2.5 w-6 shrink-0 text-center text-xs font-bold text-slate-400">EN</span>
+                    <textarea v-model="form.description.en" rows="2" placeholder="English" class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none" />
+                </div>
+            </div>
         </div>
 
-        <div class="mb-5 grid grid-cols-2 gap-4">
-            <div>
-                <label class="mb-1.5 block text-sm font-medium text-slate-300">Precio (€)</label>
-                <input v-model="form.price" type="number" step="0.01" min="0" required class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none" />
-            </div>
-            <div>
-                <label class="mb-1.5 block text-sm font-medium text-slate-300">Stock</label>
-                <input v-model="form.stock" type="number" min="0" class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none" />
-            </div>
+        <div class="mb-5">
+            <label class="mb-1.5 block text-sm font-medium text-slate-300">Precio (€)</label>
+            <input v-model="form.price" type="number" step="0.01" min="0" required class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none" />
         </div>
 
         <div class="mb-5">
@@ -79,6 +90,11 @@ function submit() {
         <div class="mb-6">
             <label class="mb-1.5 block text-sm font-medium text-slate-300">Imagen</label>
             <input type="file" accept="image/*" class="w-full text-sm text-slate-300 file:mr-3 file:rounded-lg file:border-0 file:bg-amber-500 file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-white hover:file:bg-amber-600" @change="(e: Event) => form.image = (e.target as HTMLInputElement).files?.[0] ?? null" />
+        </div>
+
+        <div class="mb-4 flex items-center gap-3">
+            <input id="stock" v-model="form.stock" type="checkbox" class="h-4 w-4 rounded border-slate-600 bg-slate-700 accent-amber-500" />
+            <label for="stock" class="text-sm font-medium text-slate-300">En stock</label>
         </div>
 
         <div class="mb-6 flex items-center gap-3">

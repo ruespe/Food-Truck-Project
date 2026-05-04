@@ -9,7 +9,7 @@ type Product = {
     id: number;
     name: string;
     price: number;
-    stock: number;
+    stock: boolean;
     available: boolean;
     image: string | null;
     category: { name: string };
@@ -71,14 +71,14 @@ function toggleStock(id: number) {
                                 :src="product.image?.startsWith('http') ? product.image : `/storage/${product.image}`"
                                 :alt="product.name"
                                 class="h-full w-full object-cover"
-                                :class="product.stock === 0 ? 'brightness-50' : ''"
+                                :class="!product.stock ? 'brightness-50' : ''"
                             />
                             <div v-else class="flex h-full w-full items-center justify-center bg-slate-700"
-                                :class="product.stock === 0 ? 'opacity-40' : ''"
+                                :class="!product.stock ? 'opacity-40' : ''"
                             ><ImagePlaceholder class="h-8 w-8 text-slate-400" /></div>
                             <!-- Overlay rojo sin stock -->
                             <div
-                                v-if="product.stock === 0"
+                                v-if="!product.stock"
                                 class="absolute inset-0 flex items-center justify-center bg-red-600/60"
                             >
                                 <span class="text-[9px] font-bold leading-tight text-white text-center">SIN<br>STOCK</span>
@@ -98,12 +98,12 @@ function toggleStock(id: number) {
                             <Link :href="`/admin/products/${product.id}/edit`" class="rounded-lg px-3 py-1 text-xs font-medium bg-slate-700 text-slate-200 hover:bg-slate-600 transition">Editar</Link>
                             <button
                                 class="rounded-lg px-3 py-1 text-xs font-medium transition"
-                                :class="product.stock === 0
+                                :class="!product.stock
                                     ? 'bg-green-500/15 text-green-400 hover:bg-green-500/25'
                                     : 'bg-orange-500/15 text-orange-400 hover:bg-orange-500/25'"
                                 @click="toggleStock(product.id)"
                             >
-                                {{ product.stock === 0 ? '↑ Reponer' : '✕ Sin stock' }}
+                                {{ !product.stock ? '↑ Reponer' : '✕ Sin stock' }}
                             </button>
                             <button class="rounded-lg px-3 py-1 text-xs font-medium bg-red-500/10 text-red-400 hover:bg-red-500/20 transition" @click="destroy(product.id)">Eliminar</button>
                         </div>

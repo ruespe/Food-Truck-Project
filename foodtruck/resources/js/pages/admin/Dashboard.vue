@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import AdminLayout from '@/layouts/AdminLayout.vue';
-import MapLocation from '@/components/MapLocation.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
-import { Clock, Package, ShoppingCart, TrendingUp, Users, MapPin, Check } from 'lucide-vue-next';
-import { ref, watch, computed, onMounted, onUnmounted } from 'vue';
-import { Bar, Line } from 'vue-chartjs';
 import {
     Chart as ChartJS,
     Title, Tooltip, Legend,
     BarElement, LineElement, PointElement,
     CategoryScale, LinearScale, Filler,
 } from 'chart.js';
+import { Clock, Package, ShoppingCart, TrendingUp, Users, MapPin, Check } from 'lucide-vue-next';
+import { ref, watch, computed, onMounted, onUnmounted } from 'vue';
+import { Bar, Line } from 'vue-chartjs';
+import MapLocation from '@/components/MapLocation.vue';
+import AdminLayout from '@/layouts/AdminLayout.vue';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, LineElement, PointElement, CategoryScale, LinearScale, Filler);
 
@@ -132,7 +132,9 @@ onMounted(() => {
     refreshTimer = setInterval(refreshData, 30_000);
 });
 onUnmounted(() => {
-    if (refreshTimer) clearInterval(refreshTimer);
+    if (refreshTimer) {
+        clearInterval(refreshTimer);
+    }
 });
 
 // ── Location form ─────────────────────────────────────────────────────────────

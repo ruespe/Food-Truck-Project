@@ -2,6 +2,7 @@
 import AdminLayout from '@/layouts/AdminLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import ImagePlaceholder from '@/components/ImagePlaceholder.vue';
+import { td } from '@/composables/useI18n';
 
 defineOptions({ layout: AdminLayout });
 
@@ -90,7 +91,7 @@ function updateStatus(status: string) {
                         <!-- Info -->
                         <div class="flex-1 min-w-0">
                             <p class="font-medium text-slate-900 dark:text-white truncate">{{ item.product.name }}</p>
-                            <p class="mt-0.5 text-xs text-slate-400 line-clamp-1">{{ item.product.description }}</p>
+                            <p class="mt-0.5 text-xs text-slate-400 line-clamp-1">{{ td(item.product.description) }}</p>
                             <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                                 {{ parseFloat(String(item.price)).toFixed(2) }} € × {{ item.quantity }}
                             </p>

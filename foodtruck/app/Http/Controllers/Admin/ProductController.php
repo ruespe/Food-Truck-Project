@@ -89,15 +89,10 @@ class ProductController extends Controller
 
     public function toggleStock(Product $product): RedirectResponse
     {
-        if ($product->stock > 0) {
-            // Marcar sin stock
-            $product->update(['stock' => 0]);
-            $message = "'{$product->name}' marcado sin stock.";
-        } else {
-            // Reponer stock mínimo
-            $product->update(['stock' => 1]);
-            $message = "Stock de '{$product->name}' repuesto.";
-        }
+        $product->update(['stock' => !$product->stock]);
+        $message = $product->stock
+            ? "'{$product->name}' marcado con stock."
+            : "'{$product->name}' marcado sin stock.";
 
         return redirect()->route('admin.products.index')->with('success', $message);
     }
@@ -107,10 +102,13 @@ class ProductController extends Controller
         return $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name'        => 'required|string|max:255',
-            'description' => 'nullable|string|max:2000',
+            'description'    => 'nullable|array',
+            'description.es' => 'nullable|string|max:2000',
+            'description.ca' => 'nullable|string|max:2000',
+            'description.en' => 'nullable|string|max:2000',
             'price'       => 'required|numeric|min:0',
             'image'       => 'nullable|image|max:2048',
-            'stock'       => 'required|integer|min:0',
+            'stock'       => 'boolean',
             'available'   => 'boolean',
         ]);
     }

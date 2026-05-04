@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { Link, router, usePage } from '@inertiajs/vue3';
 import {
+    ChevronDown,
+    LayoutDashboard,
+    LogOut,
+    Menu,
     Moon,
     ShoppingCart,
     Sun,
-    ChevronDown,
     User,
-    LayoutDashboard,
-    LogOut,
+    X,
 } from 'lucide-vue-next';
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import LocaleFlag from '@/components/LocaleFlag.vue';
@@ -35,6 +37,7 @@ const langRef = ref<HTMLElement | null>(null);
 const userOpen = ref(false);
 const userRef = ref<HTMLElement | null>(null);
 const mobileOpen = ref(false);
+const xsOpen = ref(false);
 
 function toggleTheme() {
     updateAppearance(resolvedAppearance.value === 'dark' ? 'light' : 'dark');
@@ -120,18 +123,24 @@ function submitContact() {
                         class="transition hover:text-amber-600"
                         >{{ t('nav.location') }}</Link
                     >
-                    <a
-                        href="#contact"
-                        class="transition hover:text-amber-600"
-                        >{{ t('nav.contact') }}</a
-                    >
                 </div>
 
                 <!-- Controls -->
                 <div class="flex items-center gap-2">
-                    <!-- Hamburguesa (móvil) -->
+                    <!-- Hamburguesa XS (< 430px): abre offcanvas -->
                     <button
-                        class="rounded-full p-2 text-gray-600 transition hover:bg-amber-100 dark:text-gray-300 dark:hover:bg-gray-800 sm:hidden"
+                        class="xs:hidden rounded-full p-2 text-gray-600 transition hover:bg-amber-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                        @click="xsOpen = true"
+                        aria-label="Abrir menú"
+                    >
+                        <Menu class="h-5 w-5" />
+                    </button>
+
+                    <!-- Controles ocultos por debajo de 430px -->
+                    <div class="hidden xs:flex items-center gap-2">
+                    <!-- Hamburguesa SM (430–640px): despliega menú -->
+                    <button
+                        class="hidden xs:flex sm:hidden rounded-full p-2 text-gray-600 transition hover:bg-amber-100 dark:text-gray-300 dark:hover:bg-gray-800"
                         @click="mobileOpen = !mobileOpen"
                         :aria-label="mobileOpen ? 'Cerrar menú' : 'Abrir menú'"
                     >
@@ -204,8 +213,9 @@ function submitContact() {
                         </div>
                     </div>
 
-                    <!-- Cart -->
+                    <!-- Cart (solo visible si hay sesión) -->
                     <Link
+                        v-if="auth?.user"
                         href="/cart"
                         class="relative rounded-full p-2 transition hover:bg-amber-100 dark:hover:bg-gray-800"
                     >
@@ -296,20 +306,20 @@ function submitContact() {
                             </button>
                         </div>
                     </div>
+                    </div>
                 </div>
             </nav>
         </header>
 
-        <!-- Menú móvil -->
+        <!-- Menú móvil (430–640px) -->
         <div
             v-show="mobileOpen"
-            class="border-b border-amber-200 bg-white px-4 pb-4 pt-2 shadow-md dark:border-gray-800 dark:bg-gray-900 sm:hidden"
+            class="max-xs:hidden border-b border-amber-200 bg-white px-4 pb-4 pt-2 shadow-md dark:border-gray-800 dark:bg-gray-900 sm:hidden"
         >
             <div class="flex flex-col gap-1 text-sm font-medium text-gray-700 dark:text-gray-200">
                 <Link href="/" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.home') }}</Link>
                 <Link href="/menu" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.menu') }}</Link>
                 <Link href="/#location" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.location') }}</Link>
-                <a href="#contact" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.contact') }}</a>
                 <div class="my-1 border-t border-gray-100 dark:border-gray-700" />
                 <template v-if="auth?.user">
                     <Link v-if="isAdmin" href="/admin/" class="rounded-lg px-3 py-2 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="mobileOpen = false">{{ t('nav.adminPanel') }}</Link>
@@ -479,6 +489,88 @@ function submitContact() {
                 {{ t('footer.rights') }}
             </div>
         </footer>
+
+        <!-- Contact modal -->
+        <Teleport to="body">
+            <Transition
+                enter-active-class="transition-opacity duration-200 ease-out"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+                leave-active-class="transition-opacity duration-150 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+            >
+                <div v-if="xsOpen" class="fixed inset-0 z-[60] flex" @keydown.esc="xsOpen = false">
+                    <!-- Backdrop -->
+                    <div class="absolute inset-0 bg-black/50" @click="xsOpen = false" />
+
+                    <!-- Panel -->
+                    <div class="relative z-10 flex w-72 flex-col overflow-y-auto bg-white shadow-xl dark:bg-gray-900">
+                        <!-- Header -->
+                        <div class="flex items-center justify-between border-b border-amber-100 px-4 py-3 dark:border-gray-800">
+                            <img src="/logoFoodtruck.png" alt="FoodTruck" class="h-10 w-auto" />
+                            <button
+                                class="rounded-full p-1.5 text-gray-500 transition hover:bg-gray-100 dark:hover:bg-gray-800"
+                                @click="xsOpen = false"
+                                aria-label="Cerrar"
+                            >
+                                <X class="h-5 w-5" />
+                            </button>
+                        </div>
+
+                        <!-- Nav links -->
+                        <div class="flex flex-col gap-1 p-3 text-sm font-medium text-gray-700 dark:text-gray-200">
+                            <Link href="/" class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">{{ t('nav.home') }}</Link>
+                            <Link href="/menu" class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">{{ t('nav.menu') }}</Link>
+                            <Link href="/#location" class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">{{ t('nav.location') }}</Link>
+                        </div>
+
+                        <div class="mx-4 border-t border-gray-100 dark:border-gray-700" />
+
+                        <!-- Auth section -->
+                        <div class="flex flex-col gap-1 p-3 text-sm font-medium text-gray-700 dark:text-gray-200">
+                            <template v-if="auth?.user">
+                                <Link v-if="isAdmin" href="/admin/" class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">{{ t('nav.adminPanel') }}</Link>
+                                <Link v-else href="/orders" class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">{{ t('nav.myOrders') }}</Link>
+                                <Link href="/settings/profile" class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">{{ t('nav.profile') }}</Link>
+                                <Link href="/cart" class="flex items-center gap-2 rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">
+                                    <ShoppingCart class="h-4 w-4 text-amber-600" />
+                                    Cart
+                                    <span v-if="count > 0" class="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-amber-500 text-xs text-white">{{ count }}</span>
+                                </Link>
+                                <button class="rounded-lg px-3 py-2.5 text-left text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10" @click="logout; xsOpen = false">{{ t('nav.logout') }}</button>
+                            </template>
+                            <Link v-else href="/login" class="rounded-lg px-3 py-2.5 transition hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-gray-800" @click="xsOpen = false">{{ t('nav.login') }}</Link>
+                        </div>
+
+                        <div class="mx-4 border-t border-gray-100 dark:border-gray-700" />
+
+                        <!-- Theme + Language -->
+                        <div class="flex items-center justify-between p-4">
+                            <button
+                                class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-700 transition hover:bg-amber-50 dark:text-gray-200 dark:hover:bg-gray-800"
+                                @click="toggleTheme"
+                            >
+                                <Sun v-if="resolvedAppearance === 'dark'" class="h-4 w-4" />
+                                <Moon v-else class="h-4 w-4" />
+                                {{ resolvedAppearance === 'dark' ? t('theme.light') : t('theme.dark') }}
+                            </button>
+                            <div class="flex gap-1">
+                                <button
+                                    v-for="l in locales"
+                                    :key="l"
+                                    class="rounded px-2 py-1 text-xs font-semibold transition"
+                                    :class="l === locale ? 'bg-amber-500 text-white' : 'text-gray-500 hover:bg-amber-50 dark:text-gray-400 dark:hover:bg-gray-800'"
+                                    @click="selectLocale(l)"
+                                >
+                                    {{ l.toUpperCase() }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Transition>
+        </Teleport>
 
         <!-- Contact modal -->
         <Teleport to="body">

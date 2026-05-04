@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import MapLocation from '@/components/MapLocation.vue';
+import CloudinaryImage from '@/components/CloudinaryImage.vue';
 import ImagePlaceholder from '@/components/ImagePlaceholder.vue';
-import { useI18n } from '@/composables/useI18n';
+import MapLocation from '@/components/MapLocation.vue';
+import { useI18n, td } from '@/composables/useI18n';
 import ClientLayout from '@/layouts/ClientLayout.vue';
 
 defineOptions({ layout: ClientLayout });
 
 defineProps<{
-    featuredProducts?: Array<{ id: number; name: string; description: string; price: number; image: string | null }>;
+    featuredProducts?: Array<{ id: number; name: string; description: Record<string, string>; price: number; image: string | null }>;
     location?: { name: string; latitude: number; longitude: number; start_time: string; end_time: string } | null;
 }>();
 
@@ -43,12 +44,12 @@ const { t } = useI18n();
                 class="overflow-hidden rounded-2xl bg-white shadow-md transition hover:shadow-xl hover:scale-[1.02] dark:bg-gray-800"
             >
                 <div class="flex h-40 items-center justify-center bg-amber-100 dark:bg-amber-900/30">
-                    <img v-if="product.image" :src="product.image" class="h-full w-full object-cover" :alt="product.name" />
+                    <CloudinaryImage v-if="product.image" :src="product.image" img-class="h-full w-full object-cover" :alt="product.name" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
                     <span v-else class="flex items-center justify-center"><ImagePlaceholder class="h-14 w-14 text-amber-300 dark:text-amber-700" /></span>
                 </div>
                 <div class="p-4">
                     <h3 class="font-semibold text-gray-800 dark:text-white">{{ product.name }}</h3>
-                    <p class="mt-1 line-clamp-2 text-sm text-gray-500 dark:text-gray-400">{{ product.description }}</p>
+                    <p class="mt-1 line-clamp-2 text-sm text-gray-500 dark:text-gray-400">{{ td(product.description) }}</p>
                     <div class="mt-3 flex items-center justify-between">
                         <span class="text-lg font-bold text-amber-600">{{ parseFloat(String(product.price)).toFixed(2) }} €</span>
                         <a href="/menu" class="rounded-full bg-amber-500 px-3 py-1 text-sm text-white hover:bg-amber-600">{{ t('home.seeMenu') }}</a>
