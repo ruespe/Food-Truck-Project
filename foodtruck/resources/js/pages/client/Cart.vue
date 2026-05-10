@@ -4,7 +4,7 @@ import { X } from 'lucide-vue-next';
 import CloudinaryImage from '@/components/CloudinaryImage.vue';
 import ImagePlaceholder from '@/components/ImagePlaceholder.vue';
 import { useCart } from '@/composables/useCart';
-import { useI18n } from '@/composables/useI18n';
+import { useI18n, td } from '@/composables/useI18n';
 import ClientLayout from '@/layouts/ClientLayout.vue';
 
 defineOptions({ layout: ClientLayout });
@@ -58,7 +58,7 @@ function checkout() {
                             v-if="item.image"
                             :src="item.image"
                             img-class="h-full w-full rounded-xl object-cover"
-                            :alt="item.name"
+                            :alt="td(item.name)"
                             sizes="80px"
                             :widths="[80, 160]"
                         />
@@ -69,7 +69,7 @@ function checkout() {
                     </div>
                     <div class="flex-1">
                         <p class="font-semibold text-gray-800 dark:text-white">
-                            {{ item.name }}
+                            {{ td(item.name) }}
                         </p>
                         <p class="text-sm text-amber-600">
                             {{ parseFloat(String(item.price)).toFixed(2) }}

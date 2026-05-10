@@ -90,9 +90,10 @@ class ProductController extends Controller
     public function toggleStock(Product $product): RedirectResponse
     {
         $product->update(['stock' => !$product->stock]);
+        $productName = is_array($product->name) ? ($product->name['es'] ?? '') : $product->name;
         $message = $product->stock
-            ? "'{$product->name}' marcado con stock."
-            : "'{$product->name}' marcado sin stock.";
+            ? "'{$productName}' marcado con stock."
+            : "'{$productName}' marcado sin stock.";
 
         return redirect()->route('admin.products.index')->with('success', $message);
     }
@@ -100,16 +101,19 @@ class ProductController extends Controller
     private function validated(Request $request, ?Product $product = null): array
     {
         return $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'name'        => 'required|string|max:255',
+            'category_id'    => 'required|exists:categories,id',
+            'name'           => 'required|array',
+            'name.es'        => 'required|string|max:255',
+            'name.ca'        => 'nullable|string|max:255',
+            'name.en'        => 'nullable|string|max:255',
             'description'    => 'nullable|array',
             'description.es' => 'nullable|string|max:2000',
             'description.ca' => 'nullable|string|max:2000',
             'description.en' => 'nullable|string|max:2000',
-            'price'       => 'required|numeric|min:0',
-            'image'       => 'nullable|image|max:2048',
-            'stock'       => 'boolean',
-            'available'   => 'boolean',
+            'price'          => 'required|numeric|min:0',
+            'image'          => 'nullable|image|max:2048',
+            'stock'          => 'boolean',
+            'available'      => 'boolean',
         ]);
     }
 }

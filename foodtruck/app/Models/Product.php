@@ -28,6 +28,7 @@ class Product extends Model
             'price'       => 'decimal:2',
             'available'   => 'boolean',
             'stock'       => 'boolean',
+            'name'        => 'array',
             'description' => 'array',
         ];
     }

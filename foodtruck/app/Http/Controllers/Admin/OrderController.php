@@ -39,7 +39,7 @@ class OrderController extends Controller
                     'price'   => $item->price,
                     'product' => [
                         'id'          => $item->product?->id,
-                        'name'        => $item->product?->name ?? 'Producto eliminado',
+                        'name'        => $item->product?->name ?? ['es' => 'Producto eliminado', 'ca' => 'Producte eliminat', 'en' => 'Deleted product'],
                         'description' => $item->product?->description ?? '',
                         'image'       => $item->product?->image,
                     ],

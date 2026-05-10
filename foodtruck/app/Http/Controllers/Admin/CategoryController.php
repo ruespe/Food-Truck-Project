@@ -21,8 +21,14 @@ class CategoryController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name'        => 'required|string|max:255|unique:categories,name',
-            'description' => 'nullable|string|max:1000',
+            'name'           => 'required|array',
+            'name.es'        => 'required|string|max:255',
+            'name.ca'        => 'nullable|string|max:255',
+            'name.en'        => 'nullable|string|max:255',
+            'description'    => 'nullable|array',
+            'description.es' => 'nullable|string|max:1000',
+            'description.ca' => 'nullable|string|max:1000',
+            'description.en' => 'nullable|string|max:1000',
         ]);
 
         Category::create($request->only('name', 'description'));
@@ -34,8 +40,14 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category): RedirectResponse
     {
         $request->validate([
-            'name'        => 'required|string|max:255|unique:categories,name,' . $category->id,
-            'description' => 'nullable|string|max:1000',
+            'name'           => 'required|array',
+            'name.es'        => 'required|string|max:255',
+            'name.ca'        => 'nullable|string|max:255',
+            'name.en'        => 'nullable|string|max:255',
+            'description'    => 'nullable|array',
+            'description.es' => 'nullable|string|max:1000',
+            'description.ca' => 'nullable|string|max:1000',
+            'description.en' => 'nullable|string|max:1000',
         ]);
 
         $category->update($request->only('name', 'description'));

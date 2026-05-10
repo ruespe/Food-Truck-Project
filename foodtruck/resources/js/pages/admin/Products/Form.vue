@@ -1,25 +1,30 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/layouts/AdminLayout.vue';
+import { td } from '@/composables/useI18n';
 
 defineOptions({ layout: AdminLayout });
 
 const props = defineProps<{
     product?: {
         id: number;
-        name: string;
-        description: string;
+        name: Record<string, string>;
+        description: Record<string, string> | string;
         price: number;
         stock: boolean;
         available: boolean;
         category_id: number;
         image: string | null;
     };
-    categories: Array<{ id: number; name: string }>;
+    categories: Array<{ id: number; name: Record<string, string> }>;
 }>();
 
 const form = useForm({
-    name: props.product?.name ?? '',
+    name: {
+        es: (props.product?.name as any)?.es ?? '',
+        ca: (props.product?.name as any)?.ca ?? '',
+        en: (props.product?.name as any)?.en ?? '',
+    },
     description: {
         es: (props.product?.description as any)?.es ?? '',
         ca: (props.product?.description as any)?.ca ?? '',
@@ -69,14 +74,38 @@ function submit() {
             <label class="mb-1.5 block text-sm font-medium text-slate-300"
                 >Nombre</label
             >
-            <input
-                v-model="form.name"
-                type="text"
-                required
-                class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none"
-            />
-            <p v-if="form.errors.name" class="mt-1 text-xs text-red-400">
-                {{ form.errors.name }}
+            <div class="space-y-2">
+                <div class="flex items-center gap-2">
+                    <span class="w-6 shrink-0 text-center text-xs font-bold text-slate-400">ES</span>
+                    <input
+                        v-model="form.name.es"
+                        type="text"
+                        required
+                        placeholder="Español"
+                        class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none"
+                    />
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-6 shrink-0 text-center text-xs font-bold text-slate-400">CA</span>
+                    <input
+                        v-model="form.name.ca"
+                        type="text"
+                        placeholder="Català"
+                        class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none"
+                    />
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-6 shrink-0 text-center text-xs font-bold text-slate-400">EN</span>
+                    <input
+                        v-model="form.name.en"
+                        type="text"
+                        placeholder="English"
+                        class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none"
+                    />
+                </div>
+            </div>
+            <p v-if="form.errors['name.es']" class="mt-1 text-xs text-red-400">
+                {{ form.errors['name.es'] }}
             </p>
         </div>
 
@@ -151,7 +180,7 @@ function submit() {
                     Selecciona categoría
                 </option>
                 <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-                    {{ cat.name }}
+                    {{ td(cat.name) }}
                 </option>
             </select>
         </div>

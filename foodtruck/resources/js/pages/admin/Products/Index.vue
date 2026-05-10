@@ -2,17 +2,18 @@
 import { Head, Link, router } from '@inertiajs/vue3';
 import ImagePlaceholder from '@/components/ImagePlaceholder.vue';
 import AdminLayout from '@/layouts/AdminLayout.vue';
+import { useI18n, td, type MessageKey } from '@/composables/useI18n';
 
 defineOptions({ layout: AdminLayout });
 
 type Product = {
     id: number;
-    name: string;
+    name: Record<string, string>;
     price: number;
     stock: boolean;
     available: boolean;
     image: string | null;
-    category: { name: string };
+    category: { name: Record<string, string> };
 };
 
 type Paginator = {
@@ -25,8 +26,10 @@ type Paginator = {
 
 defineProps<{ products: Paginator }>();
 
+const { t } = useI18n();
+
 function destroy(id: number) {
-    if (confirm('¿Eliminar este producto?')) {
+    if (confirm(t('admin.prod.deleteConfirm' as MessageKey))) {
         router.delete(`/admin/products/${id}`);
     }
 }
@@ -46,17 +49,17 @@ function toggleStock(id: number) {
     <div class="mb-6 flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold text-slate-900 dark:text-white">
-                Productos
+                {{ t('admin.prod.title') }}
             </h1>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                {{ products.total }} productos en total
+                {{ products.total }} {{ t('admin.prod.subtitle') }}
             </p>
         </div>
         <Link
             href="/admin/products/create"
             class="rounded-xl bg-amber-500 px-4 py-2 text-sm font-bold text-white transition hover:bg-amber-600"
         >
-            + Nuevo producto
+            {{ t('admin.prod.new') }}
         </Link>
     </div>
 
@@ -69,32 +72,32 @@ function toggleStock(id: number) {
                     <th
                         class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-400 uppercase"
                     >
-                        Imagen
+                        {{ t('admin.prod.colImage') }}
                     </th>
                     <th
                         class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-400 uppercase"
                     >
-                        Nombre
+                        {{ t('admin.prod.colName') }}
                     </th>
                     <th
                         class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-400 uppercase"
                     >
-                        Categoría
+                        {{ t('admin.prod.colCategory') }}
                     </th>
                     <th
                         class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-400 uppercase"
                     >
-                        Precio
+                        {{ t('admin.prod.colPrice') }}
                     </th>
                     <th
                         class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-400 uppercase"
                     >
-                        Disponible
+                        {{ t('admin.prod.colAvailable') }}
                     </th>
                     <th
                         class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-400 uppercase"
                     >
-                        Acciones
+                        {{ t('admin.prod.colActions') }}
                     </th>
                 </tr>
             </thead>
@@ -107,7 +110,10 @@ function toggleStock(id: number) {
                     <!-- Thumbnail con overlay rojo si sin stock -->
                     <td class="px-6 py-3">
                         <div
-                            class="relative h-12 w-12 overflow-hidden rounded-lg"
+                            :class="[
+                                'relative h-12 w-12 overflow-hidden rounded-lg',
+                                (product.category?.name as any)?.es === 'Bebidas' ? 'bg-white' : 'bg-slate-700'
+                            ]"
                         >
                             <img
                                 v-if="product.image"
@@ -116,9 +122,12 @@ function toggleStock(id: number) {
                                         ? product.image
                                         : `/storage/${product.image}`
                                 "
-                                :alt="product.name"
-                                class="h-full w-full object-cover"
-                                :class="!product.stock ? 'brightness-50' : ''"
+                                :alt="td(product.name)"
+                                :class="[
+                                    'h-full w-full',
+                                    (product.category?.name as any)?.es === 'Bebidas' ? 'object-contain p-1' : 'object-cover',
+                                    !product.stock ? 'brightness-50' : ''
+                                ]"
                             />
                             <div
                                 v-else
@@ -136,16 +145,16 @@ function toggleStock(id: number) {
                             >
                                 <span
                                     class="text-center text-[9px] leading-tight font-bold text-white"
-                                    >SIN<br />STOCK</span
+                                    >{{ t('admin.prod.noStock') }}</span
                                 >
                             </div>
                         </div>
                     </td>
                     <td class="px-6 py-4 font-medium text-white">
-                        {{ product.name }}
+                        {{ td(product.name) }}
                     </td>
                     <td class="px-6 py-4 text-slate-400">
-                        {{ product.category?.name }}
+                        {{ td(product.category?.name) }}
                     </td>
                     <td class="px-6 py-4 font-semibold text-amber-400">
                         {{ parseFloat(String(product.price)).toFixed(2) }} €
@@ -158,7 +167,7 @@ function toggleStock(id: number) {
                                     : 'text-red-400'
                             "
                         >
-                            {{ product.available ? '✓ Sí' : '✕ No' }}
+                            {{ product.available ? t('admin.prod.yes') : t('admin.prod.no') }}
                         </span>
                     </td>
                     <td class="px-6 py-4">
@@ -166,7 +175,7 @@ function toggleStock(id: number) {
                             <Link
                                 :href="`/admin/products/${product.id}/edit`"
                                 class="rounded-lg bg-slate-700 px-3 py-1 text-xs font-medium text-slate-200 transition hover:bg-slate-600"
-                                >Editar</Link
+                                >{{ t('admin.prod.edit') }}</Link
                             >
                             <button
                                 class="rounded-lg px-3 py-1 text-xs font-medium transition"
@@ -178,14 +187,14 @@ function toggleStock(id: number) {
                                 @click="toggleStock(product.id)"
                             >
                                 {{
-                                    !product.stock ? '↑ Reponer' : '✕ Sin stock'
+                                    !product.stock ? t('admin.prod.restock') : t('admin.prod.outOfStock')
                                 }}
                             </button>
                             <button
                                 class="rounded-lg bg-red-500/10 px-3 py-1 text-xs font-medium text-red-400 transition hover:bg-red-500/20"
                                 @click="destroy(product.id)"
                             >
-                                Eliminar
+                                {{ t('admin.prod.delete') }}
                             </button>
                         </div>
                     </td>
@@ -195,7 +204,7 @@ function toggleStock(id: number) {
                         colspan="6"
                         class="px-6 py-10 text-center text-slate-500"
                     >
-                        No hay productos aún
+                        {{ t('admin.prod.empty') }}
                     </td>
                 </tr>
             </tbody>
@@ -207,7 +216,7 @@ function toggleStock(id: number) {
             class="flex items-center justify-between border-t border-slate-700 px-6 py-4"
         >
             <p class="text-xs text-slate-400">
-                Página {{ products.current_page }} de {{ products.last_page }}
+                {{ t('admin.prod.page') }} {{ products.current_page }} {{ t('admin.prod.of') }} {{ products.last_page }}
             </p>
             <div class="flex gap-1">
                 <template v-for="link in products.links" :key="link.label">

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ClientLayout from '@/layouts/ClientLayout.vue';
-import { useI18n } from '@/composables/useI18n';
+import { useI18n, td } from '@/composables/useI18n';
 import type { MessageKey } from '@/composables/useI18n';
 import { Head, Link } from '@inertiajs/vue3';
 
@@ -13,7 +13,7 @@ defineProps<{
         status: string;
         payment_method: string;
         created_at: string;
-        items: Array<{ id: number; quantity: number; price: number; product: { name: string } }>;
+        items: Array<{ id: number; quantity: number; price: number; product: { name: Record<string, string> } }>;
     }>;
 }>();
 
@@ -57,7 +57,7 @@ function statusLabel(status: string): string {
                 </div>
                 <ul class="mt-3 space-y-1 text-sm text-gray-600 dark:text-gray-400">
                     <li v-for="item in order.items" :key="item.id">
-                        {{ item.quantity }} × {{ item.product.name }} — {{ (parseFloat(String(item.price)) * item.quantity).toFixed(2) }} €
+                        {{ item.quantity }} × {{ td(item.product.name) }} — {{ (parseFloat(String(item.price)) * item.quantity).toFixed(2) }} €
                     </li>
                 </ul>
                 <div class="mt-3 text-right text-lg font-bold text-amber-600">

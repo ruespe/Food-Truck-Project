@@ -25,6 +25,8 @@ import { ref, watch, computed, onMounted, onUnmounted } from 'vue';
 import { Bar, Line } from 'vue-chartjs';
 import MapLocation from '@/components/MapLocation.vue';
 import AdminLayout from '@/layouts/AdminLayout.vue';
+import { useI18n, td } from '@/composables/useI18n';
+import type { MessageKey } from '@/composables/useI18n';
 
 ChartJS.register(
     Title,
@@ -40,6 +42,8 @@ ChartJS.register(
 
 defineOptions({ layout: AdminLayout });
 
+const { t } = useI18n();
+
 const props = defineProps<{
     stats: {
         total_orders: number;
@@ -52,7 +56,7 @@ const props = defineProps<{
         labels: string[];
         data: number[];
     };
-    top_products?: Array<{ name: string; total_sold: number }>;
+    top_products?: Array<{ name: Record<string, string>; total_sold: number }>;
     recent_orders: Array<{
         id: number;
         user: string;
@@ -77,7 +81,7 @@ const revenueData = computed(() => ({
     labels: props.revenue_chart?.labels ?? [],
     datasets: [
         {
-            label: 'Ingresos (€)',
+            label: t('admin.dash.revenueDataset'),
             data: props.revenue_chart?.data ?? [],
             fill: true,
             backgroundColor: 'rgba(245,158,11,0.15)',
@@ -117,10 +121,10 @@ const revenueOptions = {
 };
 
 const topProductsData = computed(() => ({
-    labels: props.top_products?.map((p) => p.name) ?? [],
+    labels: props.top_products?.map((p) => td(p.name)) ?? [],
     datasets: [
         {
-            label: 'Unidades vendidas',
+            label: t('admin.dash.topDataset'),
             data: props.top_products?.map((p) => p.total_sold) ?? [],
             backgroundColor: [
                 'rgba(245,158,11,0.8)',
@@ -171,14 +175,9 @@ const statusColor: Record<string, string> = {
     cancelled: 'bg-red-500/10 text-red-400 ring-1 ring-inset ring-red-500/20',
 };
 
-const statusLabel: Record<string, string> = {
-    pending: 'Pendiente',
-    confirmed: 'Confirmado',
-    preparing: 'Preparando',
-    ready: 'Listo',
-    delivered: 'Entregado',
-    cancelled: 'Cancelado',
-};
+function statusLabel(status: string): string {
+    return t(`status.${status}` as MessageKey);
+}
 
 // ── Auto-refresh ─────────────────────────────────────────────────────────────
 const lastRefresh = ref(new Date());
@@ -236,10 +235,10 @@ function saveLocation() {
     <div class="mb-8 flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold text-slate-900 dark:text-white">
-                Dashboard
+                {{ t('admin.dash.title') }}
             </h1>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                Resumen del negocio en tiempo real
+                {{ t('admin.dash.subtitle') }}
             </p>
         </div>
         <button
@@ -247,7 +246,7 @@ function saveLocation() {
             @click="refreshData"
         >
             <TrendingUp class="h-3.5 w-3.5" />
-            Actualizar ·
+            {{ t('admin.dash.refresh') }} ·
             {{
                 lastRefresh.toLocaleTimeString('es-ES', {
                     hour: '2-digit',
@@ -267,7 +266,7 @@ function saveLocation() {
                 <p
                     class="text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                 >
-                    Pedidos totales
+                    {{ t('admin.dash.totalOrders') }}
                 </p>
                 <div class="rounded-lg bg-amber-500/10 p-1.5">
                     <ShoppingCart
@@ -286,7 +285,7 @@ function saveLocation() {
                 <p
                     class="text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                 >
-                    Pendientes
+                    {{ t('admin.dash.pending') }}
                 </p>
                 <div class="rounded-lg bg-yellow-500/10 p-1.5">
                     <Clock
@@ -307,7 +306,7 @@ function saveLocation() {
                 <p
                     class="text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                 >
-                    Productos
+                    {{ t('admin.dash.products') }}
                 </p>
                 <div class="rounded-lg bg-blue-500/10 p-1.5">
                     <Package class="h-4 w-4 text-blue-500 dark:text-blue-400" />
@@ -324,7 +323,7 @@ function saveLocation() {
                 <p
                     class="text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                 >
-                    Clientes
+                    {{ t('admin.dash.clients') }}
                 </p>
                 <div class="rounded-lg bg-purple-500/10 p-1.5">
                     <Users
@@ -343,7 +342,7 @@ function saveLocation() {
                 <p
                     class="text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                 >
-                    Ingresos
+                    {{ t('admin.dash.revenue') }}
                 </p>
                 <div class="rounded-lg bg-green-500/10 p-1.5">
                     <TrendingUp
@@ -368,10 +367,10 @@ function saveLocation() {
             <div class="mb-4 flex items-center justify-between">
                 <div>
                     <h2 class="font-semibold text-slate-900 dark:text-white">
-                        Ingresos diarios
+                        {{ t('admin.dash.dailyRevenue') }}
                     </h2>
                     <p class="text-xs text-slate-500 dark:text-slate-400">
-                        Últimos 14 días (pedidos no cancelados)
+                        {{ t('admin.dash.last14') }}
                     </p>
                 </div>
                 <TrendingUp class="h-5 w-5 text-amber-500" />
@@ -388,10 +387,10 @@ function saveLocation() {
             <div class="mb-4 flex items-center justify-between">
                 <div>
                     <h2 class="font-semibold text-slate-900 dark:text-white">
-                        Más vendidos
+                        {{ t('admin.dash.bestSellers') }}
                     </h2>
                     <p class="text-xs text-slate-500 dark:text-slate-400">
-                        Top 8 por unidades
+                        {{ t('admin.dash.top8') }}
                     </p>
                 </div>
                 <Package class="h-5 w-5 text-amber-500" />
@@ -406,7 +405,7 @@ function saveLocation() {
                 v-else
                 class="flex h-[220px] items-center justify-center text-sm text-slate-400 dark:text-slate-500"
             >
-                Sin datos de ventas aún
+                {{ t('admin.dash.noSalesData') }}
             </div>
         </div>
     </div>
@@ -423,24 +422,23 @@ function saveLocation() {
             </div>
             <div>
                 <h2 class="font-semibold text-slate-900 dark:text-white">
-                    Ubicacion del truck hoy
+                    {{ t('admin.dash.truckLocation') }}
                 </h2>
                 <p class="text-xs text-slate-500 dark:text-slate-400">
-                    Haz clic en el mapa o arrastra el marcador para fijar la
-                    posicion
+                    {{ t('admin.dash.locationHint') }}
                 </p>
             </div>
             <span
                 v-if="today_location"
                 class="ml-auto flex items-center gap-1 rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-600 ring-1 ring-green-500/20 ring-inset dark:text-green-400"
             >
-                <Check class="h-3 w-3" /> Publicada
+                <Check class="h-3 w-3" /> {{ t('admin.dash.published') }}
             </span>
             <span
                 v-else
                 class="ml-auto rounded-full bg-yellow-500/10 px-3 py-1 text-xs font-medium text-yellow-600 ring-1 ring-yellow-500/20 ring-inset dark:text-yellow-400"
             >
-                Sin publicar
+                {{ t('admin.dash.unpublished') }}
             </span>
         </div>
 
@@ -472,12 +470,12 @@ function saveLocation() {
                 <div>
                     <label
                         class="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400"
-                        >Nombre del lugar</label
+                        >{{ t('admin.dash.locationName') }}</label
                     >
                     <input
                         v-model="form.name"
                         type="text"
-                        placeholder="Ej: Plaza Mayor, Madrid"
+                        :placeholder="t('admin.dash.locationPlaceholder')"
                         class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700/50 dark:text-white dark:placeholder-slate-500"
                     />
                     <p
@@ -491,7 +489,7 @@ function saveLocation() {
                     <div>
                         <label
                             class="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400"
-                            >Latitud</label
+                            >{{ t('admin.dash.latitude') }}</label
                         >
                         <input
                             v-model="form.latitude"
@@ -503,7 +501,7 @@ function saveLocation() {
                     <div>
                         <label
                             class="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400"
-                            >Longitud</label
+                            >{{ t('admin.dash.longitude') }}</label
                         >
                         <input
                             v-model="form.longitude"
@@ -517,7 +515,7 @@ function saveLocation() {
                     <div>
                         <label
                             class="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400"
-                            >Hora apertura</label
+                            >{{ t('admin.dash.openTime') }}</label
                         >
                         <input
                             v-model="form.start_time"
@@ -528,7 +526,7 @@ function saveLocation() {
                     <div>
                         <label
                             class="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400"
-                            >Hora cierre</label
+                            >{{ t('admin.dash.closeTime') }}</label
                         >
                         <input
                             v-model="form.end_time"
@@ -545,8 +543,8 @@ function saveLocation() {
                     <MapPin class="h-4 w-4" />
                     {{
                         today_location
-                            ? 'Actualizar ubicacion'
-                            : 'Publicar ubicacion de hoy'
+                            ? t('admin.dash.updateLocation')
+                            : t('admin.dash.publishLocation')
                     }}
                 </button>
             </div>
@@ -559,7 +557,7 @@ function saveLocation() {
     >
         <div class="border-b border-slate-200 px-6 py-4 dark:border-slate-700">
             <h2 class="font-semibold text-slate-900 dark:text-white">
-                Ultimos pedidos
+                {{ t('admin.dash.recentOrders') }}
             </h2>
         </div>
         <div class="overflow-x-auto">
@@ -574,22 +572,22 @@ function saveLocation() {
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
-                            Cliente
+                            {{ t('admin.dash.colClient') }}
                         </th>
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
-                            Total
+                            {{ t('admin.dash.colTotal') }}
                         </th>
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
-                            Estado
+                            {{ t('admin.dash.colStatus') }}
                         </th>
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
-                            Fecha
+                            {{ t('admin.dash.colDate') }}
                         </th>
                     </tr>
                 </thead>
@@ -627,7 +625,7 @@ function saveLocation() {
                                         'bg-slate-500/10 text-slate-500 dark:text-slate-400',
                                 ]"
                             >
-                                {{ statusLabel[order.status] ?? order.status }}
+                                {{ statusLabel(order.status) ?? order.status }}
                             </span>
                         </td>
                         <td
@@ -641,7 +639,7 @@ function saveLocation() {
                             colspan="5"
                             class="px-6 py-10 text-center text-slate-400 dark:text-slate-500"
                         >
-                            No hay pedidos recientes
+                            {{ t('admin.dash.noRecentOrders') }}
                         </td>
                     </tr>
                 </tbody>

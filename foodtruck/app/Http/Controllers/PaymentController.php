@@ -38,7 +38,7 @@ class PaymentController extends Controller
             'price_data' => [
                 'currency'     => 'eur',
                 'product_data' => [
-                    'name' => $item->product->name,
+                    'name' => is_array($item->product->name) ? ($item->product->name['es'] ?? $item->product->name['en'] ?? 'Producto') : $item->product->name,
                 ],
                 'unit_amount'  => (int) round($item->price * 100), // céntimos
             ],

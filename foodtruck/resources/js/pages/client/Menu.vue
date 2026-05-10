@@ -12,7 +12,7 @@ defineOptions({ layout: ClientLayout });
 
 type Product = {
     id: number;
-    name: string;
+    name: Record<string, string>;
     description: Record<string, string>;
     price: number;
     image: string | null;
@@ -29,11 +29,19 @@ type Paginator = {
     links: Array<{ url: string | null; label: string; active: boolean }>;
 };
 
-defineProps<{
-    categories: Array<{ id: number; name: string }>;
+const props = defineProps<{
+    categories: Array<{ id: number; name: Record<string, string> }>;
     products: Paginator;
     selectedCategory?: number | null;
 }>();
+
+const bebidaCategoryId = computed(() =>
+    props.categories?.find(c => (c.name as any)?.es === 'Bebidas')?.id
+);
+
+function isBebida(product: Product) {
+    return product.category_id === bebidaCategoryId.value;
+}
 
 const { add, count } = useCart();
 const { t } = useI18n();
@@ -131,7 +139,7 @@ function addToCart(product: Product) {
                 ]"
                 @click="selectCategory(cat.id)"
             >
-                {{ cat.name }}
+                {{ td(cat.name) }}
             </button>
         </div>
 
@@ -146,13 +154,16 @@ function addToCart(product: Product) {
                 class="overflow-hidden rounded-2xl bg-white shadow-md transition hover:scale-[1.02] hover:shadow-xl dark:bg-gray-800"
             >
                 <div
-                    class="relative flex h-44 items-center justify-center bg-amber-100 dark:bg-amber-900/30"
+                    :class="[
+                        'relative flex h-44 items-center justify-center',
+                        isBebida(product) ? 'bg-white dark:bg-white' : 'bg-amber-100 dark:bg-amber-900/30'
+                    ]"
                 >
                     <CloudinaryImage
                         v-if="product.image"
                         :src="product.image"
-                        :alt="product.name"
-                        img-class="h-full w-full object-cover transition"
+                        :alt="td(product.name)"
+                        :img-class="`h-full w-full transition ${isBebida(product) ? 'object-contain p-4' : 'object-cover'}`"
                         :class="
                             !product.stock ? 'brightness-50 saturate-0' : ''
                         "
@@ -178,7 +189,7 @@ function addToCart(product: Product) {
                 </div>
                 <div class="p-4">
                     <h3 class="font-semibold text-gray-800 dark:text-white">
-                        {{ product.name }}
+                        {{ td(product.name) }}
                     </h3>
                     <p
                         class="mt-1 line-clamp-2 text-sm text-gray-500 dark:text-gray-400"

@@ -11,7 +11,7 @@ defineOptions({ layout: ClientLayout });
 defineProps<{
     featuredProducts?: Array<{
         id: number;
-        name: string;
+        name: Record<string, string>;
         description: Record<string, string>;
         price: number;
         image: string | null;
@@ -77,7 +77,7 @@ const { t } = useI18n();
                         v-if="product.image"
                         :src="product.image"
                         img-class="h-full w-full object-cover"
-                        :alt="product.name"
+                        :alt="td(product.name)"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                     <span v-else class="flex items-center justify-center"
@@ -87,7 +87,7 @@ const { t } = useI18n();
                 </div>
                 <div class="p-4">
                     <h3 class="font-semibold text-gray-800 dark:text-white">
-                        {{ product.name }}
+                        {{ td(product.name) }}
                     </h3>
                     <p
                         class="mt-1 line-clamp-2 text-sm text-gray-500 dark:text-gray-400"

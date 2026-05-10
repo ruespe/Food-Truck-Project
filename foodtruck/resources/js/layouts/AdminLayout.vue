@@ -17,20 +17,22 @@ import {
 import { computed, ref, onMounted, onBeforeUnmount } from "vue";
 import { useAppearance } from "@/composables/useAppearance";
 import { useCart } from "@/composables/useCart";
+import { useI18n } from "@/composables/useI18n";
 
 const page = usePage();
 const currentUrl = computed(() => page.url);
 const { resolvedAppearance, updateAppearance } = useAppearance();
+const { t } = useI18n();
 
-const nav = [
-    { label: "Dashboard", href: "/admin/", icon: LayoutDashboard },
-    { label: "Productos", href: "/admin/products", icon: Package },
-    { label: "Categorias", href: "/admin/categories", icon: FolderOpen },
-    { label: "Pedidos", href: "/admin/orders", icon: ShoppingBag },
-    { label: "Ubicacion", href: "/admin/locations", icon: MapPin },
-    { label: "Mensajes", href: "/admin/contact", icon: MessageSquare },
-    { label: "Usuarios", href: "/admin/users", icon: Users },
-];
+const nav = computed(() => [
+    { label: t('admin.nav.dashboard'), href: "/admin/", icon: LayoutDashboard },
+    { label: t('admin.nav.products'), href: "/admin/products", icon: Package },
+    { label: t('admin.nav.categories'), href: "/admin/categories", icon: FolderOpen },
+    { label: t('admin.nav.orders'), href: "/admin/orders", icon: ShoppingBag },
+    { label: t('admin.nav.location'), href: "/admin/locations", icon: MapPin },
+    { label: t('admin.nav.messages'), href: "/admin/contact", icon: MessageSquare },
+    { label: t('admin.nav.users'), href: "/admin/users", icon: Users },
+]);
 
 function isActive(href: string) {
     if (href === "/admin/") return currentUrl.value === "/admin/" || currentUrl.value === "/admin";
@@ -133,7 +135,7 @@ onBeforeUnmount(() => document.removeEventListener("mousedown", handleOutsideCli
                                 @click="userOpen = false"
                             >
                                 <User class="h-4 w-4 text-gray-400 dark:text-slate-400" />
-                                Mi perfil
+                                {{ t('admin.nav.myProfile') }}
                             </Link>
                             <div class="border-t border-gray-100 dark:border-slate-700" />
                             <button
@@ -141,7 +143,7 @@ onBeforeUnmount(() => document.removeEventListener("mousedown", handleOutsideCli
                                 @click="logout"
                             >
                                 <LogOut class="h-4 w-4" />
-                                Cerrar sesion
+                                {{ t('admin.nav.logout') }}
                             </button>
                         </div>
                     </div>

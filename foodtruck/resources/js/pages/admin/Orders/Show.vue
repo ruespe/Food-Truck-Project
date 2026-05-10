@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import ImagePlaceholder from '@/components/ImagePlaceholder.vue';
-import { td } from '@/composables/useI18n';
+import { td, useI18n } from '@/composables/useI18n';
+import type { MessageKey } from '@/composables/useI18n';
 import AdminLayout from '@/layouts/AdminLayout.vue';
 
 defineOptions({ layout: AdminLayout });
@@ -21,9 +22,9 @@ const props = defineProps<{
             price: number;
             product: {
                 id: number;
-                name: string;
+                name: Record<string, string>;
                 image: string | null;
-                description: string;
+                description: Record<string, string>;
             };
         }>;
         payment: { status: string; transaction_id: string | null } | null;
@@ -31,14 +32,9 @@ const props = defineProps<{
     statuses: string[];
 }>();
 
-const statusLabel: Record<string, string> = {
-    pending: 'Pendiente',
-    confirmed: 'Confirmado',
-    preparing: 'Preparando',
-    ready: 'Listo',
-    delivered: 'Entregado',
-    cancelled: 'Cancelado',
-};
+const { t } = useI18n();
+
+const statusLabel = (s: string) => t(`status.${s}` as MessageKey);
 
 const statusColor: Record<string, string> = {
     pending: 'bg-yellow-500/10 text-yellow-500 ring-1 ring-yellow-500/30',
@@ -114,7 +110,7 @@ function updateStatus(status: string) {
                                         ? item.product.image
                                         : `/storage/${item.product.image}`
                                 "
-                                :alt="item.product.name"
+                                :alt="td(item.product.name)"
                                 class="h-full w-full object-cover"
                             />
                             <div
@@ -132,7 +128,7 @@ function updateStatus(status: string) {
                             <p
                                 class="truncate font-medium text-slate-900 dark:text-white"
                             >
-                                {{ item.product.name }}
+                                {{ td(item.product.name) }}
                             </p>
                             <p
                                 class="mt-0.5 line-clamp-1 text-xs text-slate-400"
@@ -194,7 +190,7 @@ function updateStatus(status: string) {
                         statusColor[order.status] ?? '',
                     ]"
                 >
-                    {{ statusLabel[order.status] ?? order.status }}
+                    {{ statusLabel(order.status) ?? order.status }}
                 </span>
 
                 <div class="mt-4">
@@ -212,7 +208,7 @@ function updateStatus(status: string) {
                         "
                     >
                         <option v-for="s in statuses" :key="s" :value="s">
-                            {{ statusLabel[s] }}
+                            {{ statusLabel(s) }}
                         </option>
                     </select>
                 </div>

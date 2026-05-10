@@ -2,7 +2,7 @@ import { computed, ref } from 'vue';
 
 export interface CartItem {
     id: number;
-    name: string;
+    name: string | Record<string, string>;
     price: number;
     quantity: number;
     image: string | null;

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import AdminLayout from '@/layouts/AdminLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { useI18n, td } from '@/composables/useI18n';
+import type { MessageKey } from '@/composables/useI18n';
 
 defineOptions({ layout: AdminLayout });
 
@@ -11,7 +13,7 @@ type Order = {
     payment_method: string;
     created_at: string;
     user: { name: string; email: string };
-    items: Array<{ quantity: number; product: { name: string } }>;
+    items: Array<{ quantity: number; product: { name: Record<string, string> } }>;
 };
 
 type Paginator = {
@@ -24,16 +26,13 @@ type Paginator = {
 
 defineProps<{ orders: Paginator }>();
 
+const { t } = useI18n();
+
 const statuses = ['pending', 'confirmed', 'preparing', 'ready', 'delivered', 'cancelled'];
 
-const statusLabel: Record<string, string> = {
-    pending:   'Pendiente',
-    confirmed: 'Confirmado',
-    preparing: 'Preparando',
-    ready:     'Listo',
-    delivered: 'Entregado',
-    cancelled: 'Cancelado',
-};
+function statusLabel(s: string): string {
+    return t(`status.${s}` as MessageKey);
+}
 
 const statusColor: Record<string, string> = {
     pending:   'bg-yellow-500/20 text-yellow-300',
@@ -84,7 +83,7 @@ function updateStatus(orderId: number, status: string) {
                         </td>
                         <td class="px-6 py-4 text-slate-500 dark:text-slate-400 max-w-xs truncate">
                             <span v-for="(item, i) in order.items" :key="i">
-                                {{ item.quantity }}× {{ item.product.name }}<span v-if="i < order.items.length - 1">, </span>
+                                {{ item.quantity }}× {{ td(item.product.name) }}<span v-if="i < order.items.length - 1">, </span>
                             </span>
                         </td>
                         <td class="px-6 py-4 font-bold text-amber-600 dark:text-amber-400">{{ parseFloat(String(order.total_price)).toFixed(2) }} €</td>
@@ -94,7 +93,7 @@ function updateStatus(orderId: number, status: string) {
                                 :class="['rounded-lg border-0 px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500', statusColor[order.status] ?? 'bg-slate-700 text-slate-300']"
                                 @change="updateStatus(order.id, ($event.target as HTMLSelectElement).value)"
                             >
-                                <option v-for="s in statuses" :key="s" :value="s" class="bg-slate-800 text-white">{{ statusLabel[s] }}</option>
+                                <option v-for="s in statuses" :key="s" :value="s" class="bg-slate-800 text-white">{{ statusLabel(s) }}</option>
                             </select>
                         </td>
                         <td class="px-6 py-4 text-xs text-slate-400">{{ order.created_at }}</td>

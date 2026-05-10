@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ClientLayout from '@/layouts/ClientLayout.vue';
-import { useI18n } from '@/composables/useI18n';
+import { useI18n, td } from '@/composables/useI18n';
 import type { MessageKey } from '@/composables/useI18n';
 import { Head, router } from '@inertiajs/vue3';
 
@@ -11,7 +11,7 @@ const props = defineProps<{
         id: number;
         total_price: number;
         status: string;
-        items: Array<{ id: number; quantity: number; price: number; product: { name: string } }>;
+        items: Array<{ id: number; quantity: number; price: number; product: { name: Record<string, string> } }>;
         payment: { status: string; transaction_id: string | null } | null;
     };
 }>();
@@ -35,7 +35,7 @@ function cancelOrder() {
         <div class="rounded-2xl bg-white p-6 shadow dark:bg-gray-800">
             <ul class="mb-4 divide-y dark:divide-gray-700">
                 <li v-for="item in order.items" :key="item.id" class="flex justify-between py-3 text-sm dark:text-gray-300">
-                    <span>{{ item.quantity }} × {{ item.product.name }}</span>
+                    <span>{{ item.quantity }} × {{ td(item.product.name) }}</span>
                     <span class="font-semibold">{{ (parseFloat(String(item.price)) * item.quantity).toFixed(2) }} €</span>
                 </li>
             </ul>

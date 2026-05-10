@@ -11,11 +11,46 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            ['name' => 'Bocadillos', 'description' => 'Bocadillos y sándwiches artesanales'],
-            ['name' => 'Hamburguesas', 'description' => 'Hamburguesas caseras con ingredientes frescos'],
-            ['name' => 'Tapas', 'description' => 'Tapas y raciones para compartir'],
-            ['name' => 'Bebidas', 'description' => 'Refrescos, zumos y bebidas frías'],
-            ['name' => 'Postres', 'description' => 'Dulces y postres del día'],
+            [
+                'name' => ['es' => 'Bocadillos', 'ca' => 'Entrepans', 'en' => 'Sandwiches'],
+                'description' => [
+                    'es' => 'Bocadillos y sándwiches artesanales',
+                    'ca' => 'Entrepans i sandvitxos artesanals',
+                    'en' => 'Artisan sandwiches and rolls',
+                ],
+            ],
+            [
+                'name' => ['es' => 'Hamburguesas', 'ca' => 'Hamburgueses', 'en' => 'Burgers'],
+                'description' => [
+                    'es' => 'Hamburguesas caseras con ingredientes frescos',
+                    'ca' => 'Hamburgueses caseres amb ingredients frescos',
+                    'en' => 'Homemade burgers with fresh ingredients',
+                ],
+            ],
+            [
+                'name' => ['es' => 'Tapas', 'ca' => 'Tapes', 'en' => 'Tapas'],
+                'description' => [
+                    'es' => 'Tapas y raciones para compartir',
+                    'ca' => 'Tapes i racions per compartir',
+                    'en' => 'Tapas and sharing plates',
+                ],
+            ],
+            [
+                'name' => ['es' => 'Bebidas', 'ca' => 'Begudes', 'en' => 'Drinks'],
+                'description' => [
+                    'es' => 'Refrescos, zumos y bebidas frías',
+                    'ca' => 'Refrescos, sucs i begudes fredes',
+                    'en' => 'Soft drinks, juices and cold beverages',
+                ],
+            ],
+            [
+                'name' => ['es' => 'Postres', 'ca' => 'Postres', 'en' => 'Desserts'],
+                'description' => [
+                    'es' => 'Dulces y postres del día',
+                    'ca' => 'Dolcos i postres del dia',
+                    'en' => "Today's sweets and desserts",
+                ],
+            ],
         ];
 
         foreach ($categories as $category) {

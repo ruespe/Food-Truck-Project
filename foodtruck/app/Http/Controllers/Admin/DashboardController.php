@@ -39,7 +39,7 @@ class DashboardController extends Controller
             ->take(8)
             ->get()
             ->map(fn ($item) => [
-                'name'       => $item->product?->name ?? 'Eliminado',
+                'name'       => $item->product?->name ?? ['es' => 'Eliminado', 'ca' => 'Eliminat', 'en' => 'Deleted'],
                 'total_sold' => (int) $item->total_sold,
             ]);
 
