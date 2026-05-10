@@ -23,10 +23,11 @@ Route::get('/', function () {
 
     return inertia('Welcome', [
         'canRegister'      => Features::enabled(Features::registration()),
-        'featuredProducts' => Product::where('available', true)
+        'featuredProducts' => Product::with('category')
+            ->where('available', true)
             ->inRandomOrder()
             ->take(6)
-            ->get(['id', 'name', 'description', 'price', 'image']),
+            ->get(['id', 'category_id', 'name', 'description', 'price', 'image']),
         'location'         => $location,
     ]);
 })->name('home');

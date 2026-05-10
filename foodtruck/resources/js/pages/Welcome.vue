@@ -8,14 +8,18 @@ import ClientLayout from '@/layouts/ClientLayout.vue';
 
 defineOptions({ layout: ClientLayout });
 
-defineProps<{
-    featuredProducts?: Array<{
-        id: number;
-        name: Record<string, string>;
-        description: Record<string, string>;
-        price: number;
-        image: string | null;
-    }>;
+type FeaturedProduct = {
+    id: number;
+    category_id: number;
+    name: Record<string, string>;
+    description: Record<string, string>;
+    price: number;
+    image: string | null;
+    category?: { name: Record<string, string> };
+};
+
+const props = defineProps<{
+    featuredProducts?: FeaturedProduct[];
     location?: {
         name: string;
         latitude: number;
@@ -26,6 +30,10 @@ defineProps<{
 }>();
 
 const { t } = useI18n();
+
+function isBebida(product: FeaturedProduct) {
+    return (product.category?.name as any)?.es === 'Bebidas';
+}
 </script>
 
 <template>
@@ -71,12 +79,15 @@ const { t } = useI18n();
                 class="overflow-hidden rounded-2xl bg-white shadow-md transition hover:scale-[1.02] hover:shadow-xl dark:bg-gray-800"
             >
                 <div
-                    class="flex h-40 items-center justify-center bg-amber-100 dark:bg-amber-900/30"
+                    :class="[
+                        'flex h-40 items-center justify-center',
+                        isBebida(product) ? 'bg-white dark:bg-white' : 'bg-amber-100 dark:bg-amber-900/30'
+                    ]"
                 >
                     <CloudinaryImage
                         v-if="product.image"
                         :src="product.image"
-                        img-class="h-full w-full object-cover"
+                        :img-class="`h-full w-full transition ${isBebida(product) ? 'object-contain p-4' : 'object-cover'}`"
                         :alt="td(product.name)"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
