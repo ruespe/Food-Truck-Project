@@ -42,7 +42,13 @@ function isBebida(product: FeaturedProduct) {
     <!-- Hero -->
     <section
         class="relative overflow-hidden py-24 text-white"
-        style="background-image: linear-gradient(rgba(38, 20, 0, 0.7), rgba(38, 20, 0, 0.7)), url('/background-hero.webp'); background-size: cover; background-position: 50% 40%;"
+        style="
+            background-image:
+                linear-gradient(rgba(38, 20, 0, 0.7), rgba(38, 20, 0, 0.7)),
+                url('/background-hero.webp');
+            background-size: cover;
+            background-position: 50% 40%;
+        "
     >
         <div class="relative mx-auto max-w-4xl px-4 text-center">
             <p
@@ -51,7 +57,7 @@ function isBebida(product: FeaturedProduct) {
                 {{ t('home.welcome') }}
             </p>
             <h1 class="mb-4 text-5xl leading-tight font-extrabold">
-                FoodTruck
+                Sabor sobre Ruedas
             </h1>
             <p class="mx-auto mb-8 max-w-xl text-xl text-amber-100">
                 {{ t('home.subtitle') }}
@@ -84,7 +90,9 @@ function isBebida(product: FeaturedProduct) {
                 <div
                     :class="[
                         'flex h-40 items-center justify-center',
-                        isBebida(product) ? 'bg-white dark:bg-white' : 'bg-amber-100 dark:bg-amber-900/30'
+                        isBebida(product)
+                            ? 'bg-white dark:bg-white'
+                            : 'bg-amber-100 dark:bg-amber-900/30',
                     ]"
                 >
                     <CloudinaryImage
