@@ -129,39 +129,56 @@
 }
 
 .dark {
-    --background: hsl(0 0% 3.9%);
-    --foreground: hsl(0 0% 98%);
-    --card: hsl(0 0% 3.9%);
-    --card-foreground: hsl(0 0% 98%);
-    --popover: hsl(0 0% 3.9%);
-    --popover-foreground: hsl(0 0% 98%);
-    --primary: hsl(0 0% 98%);
-    --primary-foreground: hsl(0 0% 9%);
-    --secondary: hsl(0 0% 14.9%);
-    --secondary-foreground: hsl(0 0% 98%);
-    --muted: hsl(0 0% 16.08%);
-    --muted-foreground: hsl(0 0% 63.9%);
-    --accent: hsl(0 0% 14.9%);
-    --accent-foreground: hsl(0 0% 98%);
+    /* ── Steam palette – slate color remap ──────────────────────────────────
+       Tailwind v4 dark:bg-slate-*, dark:text-slate-* etc. all resolve to
+       these CSS custom properties, so every existing component inherits the
+       Steam look automatically without touching any .vue file.            */
+    --color-slate-950: #171a21;   /* darkest  – header / top nav          */
+    --color-slate-900: #1b2838;   /* page background                      */
+    --color-slate-800: #1e2d3d;   /* cards & panels                       */
+    --color-slate-700: #2a475e;   /* borders, dividers, hover             */
+    --color-slate-600: #3a5d74;   /* subtle borders                       */
+    --color-slate-500: #7a9db5;   /* placeholder / disabled text          */
+    --color-slate-400: #c7d5e0;   /* secondary text (Steam body text)     */
+    --color-slate-300: #d8e5ee;   /* light text                           */
+    --color-slate-200: #e8f0f5;   /* very light surfaces                  */
+    --color-slate-100: #f2f7fa;   /* near-white surfaces                  */
+    --color-slate-50:  #f5f9fc;   /* lightest                             */
+
+    /* ── Design tokens (shadcn / custom components) ─────────────────────── */
+    --background: #1b2838;
+    --foreground: #c7d5e0;
+    --card: #1e2d3d;
+    --card-foreground: #c7d5e0;
+    --popover: #1e2d3d;
+    --popover-foreground: #c7d5e0;
+    --primary: #f59e0b;
+    --primary-foreground: #1b2838;
+    --secondary: #2a475e;
+    --secondary-foreground: #c7d5e0;
+    --muted: #1e2d3d;
+    --muted-foreground: #7a9db5;
+    --accent: #2a475e;
+    --accent-foreground: #c7d5e0;
     --destructive: hsl(0 84% 60%);
     --destructive-foreground: hsl(0 0% 98%);
-    --border: hsl(0 0% 14.9%);
-    --input: hsl(0 0% 14.9%);
-    --ring: hsl(0 0% 83.1%);
-    --chart-1: hsl(220 70% 50%);
+    --border: #2a475e;
+    --input: #2a475e;
+    --ring: #f59e0b;
+    --chart-1: #f59e0b;
     --chart-2: hsl(160 60% 45%);
     --chart-3: hsl(30 80% 55%);
     --chart-4: hsl(280 65% 60%);
     --chart-5: hsl(340 75% 55%);
-    --sidebar-background: hsl(0 0% 7%);
-    --sidebar-foreground: hsl(0 0% 95.9%);
-    --sidebar-primary: hsl(360, 100%, 100%);
-    --sidebar-primary-foreground: hsl(0 0% 100%);
-    --sidebar-accent: hsl(0 0% 15.9%);
-    --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
-    --sidebar-border: hsl(0 0% 15.9%);
-    --sidebar-ring: hsl(217.2 91.2% 59.8%);
-    --sidebar: hsl(240 5.9% 10%);
+    --sidebar-background: #171a21;
+    --sidebar-foreground: #c7d5e0;
+    --sidebar-primary: #f59e0b;
+    --sidebar-primary-foreground: #1b2838;
+    --sidebar-accent: #2a475e;
+    --sidebar-accent-foreground: #c7d5e0;
+    --sidebar-border: #2a475e;
+    --sidebar-ring: #f59e0b;
+    --sidebar: #171a21;
 }
 
 @layer base {
