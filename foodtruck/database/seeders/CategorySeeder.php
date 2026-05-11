@@ -43,14 +43,6 @@ class CategorySeeder extends Seeder
                     'en' => 'Soft drinks, juices and cold beverages',
                 ],
             ],
-            [
-                'name' => ['es' => 'Postres', 'ca' => 'Postres', 'en' => 'Desserts'],
-                'description' => [
-                    'es' => 'Dulces y postres del día',
-                    'ca' => 'Dolcos i postres del dia',
-                    'en' => "Today's sweets and desserts",
-                ],
-            ],
         ];
 
         foreach ($categories as $category) {
