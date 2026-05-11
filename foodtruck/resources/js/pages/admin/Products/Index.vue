@@ -64,48 +64,48 @@ function toggleStock(id: number) {
     </div>
 
     <div
-        class="overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-800"
+        class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
     >
         <table class="w-full text-sm">
             <thead>
-                <tr class="border-b border-slate-700">
+                <tr class="border-b border-slate-200 dark:border-slate-700">
                     <th
-                        class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-400 uppercase"
+                        class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                     >
                         {{ t('admin.prod.colImage') }}
                     </th>
                     <th
-                        class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-400 uppercase"
+                        class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                     >
                         {{ t('admin.prod.colName') }}
                     </th>
                     <th
-                        class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-400 uppercase"
+                        class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                     >
                         {{ t('admin.prod.colCategory') }}
                     </th>
                     <th
-                        class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-400 uppercase"
+                        class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                     >
                         {{ t('admin.prod.colPrice') }}
                     </th>
                     <th
-                        class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-400 uppercase"
+                        class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                     >
                         {{ t('admin.prod.colAvailable') }}
                     </th>
                     <th
-                        class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-400 uppercase"
+                        class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                     >
                         {{ t('admin.prod.colActions') }}
                     </th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-slate-700/50">
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-700/50">
                 <tr
                     v-for="product in products.data"
                     :key="product.id"
-                    class="transition hover:bg-slate-700/30"
+                    class="transition hover:bg-slate-50 dark:hover:bg-slate-700/30"
                 >
                     <!-- Thumbnail con overlay rojo si sin stock -->
                     <td class="px-6 py-3">
@@ -150,10 +150,10 @@ function toggleStock(id: number) {
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4 font-medium text-white">
+                    <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">
                         {{ td(product.name) }}
                     </td>
-                    <td class="px-6 py-4 text-slate-400">
+                    <td class="px-6 py-4 text-slate-500 dark:text-slate-400">
                         {{ td(product.category?.name) }}
                     </td>
                     <td class="px-6 py-4 font-semibold text-amber-400">
@@ -174,7 +174,7 @@ function toggleStock(id: number) {
                         <div class="flex flex-wrap gap-2">
                             <Link
                                 :href="`/admin/products/${product.id}/edit`"
-                                class="rounded-lg bg-slate-700 px-3 py-1 text-xs font-medium text-slate-200 transition hover:bg-slate-600"
+                                class="rounded-lg border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
                                 >{{ t('admin.prod.edit') }}</Link
                             >
                             <button
@@ -213,9 +213,9 @@ function toggleStock(id: number) {
         <!-- Pagination -->
         <div
             v-if="products.last_page > 1"
-            class="flex items-center justify-between border-t border-slate-700 px-6 py-4"
+            class="flex items-center justify-between border-t border-slate-200 px-6 py-4 dark:border-slate-700"
         >
-            <p class="text-xs text-slate-400">
+            <p class="text-xs text-slate-500 dark:text-slate-400">
                 {{ t('admin.prod.page') }} {{ products.current_page }} {{ t('admin.prod.of') }} {{ products.last_page }}
             </p>
             <div class="flex gap-1">
@@ -228,7 +228,7 @@ function toggleStock(id: number) {
                             'flex h-8 min-w-8 items-center justify-center rounded-lg px-2 text-xs font-medium transition',
                             link.active
                                 ? 'bg-amber-500 text-white'
-                                : 'bg-slate-700 text-slate-300 hover:bg-amber-500/10 hover:text-amber-400',
+                                : 'bg-slate-100 text-slate-600 hover:bg-amber-500/10 hover:text-amber-500 dark:bg-slate-700 dark:text-slate-300 dark:hover:text-amber-400',
                         ]"
                         v-html="link.label"
                     />

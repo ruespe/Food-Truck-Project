@@ -19,6 +19,9 @@
     --radius-md: calc(var(--radius) - 2px);
     --radius-sm: calc(var(--radius) - 4px);
 
+    --color-brand: var(--brand);
+    --color-brand-foreground: var(--brand-foreground);
+
     --color-background: var(--background);
     --color-foreground: var(--foreground);
 
@@ -92,40 +95,59 @@
 }
 
 :root {
-    --background: hsl(0 0% 100%);
-    --foreground: hsl(0 0% 3.9%);
+    /* ── Warm gray remap ──────────────────────────────────────────────────
+       All bg-gray-*, text-gray-*, border-gray-* utilities resolve to these
+       custom properties in Tailwind v4, so overriding them here applies the
+       warm palette across every component without touching any .vue file.  */
+    --color-gray-50:  hsl(33 30% 98%);    /* near-white warm background     */
+    --color-gray-100: hsl(30 20% 95%);    /* page background (AdminLayout)  */
+    --color-gray-200: hsl(30 15% 90%);    /* borders, dividers              */
+    --color-gray-300: hsl(30 12% 83%);    /* stronger borders               */
+    --color-gray-400: hsl(30 8% 64%);     /* placeholder text               */
+    --color-gray-500: hsl(30 6% 46%);     /* secondary text                 */
+    --color-gray-600: hsl(30 8% 34%);     /* body text                      */
+    --color-gray-700: hsl(30 10% 22%);    /* dark text                      */
+    --color-gray-800: hsl(30 10% 14%);    /* darker text                    */
+    --color-gray-900: hsl(30 10% 10%);    /* foreground / headings          */
+    --color-gray-950: hsl(30 12% 6%);     /* darkest                        */
+
+    /* ── Warm minimal light mode + brand orange ────────────────────────── */
+    --background: hsl(33 30% 99%);
+    --foreground: hsl(30 10% 10%);
     --card: hsl(0 0% 100%);
-    --card-foreground: hsl(0 0% 3.9%);
+    --card-foreground: hsl(30 10% 10%);
     --popover: hsl(0 0% 100%);
-    --popover-foreground: hsl(0 0% 3.9%);
-    --primary: hsl(0 0% 9%);
-    --primary-foreground: hsl(0 0% 98%);
-    --secondary: hsl(0 0% 92.1%);
-    --secondary-foreground: hsl(0 0% 9%);
-    --muted: hsl(0 0% 96.1%);
-    --muted-foreground: hsl(0 0% 45.1%);
-    --accent: hsl(0 0% 96.1%);
-    --accent-foreground: hsl(0 0% 9%);
+    --popover-foreground: hsl(30 10% 10%);
+    --primary: hsl(30 10% 10%);
+    --primary-foreground: hsl(0 0% 100%);
+    --secondary: hsl(30 10% 96%);
+    --secondary-foreground: hsl(30 10% 20%);
+    --muted: hsl(30 10% 96%);
+    --muted-foreground: hsl(30 5% 45%);
+    --accent: hsl(30 10% 96%);
+    --accent-foreground: hsl(30 10% 20%);
     --destructive: hsl(0 84.2% 60.2%);
     --destructive-foreground: hsl(0 0% 98%);
-    --border: hsl(0 0% 92.8%);
-    --input: hsl(0 0% 89.8%);
-    --ring: hsl(0 0% 3.9%);
-    --chart-1: hsl(12 76% 61%);
+    --border: hsl(30 10% 90%);
+    --input: hsl(30 10% 90%);
+    --ring: hsl(25 95% 53%);
+    --brand: hsl(25 95% 53%);
+    --brand-foreground: hsl(0 0% 100%);
+    --chart-1: hsl(25 95% 53%);
     --chart-2: hsl(173 58% 39%);
     --chart-3: hsl(197 37% 24%);
     --chart-4: hsl(43 74% 66%);
     --chart-5: hsl(27 87% 67%);
     --radius: 0.5rem;
-    --sidebar-background: hsl(0 0% 98%);
-    --sidebar-foreground: hsl(240 5.3% 26.1%);
-    --sidebar-primary: hsl(0 0% 10%);
-    --sidebar-primary-foreground: hsl(0 0% 98%);
-    --sidebar-accent: hsl(0 0% 94%);
-    --sidebar-accent-foreground: hsl(0 0% 30%);
-    --sidebar-border: hsl(0 0% 91%);
-    --sidebar-ring: hsl(217.2 91.2% 59.8%);
-    --sidebar: hsl(0 0% 98%);
+    --sidebar-background: hsl(33 30% 98%);
+    --sidebar-foreground: hsl(30 10% 20%);
+    --sidebar-primary: hsl(30 10% 10%);
+    --sidebar-primary-foreground: hsl(0 0% 100%);
+    --sidebar-accent: hsl(30 10% 94%);
+    --sidebar-accent-foreground: hsl(30 10% 20%);
+    --sidebar-border: hsl(30 10% 90%);
+    --sidebar-ring: hsl(25 95% 53%);
+    --sidebar: hsl(33 30% 98%);
 }
 
 .dark {
