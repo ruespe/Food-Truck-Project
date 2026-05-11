@@ -23,7 +23,9 @@ class OrderController extends Controller
             ->get();
 
         return Inertia::render('client/OrderHistory', [
-            'orders' => $orders,
+            'orders' => $orders->map(fn ($order) => array_merge($order->toArray(), [
+                'created_at' => $order->created_at->format('d/m/Y H:i'),
+            ])),
         ]);
     }
 
@@ -75,8 +77,13 @@ class OrderController extends Controller
     {
         abort_unless($order->user_id === auth()->id(), 403);
 
+        $order->load(['items.product', 'payment']);
+
         return Inertia::render('client/OrderDetail', [
-            'order' => $order->load(['items.product', 'payment']),
+            'order' => array_merge($order->toArray(), [
+                'created_at' => $order->created_at->format('d/m/Y H:i'),
+                'updated_at' => $order->updated_at->format('d/m/Y H:i'),
+            ]),
         ]);
     }
 

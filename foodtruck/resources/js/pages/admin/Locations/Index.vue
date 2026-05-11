@@ -140,7 +140,7 @@ function destroy(id: number) {
                 <tbody class="divide-y divide-slate-700/50">
                     <tr v-for="loc in locations" :key="loc.id" class="transition hover:bg-slate-700/30">
                         <td class="px-6 py-4 font-medium text-white">{{ loc.name }}</td>
-                        <td class="px-6 py-4 text-slate-300">{{ loc.date }}</td>
+                        <td class="px-6 py-4 text-slate-300">{{ loc.date.split('-').reverse().join('/') }}</td>
                         <td class="px-6 py-4 text-slate-300">{{ loc.start_time.slice(0,5) }} – {{ loc.end_time.slice(0,5) }}</td>
                         <td class="px-6 py-4 font-mono text-xs text-slate-500">{{ loc.latitude }}, {{ loc.longitude }}</td>
                         <td class="px-6 py-4">

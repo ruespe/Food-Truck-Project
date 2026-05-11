@@ -23,7 +23,7 @@ class Location extends Model
         return [
             'latitude'  => 'decimal:7',
             'longitude' => 'decimal:7',
-            'date'      => 'date',
+            'date'      => 'date:Y-m-d',
         ];
     }
 }

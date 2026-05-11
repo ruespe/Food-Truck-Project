@@ -13,10 +13,17 @@ class OrderController extends Controller
 {
     public function index(): Response
     {
+        $paginator = Order::with(['user', 'items.product'])
+            ->latest()
+            ->paginate(15);
+
+        $paginator->getCollection()->transform(fn ($order) => array_merge($order->toArray(), [
+            'created_at' => $order->created_at->format('d/m/Y H:i'),
+            'updated_at' => $order->updated_at->format('d/m/Y H:i'),
+        ]));
+
         return Inertia::render('admin/Orders/Index', [
-            'orders' => Order::with(['user', 'items.product'])
-                ->latest()
-                ->paginate(15),
+            'orders' => $paginator,
         ]);
     }
 

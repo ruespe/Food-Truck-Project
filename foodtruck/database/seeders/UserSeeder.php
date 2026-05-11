@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
             ['name' => 'María García',    'email' => 'maria@example.com',   'active' => true],
             ['name' => 'Carlos López',    'email' => 'carlos@example.com',  'active' => true],
             ['name' => 'Ana Martínez',    'email' => 'ana@example.com',     'active' => true],
-            ['name' => 'Pedro Sánchez',   'email' => 'pedro@example.com',   'active' => true],
+            ['name' => 'Pablo Sánchez',   'email' => 'pablo@example.com',   'active' => true],
             ['name' => 'Laura Fernández', 'email' => 'laura@example.com',   'active' => true],
             ['name' => 'Jordi Puig',      'email' => 'jordi@example.com',   'active' => true],
             ['name' => 'Marta Soler',     'email' => 'marta@example.com',   'active' => true],
