@@ -24,8 +24,9 @@ Route::get('/', function () {
     return inertia('Welcome', [
         'canRegister'      => Features::enabled(Features::registration()),
         'featuredProducts' => Product::with('category')
+            ->withSum('orderItems as total_sold', 'quantity')
             ->where('available', true)
-            ->inRandomOrder()
+            ->orderByRaw('COALESCE(total_sold, 0) DESC, RAND()')
             ->take(6)
             ->get(['id', 'category_id', 'name', 'description', 'price', 'image']),
         'location'         => $location,
