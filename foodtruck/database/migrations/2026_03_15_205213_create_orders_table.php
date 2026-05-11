@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->decimal('total_price', 8, 2);
-            $table->string('status')->default('pending'); // pending, confirmed, preparing, ready, delivered, cancelled
+            $table->string('status')->default('pending'); // pending (transitional during payment), confirmed, preparing, ready, delivered, cancelled
             $table->string('payment_method')->default('stripe');
             $table->timestamps();
         });

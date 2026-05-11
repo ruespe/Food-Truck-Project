@@ -103,7 +103,7 @@ function submitContact() {
                 style="height: 80px"
             >
                 <!-- Brand -->
-                <Link href="/" class="group flex items-center gap-3 shrink-0">
+                <Link href="/" class="group flex shrink-0 items-center gap-3">
                     <div
                         class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-orange-100 shadow-sm ring-2 ring-transparent transition-all duration-300 group-hover:scale-105 group-hover:ring-brand/40 dark:bg-orange-900/30"
                     >
@@ -123,17 +123,32 @@ function submitContact() {
                 <div
                     class="hidden items-center gap-8 text-sm font-medium text-muted-foreground sm:flex"
                 >
-                    <Link href="/" class="group relative py-1 transition-colors duration-300 hover:text-foreground">
+                    <Link
+                        href="/"
+                        class="group relative py-1 transition-colors duration-300 hover:text-foreground"
+                    >
                         {{ t('nav.home') }}
-                        <span class="absolute -bottom-0.5 left-0 h-0.5 w-0 rounded-full bg-brand transition-all duration-300 group-hover:w-full"></span>
+                        <span
+                            class="absolute -bottom-0.5 left-0 h-0.5 w-0 rounded-full bg-brand transition-all duration-300 group-hover:w-full"
+                        ></span>
                     </Link>
-                    <Link href="/menu" class="group relative py-1 transition-colors duration-300 hover:text-foreground">
+                    <Link
+                        href="/menu"
+                        class="group relative py-1 transition-colors duration-300 hover:text-foreground"
+                    >
                         {{ t('nav.menu') }}
-                        <span class="absolute -bottom-0.5 left-0 h-0.5 w-0 rounded-full bg-brand transition-all duration-300 group-hover:w-full"></span>
+                        <span
+                            class="absolute -bottom-0.5 left-0 h-0.5 w-0 rounded-full bg-brand transition-all duration-300 group-hover:w-full"
+                        ></span>
                     </Link>
-                    <Link href="/#location" class="group relative py-1 transition-colors duration-300 hover:text-foreground">
+                    <Link
+                        href="/#location"
+                        class="group relative py-1 transition-colors duration-300 hover:text-foreground"
+                    >
                         {{ t('nav.location') }}
-                        <span class="absolute -bottom-0.5 left-0 h-0.5 w-0 rounded-full bg-brand transition-all duration-300 group-hover:w-full"></span>
+                        <span
+                            class="absolute -bottom-0.5 left-0 h-0.5 w-0 rounded-full bg-brand transition-all duration-300 group-hover:w-full"
+                        ></span>
                     </Link>
                 </div>
 
@@ -321,9 +336,7 @@ function submitContact() {
                                     {{ t('nav.profile') }}
                                 </Link>
 
-                                <div
-                                    class="border-t border-border"
-                                />
+                                <div class="border-t border-border" />
 
                                 <!-- Cerrar sesión -->
                                 <button
@@ -524,10 +537,21 @@ function submitContact() {
                     class="fixed inset-0 z-[60] flex max-xs:hidden sm:hidden"
                     @keydown.esc="mobileOpen = false"
                 >
-                    <div class="absolute inset-0 bg-black/50" @click="mobileOpen = false" />
-                    <div class="relative z-10 flex w-72 flex-col overflow-y-auto bg-background shadow-xl">
-                        <div class="flex items-center justify-between border-b border-border px-4 py-3">
-                            <img src="/logoFoodtruck.png" alt="FoodTruck" class="h-10 w-auto" />
+                    <div
+                        class="absolute inset-0 bg-black/50"
+                        @click="mobileOpen = false"
+                    />
+                    <div
+                        class="relative z-10 flex w-72 flex-col overflow-y-auto bg-background shadow-xl"
+                    >
+                        <div
+                            class="flex items-center justify-between border-b border-border px-4 py-3"
+                        >
+                            <img
+                                src="/logoFoodtruck.png"
+                                alt="FoodTruck"
+                                class="h-10 w-auto"
+                            />
                             <button
                                 class="rounded-full p-1.5 text-muted-foreground transition hover:bg-brand/10 hover:text-brand"
                                 @click="mobileOpen = false"
@@ -537,45 +561,127 @@ function submitContact() {
                             </button>
                         </div>
 
-                        <div class="flex flex-col gap-1 p-3 text-sm font-medium text-foreground">
-                            <Link href="/" class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand" @click="mobileOpen = false">{{ t('nav.home') }}</Link>
-                            <Link href="/menu" class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand" @click="mobileOpen = false">{{ t('nav.menu') }}</Link>
-                            <Link href="/#location" class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand" @click="mobileOpen = false">{{ t('nav.location') }}</Link>
+                        <div
+                            class="flex flex-col gap-1 p-3 text-sm font-medium text-foreground"
+                        >
+                            <Link
+                                href="/"
+                                class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand"
+                                @click="mobileOpen = false"
+                                >{{ t('nav.home') }}</Link
+                            >
+                            <Link
+                                href="/menu"
+                                class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand"
+                                @click="mobileOpen = false"
+                                >{{ t('nav.menu') }}</Link
+                            >
+                            <Link
+                                href="/#location"
+                                class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand"
+                                @click="mobileOpen = false"
+                                >{{ t('nav.location') }}</Link
+                            >
                         </div>
 
                         <div class="mx-4 border-t border-border" />
 
-                        <div class="flex flex-col gap-1 p-3 text-sm font-medium text-foreground">
+                        <div
+                            class="flex flex-col gap-1 p-3 text-sm font-medium text-foreground"
+                        >
                             <template v-if="auth?.user">
-                                <Link v-if="isAdmin" href="/admin/" class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand" @click="mobileOpen = false">{{ t('nav.adminPanel') }}</Link>
-                                <Link v-else href="/orders" class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand" @click="mobileOpen = false">{{ t('nav.myOrders') }}</Link>
-                                <Link href="/settings/profile" class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand" @click="mobileOpen = false">{{ t('nav.profile') }}</Link>
-                                <Link href="/cart" class="flex items-center gap-2 rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand" @click="mobileOpen = false">
-                                    <ShoppingCart class="h-4 w-4" stroke-width="1.5" />
+                                <Link
+                                    v-if="isAdmin"
+                                    href="/admin/"
+                                    class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand"
+                                    @click="mobileOpen = false"
+                                    >{{ t('nav.adminPanel') }}</Link
+                                >
+                                <Link
+                                    v-else
+                                    href="/orders"
+                                    class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand"
+                                    @click="mobileOpen = false"
+                                    >{{ t('nav.myOrders') }}</Link
+                                >
+                                <Link
+                                    href="/settings/profile"
+                                    class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand"
+                                    @click="mobileOpen = false"
+                                    >{{ t('nav.profile') }}</Link
+                                >
+                                <Link
+                                    href="/cart"
+                                    class="flex items-center gap-2 rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand"
+                                    @click="mobileOpen = false"
+                                >
+                                    <ShoppingCart
+                                        class="h-4 w-4"
+                                        stroke-width="1.5"
+                                    />
                                     Cart
-                                    <span v-if="count > 0" class="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-brand text-xs text-white">{{ count }}</span>
+                                    <span
+                                        v-if="count > 0"
+                                        class="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-brand text-xs text-white"
+                                        >{{ count }}</span
+                                    >
                                 </Link>
-                                <button class="rounded-full px-4 py-2.5 text-left text-red-600 transition-colors duration-300 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10" @click="logout; mobileOpen = false">{{ t('nav.logout') }}</button>
+                                <button
+                                    class="rounded-full px-4 py-2.5 text-left text-red-600 transition-colors duration-300 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
+                                    @click="
+                                        logout;
+                                        mobileOpen = false;
+                                    "
+                                >
+                                    {{ t('nav.logout') }}
+                                </button>
                             </template>
-                            <Link v-else href="/login" class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand" @click="mobileOpen = false">{{ t('nav.login') }}</Link>
+                            <Link
+                                v-else
+                                href="/login"
+                                class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand"
+                                @click="mobileOpen = false"
+                                >{{ t('nav.login') }}</Link
+                            >
                         </div>
 
                         <div class="mx-4 border-t border-border" />
 
                         <div class="flex items-center justify-between p-4">
-                            <button class="flex items-center gap-2 rounded-full px-3 py-2 text-sm text-foreground transition-colors duration-300 hover:bg-brand/10 hover:text-brand" @click="toggleTheme">
-                                <Sun v-if="resolvedAppearance === 'dark'" class="h-4 w-4" stroke-width="1.5" />
-                                <Moon v-else class="h-4 w-4" stroke-width="1.5" />
-                                {{ resolvedAppearance === 'dark' ? t('theme.light') : t('theme.dark') }}
+                            <button
+                                class="flex items-center gap-2 rounded-full px-3 py-2 text-sm text-foreground transition-colors duration-300 hover:bg-brand/10 hover:text-brand"
+                                @click="toggleTheme"
+                            >
+                                <Sun
+                                    v-if="resolvedAppearance === 'dark'"
+                                    class="h-4 w-4"
+                                    stroke-width="1.5"
+                                />
+                                <Moon
+                                    v-else
+                                    class="h-4 w-4"
+                                    stroke-width="1.5"
+                                />
+                                {{
+                                    resolvedAppearance === 'dark'
+                                        ? t('theme.light')
+                                        : t('theme.dark')
+                                }}
                             </button>
                             <div class="flex gap-1">
                                 <button
                                     v-for="l in locales"
                                     :key="l"
                                     class="rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300"
-                                    :class="l === locale ? 'bg-brand text-white' : 'text-muted-foreground hover:bg-brand/10 hover:text-brand'"
+                                    :class="
+                                        l === locale
+                                            ? 'bg-brand text-white'
+                                            : 'text-muted-foreground hover:bg-brand/10 hover:text-brand'
+                                    "
                                     @click="selectLocale(l)"
-                                >{{ l.toUpperCase() }}</button>
+                                >
+                                    {{ l.toUpperCase() }}
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -647,9 +753,7 @@ function submitContact() {
                             >
                         </div>
 
-                        <div
-                            class="mx-4 border-t border-border"
-                        />
+                        <div class="mx-4 border-t border-border" />
 
                         <!-- Auth section -->
                         <div
@@ -711,9 +815,7 @@ function submitContact() {
                             >
                         </div>
 
-                        <div
-                            class="mx-4 border-t border-border"
-                        />
+                        <div class="mx-4 border-t border-border" />
 
                         <!-- Theme + Language -->
                         <div class="flex items-center justify-between p-4">

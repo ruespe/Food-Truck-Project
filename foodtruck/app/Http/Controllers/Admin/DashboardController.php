@@ -38,7 +38,7 @@ class DashboardController extends Controller
             ->orderByDesc('total_sold')
             ->take(8)
             ->get()
-            ->map(fn ($item) => [
+            ->map(fn($item) => [
                 'name'       => $item->product?->name ?? ['es' => 'Eliminado', 'ca' => 'Eliminat', 'en' => 'Deleted'],
                 'total_sold' => (int) $item->total_sold,
             ]);
@@ -46,13 +46,13 @@ class DashboardController extends Controller
         return Inertia::render('admin/Dashboard', [
             'stats' => [
                 'total_orders'   => Order::count(),
-                'pending_orders' => Order::where('status', 'pending')->count(),
+                'confirmed_orders' => Order::where('status', 'confirmed')->count(),
                 'total_products' => Product::count(),
                 'total_clients'  => User::where('role', 'client')->count(),
                 'revenue'        => Order::whereNotIn('status', ['cancelled'])->sum('total_price'),
             ],
             'revenue_chart' => [
-                'labels' => $days->keys()->map(fn ($d) => \Carbon\Carbon::parse($d)->format('d/m'))->values(),
+                'labels' => $days->keys()->map(fn($d) => \Carbon\Carbon::parse($d)->format('d/m'))->values(),
                 'data'   => $days->values(),
             ],
             'top_products' => $topProducts,
@@ -60,7 +60,7 @@ class DashboardController extends Controller
                 ->latest()
                 ->take(10)
                 ->get()
-                ->map(fn ($order) => [
+                ->map(fn($order) => [
                     'id'          => $order->id,
                     'user'        => $order->user?->name ?? 'Desconocido',
                     'total_price' => $order->total_price,

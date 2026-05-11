@@ -64,11 +64,11 @@ function toggleStock(id: number) {
     </div>
 
     <div
-        class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+        class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
     >
         <table class="w-full text-sm">
             <thead>
-                <tr class="border-b border-slate-200 dark:border-slate-700">
+                <tr class="border-b border-slate-200 dark:border-[#66c0f4]">
                     <th
                         class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                     >
@@ -213,7 +213,7 @@ function toggleStock(id: number) {
         <!-- Pagination -->
         <div
             v-if="products.last_page > 1"
-            class="flex items-center justify-between border-t border-slate-200 px-6 py-4 dark:border-slate-700"
+            class="flex items-center justify-between border-t border-slate-200 px-6 py-4 dark:border-[#66c0f4]"
         >
             <p class="text-xs text-slate-500 dark:text-slate-400">
                 {{ t('admin.prod.page') }} {{ products.current_page }} {{ t('admin.prod.of') }} {{ products.last_page }}

@@ -87,7 +87,7 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
 
         <!-- Stats chips -->
         <div class="flex flex-wrap gap-2">
-            <span class="rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-slate-600 dark:text-slate-300">
+            <span class="rounded-full border border-slate-200 dark:border-[#66c0f4] bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-slate-600 dark:text-slate-300">
                 {{ users.length }} total
             </span>
             <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
@@ -108,11 +108,11 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
             v-model="search"
             type="search"
             placeholder="Buscar por nombre o email…"
-            class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 min-w-[220px]"
+            class="rounded-xl border border-slate-200 dark:border-[#66c0f4] bg-white dark:bg-slate-800 px-4 py-2 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 min-w-[220px]"
         />
         <select
             v-model="filterRole"
-            class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+            class="rounded-xl border border-slate-200 dark:border-[#66c0f4] bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
         >
             <option value="all">Todos los roles</option>
             <option value="admin">Admin</option>
@@ -120,7 +120,7 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
         </select>
         <select
             v-model="filterActive"
-            class="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+            class="rounded-xl border border-slate-200 dark:border-[#66c0f4] bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
         >
             <option value="all">Todos los estados</option>
             <option value="active">Activos</option>
@@ -129,10 +129,10 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
     </div>
 
     <!-- Table -->
-    <div class="rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 overflow-hidden shadow-sm">
+    <div class="rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-[#66c0f4]/50 overflow-hidden shadow-sm">
         <table class="w-full text-sm">
             <thead>
-                <tr class="border-b border-slate-200 dark:border-slate-700 text-left">
+                <tr class="border-b border-slate-200 dark:border-[#66c0f4] text-left">
                     <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Usuario</th>
                     <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Rol</th>
                     <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Estado</th>

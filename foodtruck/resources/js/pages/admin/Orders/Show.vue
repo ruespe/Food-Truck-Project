@@ -37,7 +37,6 @@ const { t } = useI18n();
 const statusLabel = (s: string) => t(`status.${s}` as MessageKey);
 
 const statusColor: Record<string, string> = {
-    pending: 'bg-yellow-500/10 text-yellow-500 ring-1 ring-yellow-500/30',
     confirmed: 'bg-blue-500/10 text-blue-400 ring-1 ring-blue-500/30',
     preparing: 'bg-orange-500/10 text-orange-400 ring-1 ring-orange-500/30',
     ready: 'bg-green-500/10 text-green-400 ring-1 ring-green-500/30',
@@ -80,10 +79,10 @@ function updateStatus(status: string) {
         <!-- LEFT: items -->
         <div class="space-y-4 lg:col-span-2">
             <div
-                class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+                class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
             >
                 <div
-                    class="flex items-center justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-700"
+                    class="flex items-center justify-between border-b border-slate-200 px-6 py-4 dark:border-[#66c0f4]"
                 >
                     <h2 class="font-semibold text-slate-900 dark:text-white">
                         Productos del pedido
@@ -138,9 +137,7 @@ function updateStatus(status: string) {
                             <p
                                 class="mt-1 text-xs text-slate-500 dark:text-slate-400"
                             >
-                                {{
-                                    parseFloat(String(item.price)).toFixed(2)
-                                }}
+                                {{ parseFloat(String(item.price)).toFixed(2) }}
                                 € × {{ item.quantity }}
                             </p>
                         </div>
@@ -158,7 +155,7 @@ function updateStatus(status: string) {
 
                 <!-- Total -->
                 <div
-                    class="flex items-center justify-between border-t border-slate-200 px-6 py-4 dark:border-slate-700"
+                    class="flex items-center justify-between border-t border-slate-200 px-6 py-4 dark:border-[#66c0f4]"
                 >
                     <span
                         class="text-sm font-medium text-slate-500 dark:text-slate-400"
@@ -177,7 +174,7 @@ function updateStatus(status: string) {
         <div class="space-y-4">
             <!-- Estado -->
             <div
-                class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+                class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
             >
                 <h3
                     class="mb-3 text-xs font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400"
@@ -200,7 +197,7 @@ function updateStatus(status: string) {
                     >
                     <select
                         :value="order.status"
-                        class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                        class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none dark:border-[#66c0f4] dark:bg-slate-900 dark:text-white"
                         @change="
                             updateStatus(
                                 ($event.target as HTMLSelectElement).value,
@@ -216,7 +213,7 @@ function updateStatus(status: string) {
 
             <!-- Cliente -->
             <div
-                class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+                class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
             >
                 <h3
                     class="mb-3 text-xs font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400"
@@ -242,7 +239,7 @@ function updateStatus(status: string) {
 
             <!-- Pago -->
             <div
-                class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+                class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
             >
                 <h3
                     class="mb-3 text-xs font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400"
@@ -293,7 +290,7 @@ function updateStatus(status: string) {
 
             <!-- Fechas -->
             <div
-                class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+                class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
             >
                 <h3
                     class="mb-3 text-xs font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400"
@@ -322,7 +319,7 @@ function updateStatus(status: string) {
 
             <Link
                 href="/admin/orders"
-                class="flex w-full items-center justify-center rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-600 transition hover:border-amber-500 hover:text-amber-600 dark:border-slate-700 dark:text-slate-400 dark:hover:text-amber-400"
+                class="flex w-full items-center justify-center rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-600 transition hover:border-amber-500 hover:text-amber-600 dark:border-[#66c0f4] dark:text-slate-400 dark:hover:text-amber-400"
             >
                 ← Volver a pedidos
             </Link>

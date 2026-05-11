@@ -107,7 +107,7 @@ const inputClass =
     <!-- Formulario inline -->
     <div
         v-if="showForm"
-        class="mb-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+        class="mb-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
     >
         <h2 class="mb-4 font-semibold text-slate-900 dark:text-white">
             {{ editId ? 'Editar categoría' : 'Nueva categoría' }}
@@ -228,11 +228,11 @@ const inputClass =
     </div>
 
     <div
-        class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+        class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
     >
         <table class="w-full text-sm">
             <thead>
-                <tr class="border-b border-slate-200 dark:border-slate-700">
+                <tr class="border-b border-slate-200 dark:border-[#66c0f4]">
                     <th
                         class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                     >

@@ -54,10 +54,10 @@ function submit() {
     />
 
     <div class="mb-6">
-        <h1 class="text-2xl font-bold text-white">
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">
             {{ product ? 'Editar producto' : 'Nuevo producto' }}
         </h1>
-        <p class="mt-1 text-sm text-slate-400">
+        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
             {{
                 product
                     ? 'Modifica los datos del producto'
@@ -67,11 +67,11 @@ function submit() {
     </div>
 
     <form
-        class="mx-auto max-w-2xl rounded-2xl border border-slate-700/50 bg-slate-800 p-8"
+        class="mx-auto max-w-2xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
         @submit.prevent="submit"
     >
         <div class="mb-5">
-            <label class="mb-1.5 block text-sm font-medium text-slate-300"
+            <label class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
                 >Nombre</label
             >
             <div class="space-y-2">
@@ -82,7 +82,7 @@ function submit() {
                         type="text"
                         required
                         placeholder="Español"
-                        class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none"
+                        class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                     />
                 </div>
                 <div class="flex items-center gap-2">
@@ -91,7 +91,7 @@ function submit() {
                         v-model="form.name.ca"
                         type="text"
                         placeholder="Català"
-                        class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none"
+                        class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                     />
                 </div>
                 <div class="flex items-center gap-2">
@@ -100,7 +100,7 @@ function submit() {
                         v-model="form.name.en"
                         type="text"
                         placeholder="English"
-                        class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none"
+                        class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                     />
                 </div>
             </div>
@@ -110,7 +110,7 @@ function submit() {
         </div>
 
         <div class="mb-5">
-            <label class="mb-1.5 block text-sm font-medium text-slate-300"
+            <label class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
                 >Descripción</label
             >
             <div class="space-y-2">
@@ -123,7 +123,7 @@ function submit() {
                         v-model="form.description.es"
                         rows="2"
                         placeholder="Español"
-                        class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none"
+                        class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                     />
                 </div>
                 <div class="flex items-start gap-2">
@@ -135,7 +135,7 @@ function submit() {
                         v-model="form.description.ca"
                         rows="2"
                         placeholder="Català"
-                        class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none"
+                        class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                     />
                 </div>
                 <div class="flex items-start gap-2">
@@ -147,14 +147,14 @@ function submit() {
                         v-model="form.description.en"
                         rows="2"
                         placeholder="English"
-                        class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none"
+                        class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                     />
                 </div>
             </div>
         </div>
 
         <div class="mb-5">
-            <label class="mb-1.5 block text-sm font-medium text-slate-300"
+            <label class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
                 >Precio (€)</label
             >
             <input
@@ -163,18 +163,18 @@ function submit() {
                 step="0.01"
                 min="0"
                 required
-                class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none"
+                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white"
             />
         </div>
 
         <div class="mb-5">
-            <label class="mb-1.5 block text-sm font-medium text-slate-300"
+            <label class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
                 >Categoría</label
             >
             <select
                 v-model="form.category_id"
                 required
-                class="w-full rounded-xl border border-slate-600 bg-slate-700 px-3 py-2.5 text-white focus:border-amber-500 focus:outline-none"
+                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white"
             >
                 <option value="" disabled class="text-slate-400">
                     Selecciona categoría
@@ -186,13 +186,13 @@ function submit() {
         </div>
 
         <div class="mb-6">
-            <label class="mb-1.5 block text-sm font-medium text-slate-300"
+            <label class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
                 >Imagen</label
             >
             <input
                 type="file"
                 accept="image/*"
-                class="w-full text-sm text-slate-300 file:mr-3 file:rounded-lg file:border-0 file:bg-amber-500 file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-white hover:file:bg-amber-600"
+                class="w-full text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-amber-500 file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-white hover:file:bg-amber-600 dark:text-slate-300"
                 @change="
                     (e: Event) =>
                         (form.image =
@@ -206,9 +206,9 @@ function submit() {
                 id="stock"
                 v-model="form.stock"
                 type="checkbox"
-                class="h-4 w-4 rounded border-slate-600 bg-slate-700 accent-amber-500"
+                class="h-4 w-4 rounded border-slate-300 accent-amber-500 dark:border-slate-600 dark:bg-slate-700"
             />
-            <label for="stock" class="text-sm font-medium text-slate-300"
+            <label for="stock" class="text-sm font-medium text-slate-700 dark:text-slate-300"
                 >En stock</label
             >
         </div>
@@ -218,9 +218,9 @@ function submit() {
                 id="available"
                 v-model="form.available"
                 type="checkbox"
-                class="h-4 w-4 rounded border-slate-600 bg-slate-700 accent-amber-500"
+                class="h-4 w-4 rounded border-slate-300 accent-amber-500 dark:border-slate-600 dark:bg-slate-700"
             />
-            <label for="available" class="text-sm font-medium text-slate-300"
+            <label for="available" class="text-sm font-medium text-slate-700 dark:text-slate-300"
                 >Disponible para la venta</label
             >
         </div>
@@ -228,7 +228,7 @@ function submit() {
         <div class="flex justify-end gap-3">
             <a
                 href="/admin/products"
-                class="rounded-xl border border-slate-600 px-5 py-2 text-sm text-slate-300 transition hover:bg-slate-700"
+                class="rounded-xl border border-slate-200 px-5 py-2 text-sm text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700"
                 >Cancelar</a
             >
             <button

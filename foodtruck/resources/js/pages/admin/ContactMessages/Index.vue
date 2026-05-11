@@ -52,7 +52,7 @@ function formatDate(iso: string) {
     </div>
 
     <!-- Sin mensajes -->
-    <div v-if="messages.length === 0" class="rounded-2xl bg-white border border-slate-200 px-8 py-20 text-center shadow-sm dark:bg-slate-800 dark:border-slate-700/50">
+    <div v-if="messages.length === 0" class="rounded-2xl bg-white border border-slate-200 px-8 py-20 text-center shadow-sm dark:bg-slate-800 dark:border-[#66c0f4]/50">
         <p class="text-4xl mb-3">📭</p>
         <p class="text-slate-500 dark:text-slate-400">No hay mensajes de contacto aún</p>
     </div>
@@ -64,7 +64,7 @@ function formatDate(iso: string) {
             :key="msg.id"
             class="rounded-2xl border transition"
             :class="msg.read
-                ? 'border-slate-200 bg-white shadow-sm dark:border-slate-700/50 dark:bg-slate-800'
+                ? 'border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800'
                 : 'border-amber-500/40 bg-white shadow-[0_0_0_1px_rgba(245,158,11,0.2)] dark:bg-slate-800'"
         >
             <div class="flex flex-col gap-4 p-6 sm:flex-row sm:items-start sm:justify-between">

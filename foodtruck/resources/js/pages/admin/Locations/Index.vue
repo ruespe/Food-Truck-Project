@@ -86,7 +86,7 @@ function destroy(id: number) {
     </div>
 
     <!-- Formulario con mapa arrastrable -->
-    <div v-if="showForm" class="mb-6 grid gap-6 rounded-2xl bg-white border border-slate-200 p-6 shadow-sm dark:bg-slate-800 dark:border-slate-700/50 lg:grid-cols-2">
+    <div v-if="showForm" class="mb-6 grid gap-6 rounded-2xl bg-white border border-slate-200 p-6 shadow-sm dark:bg-slate-800 dark:border-[#66c0f4]/50 lg:grid-cols-2">
         <form class="space-y-3" @submit.prevent="submit">
             <h2 class="mb-2 font-semibold text-slate-900 dark:text-white">{{ editId ? 'Editar ubicación' : 'Nueva ubicación' }}</h2>
             <input v-model="form.name" type="text" placeholder="Nombre del lugar" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white" />
@@ -125,11 +125,11 @@ function destroy(id: number) {
     </div>
 
     <!-- Listado de ubicaciones -->
-    <div class="rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-sm dark:bg-slate-800 dark:border-slate-700/50">
+    <div class="rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-sm dark:bg-slate-800 dark:border-[#66c0f4]/50">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
-                    <tr class="border-b border-slate-200 dark:border-slate-700">
+                    <tr class="border-b border-slate-200 dark:border-[#66c0f4]">
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Lugar</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Fecha</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Horario</th>

@@ -34,7 +34,7 @@ class PaymentController extends Controller
 
         $order->load('items.product');
 
-        $lineItems = $order->items->map(fn ($item) => [
+        $lineItems = $order->items->map(fn($item) => [
             'price_data' => [
                 'currency'     => 'eur',
                 'product_data' => [
@@ -70,10 +70,18 @@ class PaymentController extends Controller
 
     /**
      * Página de éxito tras el pago.
+     * Stripe solo redirige aquí si el pago fue aceptado, así que
+     * actualizamos el estado de forma optimista. El webhook hará
+     * lo mismo cuando llegue (operación idempotente).
      */
     public function success(Order $order): Response
     {
         abort_unless($order->user_id === auth()->id(), 403);
+
+        if ($order->status === 'pending') {
+            $order->update(['status' => 'confirmed']);
+            Payment::where('order_id', $order->id)->update(['status' => 'paid']);
+        }
 
         return Inertia::render('client/PaymentSuccess', [
             'order' => $order->load(['items.product', 'payment']),
@@ -81,15 +89,15 @@ class PaymentController extends Controller
     }
 
     /**
-     * Página de cancelación del pago.
+     * Pago cancelado: el pedido nunca existió, se elimina.
      */
-    public function cancel(Order $order): Response
+    public function cancel(Order $order): RedirectResponse
     {
         abort_unless($order->user_id === auth()->id(), 403);
 
-        return Inertia::render('client/PaymentCancel', [
-            'order' => $order,
-        ]);
+        $order->delete(); // cascade elimina items y payment
+
+        return redirect('/menu')->with('info', 'Pago cancelado.');
     }
 
     /**

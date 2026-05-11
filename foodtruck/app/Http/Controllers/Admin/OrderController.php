@@ -17,7 +17,7 @@ class OrderController extends Controller
             ->latest()
             ->paginate(15);
 
-        $paginator->getCollection()->transform(fn ($order) => array_merge($order->toArray(), [
+        $paginator->getCollection()->transform(fn($order) => array_merge($order->toArray(), [
             'created_at' => $order->created_at->format('d/m/Y H:i'),
             'updated_at' => $order->updated_at->format('d/m/Y H:i'),
         ]));
@@ -40,7 +40,7 @@ class OrderController extends Controller
                 'created_at'     => $order->created_at->format('d/m/Y H:i'),
                 'updated_at'     => $order->updated_at->format('d/m/Y H:i'),
                 'user'           => $order->user?->only('id', 'name', 'email'),
-                'items'          => $order->items->map(fn ($item) => [
+                'items'          => $order->items->map(fn($item) => [
                     'id'      => $item->id,
                     'quantity' => $item->quantity,
                     'price'   => $item->price,
@@ -56,14 +56,14 @@ class OrderController extends Controller
                     'transaction_id' => $order->payment->transaction_id,
                 ] : null,
             ],
-            'statuses' => ['pending', 'confirmed', 'preparing', 'ready', 'delivered', 'cancelled'],
+            'statuses' => ['confirmed', 'preparing', 'ready', 'delivered', 'cancelled'],
         ]);
     }
 
     public function updateStatus(Request $request, Order $order): RedirectResponse
     {
         $request->validate([
-            'status' => 'required|in:pending,confirmed,preparing,ready,delivered,cancelled',
+            'status' => 'required|in:confirmed,preparing,ready,delivered,cancelled',
         ]);
 
         $order->update(['status' => $request->status]);

@@ -19,7 +19,7 @@ class OrderSeeder extends Seeder
         $clients  = User::where('role', 'client')->get();
         $cliente  = User::where('email', 'cliente@foodtruck.com')->first();
 
-        $statuses       = ['pending', 'confirmed', 'preparing', 'ready', 'delivered', 'cancelled'];
+        $statuses       = ['confirmed', 'preparing', 'ready', 'delivered', 'cancelled'];
         $paymentMethods = ['stripe', 'cash'];
 
         // Pedidos fijos para cliente@foodtruck.com
@@ -30,7 +30,7 @@ class OrderSeeder extends Seeder
             ['status' => 'delivered', 'payment_method' => 'stripe', 'days_ago' => 10],
             ['status' => 'cancelled', 'payment_method' => 'stripe', 'days_ago' => 7],
             ['status' => 'preparing', 'payment_method' => 'cash',   'days_ago' => 1],
-            ['status' => 'pending',   'payment_method' => 'stripe', 'days_ago' => 0],
+            ['status' => 'confirmed', 'payment_method' => 'stripe', 'days_ago' => 0],
         ];
 
         foreach ($clienteOrders as $data) {
@@ -88,12 +88,11 @@ class OrderSeeder extends Seeder
 
         // Pago Stripe si procede
         if ($paymentMethod === 'stripe' && $status !== 'cancelled') {
-            $paidStatuses = ['confirmed', 'preparing', 'ready', 'delivered'];
             Payment::create([
                 'order_id'         => $order->id,
                 'payment_provider' => 'stripe',
                 'transaction_id'   => 'pi_' . Str::random(24),
-                'status'           => in_array($status, $paidStatuses) ? 'paid' : 'pending',
+                'status'           => 'paid',
                 'amount'           => $total,
                 'created_at'       => $createdAt,
                 'updated_at'       => $createdAt,

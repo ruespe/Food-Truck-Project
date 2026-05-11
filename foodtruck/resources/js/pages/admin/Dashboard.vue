@@ -13,7 +13,6 @@ import {
     Filler,
 } from 'chart.js';
 import {
-    Clock,
     Package,
     ShoppingCart,
     TrendingUp,
@@ -22,11 +21,16 @@ import {
     Check,
 } from 'lucide-vue-next';
 import { ref, watch, computed, onMounted, onUnmounted } from 'vue';
+
+const isDark = ref(document.documentElement.classList.contains('dark'));
+const darkObserver = new MutationObserver(() => {
+    isDark.value = document.documentElement.classList.contains('dark');
+});
 import { Bar, Line } from 'vue-chartjs';
 import MapLocation from '@/components/MapLocation.vue';
-import AdminLayout from '@/layouts/AdminLayout.vue';
 import { useI18n, td } from '@/composables/useI18n';
 import type { MessageKey } from '@/composables/useI18n';
+import AdminLayout from '@/layouts/AdminLayout.vue';
 
 ChartJS.register(
     Title,
@@ -47,7 +51,7 @@ const { t } = useI18n();
 const props = defineProps<{
     stats: {
         total_orders: number;
-        pending_orders: number;
+        confirmed_orders: number;
         total_products: number;
         total_clients: number;
         revenue: number;
@@ -142,7 +146,7 @@ const topProductsData = computed(() => ({
     ],
 }));
 
-const topProductsOptions = {
+const topProductsOptions = computed(() => ({
     responsive: true,
     maintainAspectRatio: false,
     indexAxis: 'y' as const,
@@ -155,16 +159,17 @@ const topProductsOptions = {
         },
         y: {
             grid: { display: false },
-            ticks: { color: '#e2e8f0', font: { size: 12 } },
+            ticks: {
+                color: isDark.value ? '#c7d5e0' : '#000000',
+                font: { size: 12 },
+            },
         },
     },
-};
+}));
 
 // ── Status helpers ───────────────────────────────────────────────────────────
 
 const statusColor: Record<string, string> = {
-    pending:
-        'bg-yellow-500/10 text-yellow-400 ring-1 ring-inset ring-yellow-500/20',
     confirmed:
         'bg-blue-500/10 text-blue-400 ring-1 ring-inset ring-blue-500/20',
     preparing:
@@ -192,11 +197,17 @@ function refreshData() {
 
 onMounted(() => {
     refreshTimer = setInterval(refreshData, 30_000);
+    darkObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class'],
+    });
 });
 onUnmounted(() => {
     if (refreshTimer) {
         clearInterval(refreshTimer);
     }
+
+    darkObserver.disconnect();
 });
 
 // ── Location form ─────────────────────────────────────────────────────────────
@@ -242,7 +253,7 @@ function saveLocation() {
             </p>
         </div>
         <button
-            class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs text-slate-500 transition hover:border-amber-400 hover:text-amber-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:text-amber-400"
+            class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs text-slate-500 transition hover:border-amber-400 hover:text-amber-600 dark:border-[#66c0f4] dark:bg-slate-800 dark:text-slate-400 dark:hover:text-amber-400"
             @click="refreshData"
         >
             <TrendingUp class="h-3.5 w-3.5" />
@@ -260,7 +271,7 @@ function saveLocation() {
     <!-- Stat cards -->
     <div class="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <div
-            class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+            class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
         >
             <div class="mb-3 flex items-center justify-between">
                 <p
@@ -279,28 +290,24 @@ function saveLocation() {
             </p>
         </div>
         <div
-            class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+            class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
         >
             <div class="mb-3 flex items-center justify-between">
                 <p
                     class="text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                 >
-                    {{ t('admin.dash.pending') }}
+                    {{ t('admin.dash.confirmed') }}
                 </p>
-                <div class="rounded-lg bg-yellow-500/10 p-1.5">
-                    <Clock
-                        class="h-4 w-4 text-yellow-500 dark:text-yellow-400"
-                    />
+                <div class="rounded-lg bg-blue-500/10 p-1.5">
+                    <Check class="h-4 w-4 text-blue-500 dark:text-blue-400" />
                 </div>
             </div>
-            <p
-                class="text-3xl font-extrabold text-yellow-500 dark:text-yellow-400"
-            >
-                {{ stats.pending_orders }}
+            <p class="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
+                {{ stats.confirmed_orders }}
             </p>
         </div>
         <div
-            class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+            class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
         >
             <div class="mb-3 flex items-center justify-between">
                 <p
@@ -317,7 +324,7 @@ function saveLocation() {
             </p>
         </div>
         <div
-            class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+            class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
         >
             <div class="mb-3 flex items-center justify-between">
                 <p
@@ -336,7 +343,7 @@ function saveLocation() {
             </p>
         </div>
         <div
-            class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+            class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
         >
             <div class="mb-3 flex items-center justify-between">
                 <p
@@ -362,7 +369,7 @@ function saveLocation() {
     <div class="mb-8 grid gap-6 lg:grid-cols-5">
         <!-- Ingresos últimos 14 días -->
         <div
-            class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-3 dark:border-slate-700/50 dark:bg-slate-800"
+            class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-3 dark:border-[#66c0f4]/50 dark:bg-slate-800"
         >
             <div class="mb-4 flex items-center justify-between">
                 <div>
@@ -382,7 +389,7 @@ function saveLocation() {
 
         <!-- Productos más vendidos -->
         <div
-            class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-2 dark:border-slate-700/50 dark:bg-slate-800"
+            class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-2 dark:border-[#66c0f4]/50 dark:bg-slate-800"
         >
             <div class="mb-4 flex items-center justify-between">
                 <div>
@@ -412,10 +419,10 @@ function saveLocation() {
 
     <!-- Ubicacion del dia -->
     <div
-        class="mb-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+        class="mb-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
     >
         <div
-            class="flex items-center gap-3 border-b border-slate-200 px-6 py-4 dark:border-slate-700"
+            class="flex items-center gap-3 border-b border-slate-200 px-6 py-4 dark:border-[#66c0f4]"
         >
             <div class="rounded-lg bg-amber-500/10 p-1.5">
                 <MapPin class="h-4 w-4 text-amber-500 dark:text-amber-400" />
@@ -553,9 +560,9 @@ function saveLocation() {
 
     <!-- Recent orders -->
     <div
-        class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700/50 dark:bg-slate-800"
+        class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
     >
-        <div class="border-b border-slate-200 px-6 py-4 dark:border-slate-700">
+        <div class="border-b border-slate-200 px-6 py-4 dark:border-[#66c0f4]">
             <h2 class="font-semibold text-slate-900 dark:text-white">
                 {{ t('admin.dash.recentOrders') }}
             </h2>
@@ -563,7 +570,7 @@ function saveLocation() {
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
-                    <tr class="border-b border-slate-200 dark:border-slate-700">
+                    <tr class="border-b border-slate-200 dark:border-[#66c0f4]">
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
