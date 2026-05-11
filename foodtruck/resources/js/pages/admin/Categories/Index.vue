@@ -1,45 +1,66 @@
 <script setup lang="ts">
 import AdminLayout from '@/layouts/AdminLayout.vue';
-import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
+import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 
 defineOptions({ layout: AdminLayout });
 
+type Category = {
+    id: number;
+    name: Record<string, string>;
+    description: Record<string, string> | null;
+};
+
 defineProps<{
-    categories: Array<{ id: number; name: string; description: string | null }>;
+    categories: Category[];
 }>();
 
 const showForm = ref(false);
 const editId = ref<number | null>(null);
 
-const form = useForm({ name: '', description: '' });
+const form = useForm({
+    name: { es: '', ca: '', en: '' },
+    description: { es: '', ca: '', en: '' },
+});
+
 const page = usePage();
 const deleteError = computed(() => (page.props.errors as any)?.category as string | undefined);
 
 function openCreate() {
     editId.value = null;
-    form.reset();
+    form.name = { es: '', ca: '', en: '' };
+    form.description = { es: '', ca: '', en: '' };
     showForm.value = true;
 }
 
-function openEdit(cat: { id: number; name: string; description: string | null }) {
+function openEdit(cat: Category) {
     editId.value = cat.id;
-    form.name = cat.name;
-    form.description = cat.description ?? '';
+    form.name = {
+        es: cat.name?.es ?? '',
+        ca: cat.name?.ca ?? '',
+        en: cat.name?.en ?? '',
+    };
+    form.description = {
+        es: cat.description?.es ?? '',
+        ca: cat.description?.ca ?? '',
+        en: cat.description?.en ?? '',
+    };
     showForm.value = true;
 }
 
 function submit() {
     if (editId.value) {
-        form.patch(`/admin/categories/${editId.value}`, { onSuccess: () => { showForm.value = false; form.reset(); } });
+        form.patch(`/admin/categories/${editId.value}`, { onSuccess: () => { showForm.value = false; } });
     } else {
-        form.post('/admin/categories', { onSuccess: () => { showForm.value = false; form.reset(); } });
+        form.post('/admin/categories', { onSuccess: () => { showForm.value = false; } });
     }
 }
 
 function destroy(id: number) {
     if (confirm('¿Eliminar esta categoría?')) router.delete(`/admin/categories/${id}`);
 }
+
+const inputClass = 'w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white';
 </script>
 
 <template>
@@ -63,9 +84,46 @@ function destroy(id: number) {
     <!-- Formulario inline -->
     <div v-if="showForm" class="mb-6 rounded-2xl bg-white border border-slate-200 p-6 shadow-sm dark:bg-slate-800 dark:border-slate-700/50">
         <h2 class="mb-4 font-semibold text-slate-900 dark:text-white">{{ editId ? 'Editar categoría' : 'Nueva categoría' }}</h2>
-        <form class="space-y-3" @submit.prevent="submit">
-            <input v-model="form.name" type="text" placeholder="Nombre" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white" />
-            <input v-model="form.description" type="text" placeholder="Descripción (opcional)" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white" />
+        <form class="space-y-5" @submit.prevent="submit">
+
+            <!-- Nombre multilingüe -->
+            <div>
+                <label class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Nombre</label>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2">
+                        <span class="w-6 shrink-0 text-center text-xs font-bold text-slate-400">ES</span>
+                        <input v-model="form.name.es" type="text" placeholder="Nombre en español" required :class="inputClass" />
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-6 shrink-0 text-center text-xs font-bold text-slate-400">CA</span>
+                        <input v-model="form.name.ca" type="text" placeholder="Nom en català" :class="inputClass" />
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-6 shrink-0 text-center text-xs font-bold text-slate-400">EN</span>
+                        <input v-model="form.name.en" type="text" placeholder="Name in English" :class="inputClass" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Descripción multilingüe -->
+            <div>
+                <label class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Descripción <span class="text-slate-400 font-normal">(opcional)</span></label>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2">
+                        <span class="w-6 shrink-0 text-center text-xs font-bold text-slate-400">ES</span>
+                        <input v-model="form.description.es" type="text" placeholder="Descripción en español" :class="inputClass" />
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-6 shrink-0 text-center text-xs font-bold text-slate-400">CA</span>
+                        <input v-model="form.description.ca" type="text" placeholder="Descripció en català" :class="inputClass" />
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-6 shrink-0 text-center text-xs font-bold text-slate-400">EN</span>
+                        <input v-model="form.description.en" type="text" placeholder="Description in English" :class="inputClass" />
+                    </div>
+                </div>
+            </div>
+
             <div class="flex gap-2">
                 <button type="submit" class="rounded-xl bg-amber-500 px-5 py-2 text-sm font-bold text-white hover:bg-amber-600 transition">Guardar</button>
                 <button type="button" class="rounded-xl border border-slate-200 px-5 py-2 text-sm text-slate-700 hover:bg-slate-50 transition dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700" @click="showForm = false">Cancelar</button>
@@ -84,8 +142,8 @@ function destroy(id: number) {
             </thead>
             <tbody class="divide-y divide-slate-100 dark:divide-slate-700/50">
                 <tr v-for="cat in categories" :key="cat.id" class="transition hover:bg-slate-50 dark:hover:bg-slate-700/30">
-                    <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">{{ cat.name }}</td>
-                    <td class="px-6 py-4 text-slate-500 dark:text-slate-400">{{ cat.description ?? '—' }}</td>
+                    <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">{{ cat.name?.es ?? cat.name }}</td>
+                    <td class="px-6 py-4 text-slate-500 dark:text-slate-400">{{ cat.description?.es ?? '—' }}</td>
                     <td class="px-6 py-4">
                         <div class="flex gap-2">
                             <button class="rounded-lg border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 transition dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600" @click="openEdit(cat)">Editar</button>
