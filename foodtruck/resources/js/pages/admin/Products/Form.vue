@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
-import AdminLayout from '@/layouts/AdminLayout.vue';
 import { td } from '@/composables/useI18n';
+import AdminLayout from '@/layouts/AdminLayout.vue';
 
 defineOptions({ layout: AdminLayout });
 
@@ -71,12 +71,16 @@ function submit() {
         @submit.prevent="submit"
     >
         <div class="mb-5">
-            <label class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+            <label
+                class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
                 >Nombre</label
             >
             <div class="space-y-2">
                 <div class="flex items-center gap-2">
-                    <span class="w-6 shrink-0 text-center text-xs font-bold text-slate-400">ES</span>
+                    <span
+                        class="w-6 shrink-0 text-center text-xs font-bold text-slate-400"
+                        >ES</span
+                    >
                     <input
                         v-model="form.name.es"
                         type="text"
@@ -86,7 +90,10 @@ function submit() {
                     />
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="w-6 shrink-0 text-center text-xs font-bold text-slate-400">CA</span>
+                    <span
+                        class="w-6 shrink-0 text-center text-xs font-bold text-slate-400"
+                        >CA</span
+                    >
                     <input
                         v-model="form.name.ca"
                         type="text"
@@ -95,7 +102,10 @@ function submit() {
                     />
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="w-6 shrink-0 text-center text-xs font-bold text-slate-400">EN</span>
+                    <span
+                        class="w-6 shrink-0 text-center text-xs font-bold text-slate-400"
+                        >EN</span
+                    >
                     <input
                         v-model="form.name.en"
                         type="text"
@@ -110,7 +120,8 @@ function submit() {
         </div>
 
         <div class="mb-5">
-            <label class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+            <label
+                class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
                 >Descripción</label
             >
             <div class="space-y-2">
@@ -154,7 +165,8 @@ function submit() {
         </div>
 
         <div class="mb-5">
-            <label class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+            <label
+                class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
                 >Precio (€)</label
             >
             <input
@@ -168,7 +180,8 @@ function submit() {
         </div>
 
         <div class="mb-5">
-            <label class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+            <label
+                class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
                 >Categoría</label
             >
             <select
@@ -186,7 +199,8 @@ function submit() {
         </div>
 
         <div class="mb-6">
-            <label class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+            <label
+                class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
                 >Imagen</label
             >
             <input
@@ -208,7 +222,9 @@ function submit() {
                 type="checkbox"
                 class="h-4 w-4 rounded border-slate-300 accent-amber-500 dark:border-slate-600 dark:bg-slate-700"
             />
-            <label for="stock" class="text-sm font-medium text-slate-700 dark:text-slate-300"
+            <label
+                for="stock"
+                class="text-sm font-medium text-slate-700 dark:text-slate-300"
                 >En stock</label
             >
         </div>
@@ -220,7 +236,9 @@ function submit() {
                 type="checkbox"
                 class="h-4 w-4 rounded border-slate-300 accent-amber-500 dark:border-slate-600 dark:bg-slate-700"
             />
-            <label for="available" class="text-sm font-medium text-slate-700 dark:text-slate-300"
+            <label
+                for="available"
+                class="text-sm font-medium text-slate-700 dark:text-slate-300"
                 >Disponible para la venta</label
             >
         </div>

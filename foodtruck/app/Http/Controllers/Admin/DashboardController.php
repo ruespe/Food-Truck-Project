@@ -77,8 +77,12 @@ class DashboardController extends Controller
             'name'       => 'required|string|max:255',
             'latitude'   => 'required|numeric',
             'longitude'  => 'required|numeric',
-            'start_time' => 'required',
-            'end_time'   => 'required',
+            'start_time' => ['required', function ($attr, $val, $fail) {
+                if ($val < '19:00') $fail('La apertura debe ser a partir de las 19:00.');
+            }],
+            'end_time'   => ['required', function ($attr, $val, $fail) {
+                if ($val > '07:00' && $val < '19:00') $fail('El cierre debe ser antes de las 07:00 (madrugada).');
+            }],
         ]);
         $data['date'] = today()->toDateString();
 

@@ -23,7 +23,7 @@ class OrderController extends Controller
             ->get();
 
         return Inertia::render('client/OrderHistory', [
-            'orders' => $orders->map(fn ($order) => array_merge($order->toArray(), [
+            'orders' => $orders->map(fn($order) => array_merge($order->toArray(), [
                 'created_at' => $order->created_at->format('d/m/Y H:i'),
             ])),
         ]);
@@ -31,6 +31,19 @@ class OrderController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        // Verificar que el truck está abierto ahora
+        $location = \App\Models\Location::whereDate('date', today())->first();
+        if ($location) {
+            $now   = now()->format('H:i');
+            $start = substr($location->start_time, 0, 5);
+            $end   = substr($location->end_time, 0, 5);
+            // Rango cruza medianoche (ej. 19:00 – 07:00)
+            $isOpen = $start > $end
+                ? ($now >= $start || $now <= $end)
+                : ($now >= $start && $now <= $end);
+            abort_unless($isOpen, 422, "El food truck está cerrado ahora. Horario de hoy: {$start} – {$end}.");
+        }
+
         $validated = $request->validate([
             'items'          => 'required|array|min:1',
             'items.*.id'     => 'required|exists:products,id',
@@ -95,4 +108,5 @@ class OrderController extends Controller
         $order->update(['status' => 'cancelled']);
 
         return redirect()->route('orders.index')->with('success', 'Pedido cancelado correctamente.');
-    }}
+    }
+}
