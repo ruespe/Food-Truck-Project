@@ -26,7 +26,7 @@ Route::get('/', function () {
         'featuredProducts' => Product::with('category')
             ->withSum('orderItems as total_sold', 'quantity')
             ->where('available', true)
-            ->orderByRaw('COALESCE(total_sold, 0) DESC, RAND()')
+            ->orderByRaw('COALESCE(total_sold, 0) DESC, id ASC')
             ->take(6)
             ->get(['id', 'category_id', 'name', 'description', 'price', 'image']),
         'location'         => $location,

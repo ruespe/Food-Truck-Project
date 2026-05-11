@@ -309,10 +309,10 @@ function submitContact() {
 
         <!-- Footer -->
         <footer
-            class="border-t border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-900"
+            class="border-t border-gray-400 bg-white dark:border-black dark:bg-gray-900"
         >
             <div class="mx-auto max-w-6xl px-4 py-12">
-                <div class="grid gap-10 sm:grid-cols-3">
+                <div class="grid gap-10 sm:grid-cols-3 text-gray-400">
                     <!-- Col 1: Brand + redes sociales -->
                     <div>
                         <img
@@ -449,7 +449,7 @@ function submitContact() {
             </div>
             <!-- Bottom bar -->
             <div
-                class="border-t border-gray-100 py-4 text-center text-xs text-gray-400 dark:border-gray-800"
+                class="border-t border-gray-400 py-4 text-center text-xs text-gray-400 dark:border-gray-800"
             >
                 © {{ new Date().getFullYear() }} FoodTruck ·
                 {{ t('footer.rights') }}

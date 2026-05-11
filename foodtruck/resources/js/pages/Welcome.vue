@@ -40,8 +40,11 @@ function isBebida(product: FeaturedProduct) {
     <Head title="Sabor sobre Ruedas" />
 
     <!-- Hero -->
-    <section class="relative overflow-hidden bg-amber-500 py-24 text-white">
-        <div class="mx-auto max-w-4xl px-4 text-center">
+    <section
+        class="relative overflow-hidden py-24 text-white"
+        style="background-image: linear-gradient(rgba(38, 20, 0, 0.7), rgba(38, 20, 0, 0.7)), url('/background-hero.webp'); background-size: cover; background-position: 50% 40%;"
+    >
+        <div class="relative mx-auto max-w-4xl px-4 text-center">
             <p
                 class="mb-2 text-lg font-medium tracking-widest text-amber-100 uppercase"
             >
