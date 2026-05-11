@@ -221,14 +221,14 @@ const truckMinuteOptions = [0, 15, 30, 45];
 
 const loc = props.today_location;
 
-const parseHour   = (t: string) => parseInt(t?.split(':')[0] ?? '19', 10);
+const parseHour = (t: string) => parseInt(t?.split(':')[0] ?? '19', 10);
 const parseMinute = (t: string) => parseInt(t?.split(':')[1] ?? '0', 10);
 const pad = (n: number) => String(n).padStart(2, '0');
 
-const startHour   = ref<number>(parseHour(loc?.start_time ?? '19:00'));
+const startHour = ref<number>(parseHour(loc?.start_time ?? '19:00'));
 const startMinute = ref<number>(parseMinute(loc?.start_time ?? '19:00'));
-const endHour     = ref<number>(parseHour(loc?.end_time ?? '07:00'));
-const endMinute   = ref<number>(parseMinute(loc?.end_time ?? '07:00'));
+const endHour = ref<number>(parseHour(loc?.end_time ?? '07:00'));
+const endMinute = ref<number>(parseMinute(loc?.end_time ?? '07:00'));
 
 const form = useForm({
     name: loc?.name ?? '',
@@ -473,7 +473,14 @@ function saveLocation() {
 
         <div class="grid lg:grid-cols-2">
             <!-- Mapa -->
-            <div style="height: 400px; min-height: 400px; position: relative; isolation: isolate">
+            <div
+                style="
+                    height: 400px;
+                    min-height: 400px;
+                    position: relative;
+                    isolation: isolate;
+                "
+            >
                 <MapLocation
                     :lat="mapLat"
                     :lng="mapLng"
@@ -542,42 +549,88 @@ function saveLocation() {
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400">{{ t('admin.dash.openTime') }}</label>
+                        <label
+                            class="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400"
+                            >{{ t('admin.dash.openTime') }}</label
+                        >
                         <div class="flex items-center gap-1">
                             <select
                                 v-model.number="startHour"
                                 class="flex-1 rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-slate-900 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700/50 dark:text-white"
                             >
-                                <option v-for="h in truckHourOptions" :key="h" :value="h">{{ pad(h) }}</option>
+                                <option
+                                    v-for="h in truckHourOptions"
+                                    :key="h"
+                                    :value="h"
+                                >
+                                    {{ pad(h) }}
+                                </option>
                             </select>
-                            <span class="font-bold text-slate-500 dark:text-slate-400">:</span>
+                            <span
+                                class="font-bold text-slate-500 dark:text-slate-400"
+                                >:</span
+                            >
                             <select
                                 v-model.number="startMinute"
                                 class="w-20 rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-slate-900 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700/50 dark:text-white"
                             >
-                                <option v-for="m in truckMinuteOptions" :key="m" :value="m">{{ pad(m) }}</option>
+                                <option
+                                    v-for="m in truckMinuteOptions"
+                                    :key="m"
+                                    :value="m"
+                                >
+                                    {{ pad(m) }}
+                                </option>
                             </select>
                         </div>
-                        <p v-if="form.errors.start_time" class="mt-1 text-xs text-red-500">{{ form.errors.start_time }}</p>
+                        <p
+                            v-if="form.errors.start_time"
+                            class="mt-1 text-xs text-red-500"
+                        >
+                            {{ form.errors.start_time }}
+                        </p>
                     </div>
                     <div>
-                        <label class="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400">{{ t('admin.dash.closeTime') }}</label>
+                        <label
+                            class="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400"
+                            >{{ t('admin.dash.closeTime') }}</label
+                        >
                         <div class="flex items-center gap-1">
                             <select
                                 v-model.number="endHour"
                                 class="flex-1 rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-slate-900 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700/50 dark:text-white"
                             >
-                                <option v-for="h in truckHourOptions" :key="h" :value="h">{{ pad(h) }}</option>
+                                <option
+                                    v-for="h in truckHourOptions"
+                                    :key="h"
+                                    :value="h"
+                                >
+                                    {{ pad(h) }}
+                                </option>
                             </select>
-                            <span class="font-bold text-slate-500 dark:text-slate-400">:</span>
+                            <span
+                                class="font-bold text-slate-500 dark:text-slate-400"
+                                >:</span
+                            >
                             <select
                                 v-model.number="endMinute"
                                 class="w-20 rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-slate-900 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700/50 dark:text-white"
                             >
-                                <option v-for="m in truckMinuteOptions" :key="m" :value="m">{{ pad(m) }}</option>
+                                <option
+                                    v-for="m in truckMinuteOptions"
+                                    :key="m"
+                                    :value="m"
+                                >
+                                    {{ pad(m) }}
+                                </option>
                             </select>
                         </div>
-                        <p v-if="form.errors.end_time" class="mt-1 text-xs text-red-500">{{ form.errors.end_time }}</p>
+                        <p
+                            v-if="form.errors.end_time"
+                            class="mt-1 text-xs text-red-500"
+                        >
+                            {{ form.errors.end_time }}
+                        </p>
                     </div>
                 </div>
                 <button
