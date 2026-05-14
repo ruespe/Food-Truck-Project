@@ -47,15 +47,31 @@ let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
 function applyFilters() {
     const params: Record<string, string> = {};
-    if (filterStatus.value)   params.status    = filterStatus.value;
-    if (filterClient.value)   params.client    = filterClient.value;
-    if (filterDateFrom.value) params.date_from = filterDateFrom.value;
-    if (filterDateTo.value)   params.date_to   = filterDateTo.value;
+
+    if (filterStatus.value)   {
+params.status    = filterStatus.value;
+}
+
+    if (filterClient.value)   {
+params.client    = filterClient.value;
+}
+
+    if (filterDateFrom.value) {
+params.date_from = filterDateFrom.value;
+}
+
+    if (filterDateTo.value)   {
+params.date_to   = filterDateTo.value;
+}
+
     router.get('/admin/orders', params, { preserveScroll: true, replace: true });
 }
 
 function debouncedApply() {
-    if (debounceTimer) clearTimeout(debounceTimer);
+    if (debounceTimer) {
+clearTimeout(debounceTimer);
+}
+
     debounceTimer = setTimeout(applyFilters, 350);
 }
 

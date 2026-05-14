@@ -24,7 +24,7 @@ class OrderController extends Controller
         if ($request->filled('client')) {
             $query->whereHas('user', function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->client . '%')
-                  ->orWhere('email', 'like', '%' . $request->client . '%');
+                    ->orWhere('email', 'like', '%' . $request->client . '%');
             });
         }
 

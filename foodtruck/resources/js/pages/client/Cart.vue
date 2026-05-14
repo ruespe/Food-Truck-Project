@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, router, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
 import { X } from 'lucide-vue-next';
+import { computed } from 'vue';
 import CloudinaryImage from '@/components/CloudinaryImage.vue';
 import ImagePlaceholder from '@/components/ImagePlaceholder.vue';
 import { useCart } from '@/composables/useCart';
@@ -14,7 +14,9 @@ const { items, total, remove, updateQty, clear } = useCart();
 const { t } = useI18n();
 
 const page = usePage();
-const closedError = computed(() => (page.props.errors as Record<string, string>)?.closed ?? null);
+const closedError = computed(
+    () => (page.props.errors as Record<string, string>)?.closed ?? null,
+);
 
 function checkout() {
     router.post(
