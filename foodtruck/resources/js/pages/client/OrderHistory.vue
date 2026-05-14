@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
+import { useCart } from '@/composables/useCart';
 import { useI18n, td } from '@/composables/useI18n';
 import type { MessageKey } from '@/composables/useI18n';
 import ClientLayout from '@/layouts/ClientLayout.vue';
-import { useCart } from '@/composables/useCart';
 
 defineOptions({ layout: ClientLayout });
 
@@ -11,7 +11,12 @@ interface OrderItem {
     id: number;
     quantity: number;
     price: number;
-    product: { id: number; name: Record<string, string>; price: number; image: string | null };
+    product: {
+        id: number;
+        name: Record<string, string>;
+        price: number;
+        image: string | null;
+    };
 }
 
 interface Order {
@@ -58,13 +63,20 @@ function statusLabel(status: string): string {
 }
 
 function setFilter(f: string) {
-    router.get('/orders', f !== 'all' ? { filter: f } : {}, { preserveScroll: true });
+    router.get('/orders', f !== 'all' ? { filter: f } : {}, {
+        preserveScroll: true,
+    });
 }
 
 function reorder(order: Order) {
     order.items.forEach((item) => {
         add(
-            { id: item.product.id, name: item.product.name, price: item.price, image: item.product.image ?? null },
+            {
+                id: item.product.id,
+                name: item.product.name,
+                price: item.price,
+                image: item.product.image ?? null,
+            },
             item.quantity,
         );
     });
@@ -92,7 +104,13 @@ function reorder(order: Order) {
                         : 'bg-white text-gray-600 shadow hover:bg-orange-50 dark:bg-gray-800 dark:text-gray-300',
                 ]"
             >
-                {{ t(('orders.filter' + f.charAt(0).toUpperCase() + f.slice(1)) as MessageKey) }}
+                {{
+                    t(
+                        ('orders.filter' +
+                            f.charAt(0).toUpperCase() +
+                            f.slice(1)) as MessageKey,
+                    )
+                }}
             </button>
         </div>
 
@@ -101,7 +119,9 @@ function reorder(order: Order) {
             class="rounded-2xl bg-white p-10 text-center text-gray-500 shadow dark:bg-gray-800 dark:text-gray-400"
         >
             {{ t('orders.empty') }}
-            <a href="/menu" class="text-amber-500 underline">{{ t('orders.seeMenu') }}</a>
+            <a href="/menu" class="text-amber-500 underline">{{
+                t('orders.seeMenu')
+            }}</a>
         </div>
 
         <ul v-else class="space-y-4">
@@ -113,39 +133,60 @@ function reorder(order: Order) {
                     >
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-mono font-semibold text-orange-500">
+                                <p
+                                    class="font-mono text-sm font-semibold text-orange-500"
+                                >
                                     #{{ order.ref }}
                                 </p>
-                                <p class="font-semibold text-gray-800 dark:text-white">
+                                <p
+                                    class="font-semibold text-gray-800 dark:text-white"
+                                >
                                     {{ order.created_at }}
                                 </p>
                             </div>
                             <span
                                 :class="[
                                     'rounded-full px-3 py-1 text-xs font-semibold',
-                                    statusColor[order.status] ?? 'bg-gray-100 text-gray-600',
+                                    statusColor[order.status] ??
+                                        'bg-gray-100 text-gray-600',
                                 ]"
                             >
                                 {{ statusLabel(order.status) }}
                             </span>
                         </div>
-                        <ul class="mt-3 space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                        <ul
+                            class="mt-3 space-y-1 text-sm text-gray-600 dark:text-gray-400"
+                        >
                             <li v-for="item in order.items" :key="item.id">
-                                {{ item.quantity }} × {{ td(item.product.name) }} —
-                                {{ (parseFloat(String(item.price)) * item.quantity).toFixed(2) }} €
+                                {{ item.quantity }} ×
+                                {{ td(item.product.name) }} —
+                                {{
+                                    (
+                                        parseFloat(String(item.price)) *
+                                        item.quantity
+                                    ).toFixed(2)
+                                }}
+                                €
                             </li>
                         </ul>
-                        <div class="mt-3 text-right text-lg font-bold text-amber-600 dark:text-amber-400">
+                        <div
+                            class="mt-3 text-right text-lg font-bold text-amber-600 dark:text-amber-400"
+                        >
                             {{ t('orders.total') }}
-                            {{ parseFloat(String(order.total_price)).toFixed(2) }} €
+                            {{
+                                parseFloat(String(order.total_price)).toFixed(2)
+                            }}
+                            €
                         </div>
                     </Link>
 
                     <!-- Reorder button -->
-                    <div class="border-t border-gray-100 px-5 py-3 dark:border-gray-700">
+                    <div
+                        class="border-t border-gray-100 px-5 py-3 dark:border-gray-700"
+                    >
                         <button
                             @click.stop="reorder(order)"
-                            class="text-sm font-medium text-orange-500 hover:text-orange-600 transition-colors"
+                            class="text-sm font-medium text-orange-500 transition-colors hover:text-orange-600"
                         >
                             ↺ {{ t('orders.reorder') }}
                         </button>
@@ -155,7 +196,10 @@ function reorder(order: Order) {
         </ul>
 
         <!-- Pagination -->
-        <div v-if="orders.last_page > 1" class="mt-8 flex flex-wrap justify-center gap-1">
+        <div
+            v-if="orders.last_page > 1"
+            class="mt-8 flex flex-wrap justify-center gap-1"
+        >
             <template v-for="link in orders.links" :key="link.label">
                 <button
                     v-if="link.url"
