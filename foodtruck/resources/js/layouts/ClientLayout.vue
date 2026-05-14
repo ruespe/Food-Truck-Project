@@ -279,11 +279,11 @@ function submitContact() {
                                 <span
                                     class="flex h-7 w-7 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white"
                                 >
-                                    {{ auth.user.name.charAt(0).toUpperCase() }}
+                                    {{ auth?.user?.name?.charAt(0)?.toUpperCase() }}
                                 </span>
                                 <span
                                     class="hidden max-w-[100px] truncate sm:inline"
-                                    >{{ auth.user.name }}</span
+                                    >{{ auth?.user?.name }}</span
                                 >
                                 <ChevronDown
                                     class="h-3 w-3 opacity-50"

@@ -27,7 +27,7 @@
 <body>
 <div class="wrapper">
     <div class="header">
-        <div style="font-size:52px;line-height:1;">🍔</div>
+        <img src="{{ config('app.url') }}/logoFoodtruck.png" alt="FoodTruck" style="height:64px;width:auto;margin-bottom:8px;">
         <h1>¡Pedido confirmado!</h1>
         <p>Gracias por tu compra, {{ $order->user->name }}.</p>
     </div>
@@ -46,7 +46,7 @@
             <tbody>
                 @foreach($order->items as $item)
                 <tr>
-                    <td>{{ $item->product->name }}</td>
+                    <td>{{ is_array($item->product->name) ? ($item->product->name[app()->getLocale()] ?? $item->product->name['es'] ?? $item->product->name['en'] ?? reset($item->product->name)) : $item->product->name }}</td>
                     <td class="td-center">{{ $item->quantity }}</td>
                     <td class="td-right">{{ number_format($item->price * $item->quantity, 2) }} €</td>
                 </tr>
@@ -59,7 +59,7 @@
         </table>
 
         <div class="location-box">
-            <h3>📍 ¿Dónde recoger tu pedido?</h3>
+            <h3>¿Dónde recoger tu pedido?</h3>
             @if($location)
                 <p><strong>{{ $location->name }}</strong></p>
                 <p>Horario de hoy: {{ \Illuminate\Support\Str::substr($location->start_time, 0, 5) }} – {{ \Illuminate\Support\Str::substr($location->end_time, 0, 5) }} h</p>
@@ -70,7 +70,7 @@
     </div>
 
     <div class="footer">
-        🚚 FoodTruck · Comida fresca y artesanal en la calle<br>
+        FoodTruck · Comida fresca y artesanal en la calle<br>
         Si tienes alguna duda, contáctanos desde nuestra web.
     </div>
 </div>

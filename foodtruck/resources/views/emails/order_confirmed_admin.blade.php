@@ -26,7 +26,7 @@
 <body>
 <div class="wrapper">
     <div class="header">
-        <div style="font-size:44px;line-height:1;">🔴</div>
+        <img src="{{ config('app.url') }}/logoFoodtruck.png" alt="FoodTruck" style="height:48px;width:auto;margin-bottom:8px;filter:brightness(0) invert(1);">
         <h1>Nuevo pedido recibido: #FT-{{ $order->id }}</h1>
     </div>
 
@@ -48,7 +48,7 @@
             <tbody>
                 @foreach($order->items as $item)
                 <tr>
-                    <td>{{ $item->product->name }}</td>
+                    <td>{{ is_array($item->product->name) ? ($item->product->name[app()->getLocale()] ?? $item->product->name['es'] ?? $item->product->name['en'] ?? reset($item->product->name)) : $item->product->name }}</td>
                     <td class="qty">× {{ $item->quantity }}</td>
                 </tr>
                 @endforeach
