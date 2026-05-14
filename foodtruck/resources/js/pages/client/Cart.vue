@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import { X } from 'lucide-vue-next';
 import CloudinaryImage from '@/components/CloudinaryImage.vue';
 import ImagePlaceholder from '@/components/ImagePlaceholder.vue';
@@ -11,6 +12,9 @@ defineOptions({ layout: ClientLayout });
 
 const { items, total, remove, updateQty, clear } = useCart();
 const { t } = useI18n();
+
+const page = usePage();
+const closedError = computed(() => (page.props.errors as Record<string, string>)?.closed ?? null);
 
 function checkout() {
     router.post(
@@ -31,6 +35,15 @@ function checkout() {
         <h1 class="mb-6 text-3xl font-bold text-gray-800 dark:text-white">
             {{ t('cart.title') }}
         </h1>
+
+        <!-- Error de horario: truck cerrado -->
+        <div
+            v-if="closedError"
+            class="mb-5 flex items-start gap-3 rounded-2xl border border-red-300 bg-red-50 px-5 py-4 text-sm text-red-700 shadow-sm dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400"
+        >
+            <span class="text-lg leading-none">🔒</span>
+            <span>{{ closedError }}</span>
+        </div>
 
         <div
             v-if="items.length === 0"
