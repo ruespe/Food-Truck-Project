@@ -73,11 +73,12 @@ function isBebida(product: FeaturedProduct) {
 
     <!-- Menú destacado -->
     <section class="mx-auto max-w-6xl px-4 py-16">
-        <h2
-            class="mb-8 text-center text-3xl font-bold text-gray-800 dark:text-white"
-        >
-            {{ t('home.popular') }}
-        </h2>
+        <div class="mb-8 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white">
+                {{ t('home.popular') }}
+            </h2>
+            <div class="mx-auto mt-3 h-1 w-16 rounded-full bg-orange-500"></div>
+        </div>
         <div
             v-if="featuredProducts?.length"
             class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
@@ -138,13 +139,16 @@ function isBebida(product: FeaturedProduct) {
     </section>
 
     <!-- Ubicación -->
-    <section id="location" class="bg-white py-16 dark:bg-gray-900">
+    <section id="location" class="bg-orange-50/60 py-16 dark:bg-gray-900">
         <div class="mx-auto max-w-4xl px-4">
-            <h2
-                class="mb-2 text-center text-3xl font-bold text-gray-800 dark:text-white"
-            >
-                {{ t('home.where') }}
-            </h2>
+            <div class="mb-2 text-center">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white">
+                    {{ t('home.where') }}
+                </h2>
+                <div
+                    class="mx-auto mt-3 h-1 w-16 rounded-full bg-orange-500"
+                ></div>
+            </div>
             <p
                 v-if="location"
                 class="mb-6 text-center text-gray-500 dark:text-gray-400"

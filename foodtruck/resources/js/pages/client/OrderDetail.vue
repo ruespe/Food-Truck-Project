@@ -39,9 +39,9 @@ function cancelOrder() {
                     <span class="font-semibold">{{ (parseFloat(String(item.price)) * item.quantity).toFixed(2) }} €</span>
                 </li>
             </ul>
-            <div class="flex justify-between border-t pt-3 text-lg font-bold dark:border-gray-700 dark:text-white">
+            <div class="mt-3 flex justify-between rounded-xl bg-orange-50 px-3 py-3 text-lg font-bold dark:bg-orange-900/10 dark:text-white">
                 <span>{{ t('orderDetail.total') }}</span>
-                <span class="text-amber-600">{{ parseFloat(String(order.total_price)).toFixed(2) }} €</span>
+                <span class="text-orange-600">{{ parseFloat(String(order.total_price)).toFixed(2) }} €</span>
             </div>
             <div class="mt-4 text-sm text-gray-500 dark:text-gray-400">
                 {{ t('orderDetail.status') }}: <span class="font-medium capitalize text-gray-700 dark:text-gray-200">{{ statusLabel(order.status) }}</span>

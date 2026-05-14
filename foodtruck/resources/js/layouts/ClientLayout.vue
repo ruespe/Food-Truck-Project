@@ -365,10 +365,12 @@ function submitContact() {
 
         <!-- Footer -->
         <footer
-            class="border-t border-gray-400 bg-white dark:border-black dark:bg-gray-900"
+            class="border-t border-orange-300 bg-orange-100 dark:border-orange-900/40 dark:bg-gray-900"
         >
             <div class="mx-auto max-w-6xl px-4 py-12">
-                <div class="grid gap-10 text-gray-400 sm:grid-cols-3">
+                <div
+                    class="grid gap-10 text-orange-900/70 sm:grid-cols-3 dark:text-orange-200/60"
+                >
                     <!-- Col 1: Brand + redes sociales -->
                     <div>
                         <img
@@ -377,7 +379,7 @@ function submitContact() {
                             class="mb-3 h-[40px] w-auto"
                         />
                         <p
-                            class="mb-5 text-sm text-gray-500 dark:text-gray-400"
+                            class="mb-5 text-sm text-orange-800/70 dark:text-orange-200/50"
                         >
                             {{ t('footer.tagline') }}
                         </p>
@@ -392,7 +394,7 @@ function submitContact() {
                                 href="https://instagram.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-all duration-300 hover:bg-orange-100 hover:text-orange-500 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-orange-500/10 dark:hover:text-orange-400"
+                                class="flex h-9 w-9 items-center justify-center rounded-full bg-orange-200 text-orange-600 transition-all duration-300 hover:bg-orange-400 hover:text-white dark:bg-orange-900/30 dark:text-orange-400 dark:hover:bg-orange-500/30 dark:hover:text-orange-300"
                                 aria-label="Instagram"
                             >
                                 <svg
@@ -411,7 +413,7 @@ function submitContact() {
                                 href="https://facebook.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-all duration-300 hover:bg-orange-100 hover:text-orange-500 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-orange-500/10 dark:hover:text-orange-400"
+                                class="flex h-9 w-9 items-center justify-center rounded-full bg-orange-200 text-orange-600 transition-all duration-300 hover:bg-orange-400 hover:text-white dark:bg-orange-900/30 dark:text-orange-400 dark:hover:bg-orange-500/30 dark:hover:text-orange-300"
                                 aria-label="Facebook"
                             >
                                 <svg
@@ -430,7 +432,7 @@ function submitContact() {
                                 href="https://tiktok.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-all duration-300 hover:bg-orange-100 hover:text-orange-500 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-orange-500/10 dark:hover:text-orange-400"
+                                class="flex h-9 w-9 items-center justify-center rounded-full bg-orange-200 text-orange-600 transition-all duration-300 hover:bg-orange-400 hover:text-white dark:bg-orange-900/30 dark:text-orange-400 dark:hover:bg-orange-500/30 dark:hover:text-orange-300"
                                 aria-label="TikTok"
                             >
                                 <svg
@@ -456,7 +458,7 @@ function submitContact() {
                         </p>
                         <button
                             type="button"
-                            class="inline-flex items-center gap-2 rounded-full bg-gray-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-orange-500 hover:shadow-lg hover:shadow-orange-500/30 focus:outline-none dark:bg-gray-700 dark:hover:bg-orange-500"
+                            class="inline-flex items-center gap-2 rounded-full bg-orange-500 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-500/40 focus:outline-none dark:bg-orange-600 dark:hover:bg-orange-500"
                             @click="openContactModal"
                         >
                             <svg
@@ -487,7 +489,7 @@ function submitContact() {
                             <li>
                                 <Link
                                     href="/legal/privacidad"
-                                    class="text-gray-500 transition-colors duration-300 hover:text-orange-500 dark:text-gray-400 dark:hover:text-orange-400"
+                                    class="text-orange-800/60 transition-colors duration-300 hover:text-orange-600 dark:text-orange-300/60 dark:hover:text-orange-400"
                                 >
                                     {{ t('footer.privacy') }}
                                 </Link>
@@ -495,7 +497,7 @@ function submitContact() {
                             <li>
                                 <Link
                                     href="/legal/terminos"
-                                    class="text-gray-500 transition-colors duration-300 hover:text-orange-500 dark:text-gray-400 dark:hover:text-orange-400"
+                                    class="text-orange-800/60 transition-colors duration-300 hover:text-orange-600 dark:text-orange-300/60 dark:hover:text-orange-400"
                                 >
                                     {{ t('footer.terms') }}
                                 </Link>
@@ -503,7 +505,7 @@ function submitContact() {
                             <li>
                                 <Link
                                     href="/legal/cookies"
-                                    class="text-gray-500 transition-colors duration-300 hover:text-orange-500 dark:text-gray-400 dark:hover:text-orange-400"
+                                    class="text-orange-800/60 transition-colors duration-300 hover:text-orange-600 dark:text-orange-300/60 dark:hover:text-orange-400"
                                 >
                                     {{ t('footer.cookies') }}
                                 </Link>
@@ -514,7 +516,7 @@ function submitContact() {
             </div>
             <!-- Bottom bar -->
             <div
-                class="border-t border-gray-400 py-4 text-center text-xs text-gray-400 dark:border-gray-800"
+                class="border-t border-orange-300 py-4 text-center text-xs text-orange-700/60 dark:border-orange-900/40 dark:text-orange-300/50"
             >
                 © {{ new Date().getFullYear() }} FoodTruck ·
                 {{ t('footer.rights') }}

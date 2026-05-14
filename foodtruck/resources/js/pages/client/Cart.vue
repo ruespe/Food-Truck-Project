@@ -78,7 +78,7 @@ function checkout() {
                     </div>
                     <div class="flex items-center gap-2">
                         <button
-                            class="rounded-full bg-gray-100 px-2 py-1 text-sm font-bold hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+                            class="rounded-full bg-orange-100 px-2 py-1 text-sm font-bold text-orange-700 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-300 dark:hover:bg-orange-900/50"
                             @click="updateQty(item.id, item.quantity - 1)"
                         >
                             −
@@ -88,7 +88,7 @@ function checkout() {
                             >{{ item.quantity }}</span
                         >
                         <button
-                            class="rounded-full bg-gray-100 px-2 py-1 text-sm font-bold hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+                            class="rounded-full bg-orange-100 px-2 py-1 text-sm font-bold text-orange-700 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-300 dark:hover:bg-orange-900/50"
                             @click="updateQty(item.id, item.quantity + 1)"
                         >
                             +

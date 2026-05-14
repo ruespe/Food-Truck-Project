@@ -111,9 +111,12 @@ function addToCart(product: Product) {
     </Transition>
 
     <div class="mx-auto max-w-6xl px-4 py-10">
-        <h1 class="mb-6 text-3xl font-bold text-gray-800 dark:text-white">
-            {{ t('menu.title') }}
-        </h1>
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">
+                {{ t('menu.title') }}
+            </h1>
+            <div class="mt-2 h-1 w-12 rounded-full bg-orange-500"></div>
+        </div>
 
         <!-- Filtro categorías -->
         <div class="mb-8 flex flex-wrap gap-2">
