@@ -35,8 +35,8 @@ const props = defineProps<{
     selectedCategory?: number | null;
 }>();
 
-const bebidaCategoryId = computed(() =>
-    props.categories?.find(c => (c.name as any)?.es === 'Bebidas')?.id
+const bebidaCategoryId = computed(
+    () => props.categories?.find((c) => (c.name as any)?.es === 'Bebidas')?.id,
 );
 
 function isBebida(product: Product) {
@@ -159,7 +159,9 @@ function addToCart(product: Product) {
                 <div
                     :class="[
                         'relative flex h-44 items-center justify-center',
-                        isBebida(product) ? 'bg-white dark:bg-white' : 'bg-amber-100 dark:bg-amber-900/30'
+                        isBebida(product)
+                            ? 'bg-white dark:bg-white'
+                            : 'bg-amber-100 dark:bg-amber-900/30',
                     ]"
                 >
                     <CloudinaryImage
