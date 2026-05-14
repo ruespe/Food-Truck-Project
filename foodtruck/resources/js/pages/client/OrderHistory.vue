@@ -186,7 +186,7 @@ function reorder(order: Order) {
                     >
                         <button
                             @click.stop="reorder(order)"
-                            class="text-sm font-medium text-orange-500 transition-colors hover:text-orange-600"
+                            class="inline-flex items-center gap-1 text-sm font-medium text-orange-500 transition-colors hover:text-orange-600"
                         >
                             ↺ {{ t('orders.reorder') }}
                         </button>

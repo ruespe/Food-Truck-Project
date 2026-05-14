@@ -137,7 +137,7 @@
     <div class="wrapper">
         <div class="header">
             <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logoFoodtruck.png'))) }}" alt="FoodTruck" style="height:64px;width:auto;margin-bottom:8px;">
-            <h1>¡Tu pedido está listo! 🎉</h1>
+            <h1>🎉 ¡Tu pedido está listo!</h1>
             <p>Ya puedes pasar a recogerlo, {{ $order->user->name }}.</p>
         </div>
 

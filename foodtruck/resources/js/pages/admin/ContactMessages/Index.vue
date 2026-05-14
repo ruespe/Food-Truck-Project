@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import AdminLayout from '@/layouts/AdminLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import AdminLayout from '@/layouts/AdminLayout.vue';
 
 defineOptions({ layout: AdminLayout });
 
@@ -30,8 +30,11 @@ function destroy(id: number) {
 
 function formatDate(iso: string) {
     return new Date(iso).toLocaleString('es-ES', {
-        day: '2-digit', month: '2-digit', year: 'numeric',
-        hour: '2-digit', minute: '2-digit',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
     });
 }
 </script>
@@ -41,10 +44,18 @@ function formatDate(iso: string) {
 
     <div class="mb-6 flex items-center justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Mensajes de contacto</h1>
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-white">
+                Mensajes de contacto
+            </h1>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                {{ messages.length }} mensaje{{ messages.length !== 1 ? 's' : '' }} en total
-                <span v-if="unread > 0" class="ml-2 rounded-full bg-amber-500 px-2 py-0.5 text-xs font-bold text-white">
+                {{ messages.length }} mensaje{{
+                    messages.length !== 1 ? 's' : ''
+                }}
+                en total
+                <span
+                    v-if="unread > 0"
+                    class="ml-2 rounded-full bg-amber-500 px-2 py-0.5 text-xs font-bold text-white"
+                >
                     {{ unread }} sin leer
                 </span>
             </p>
@@ -52,9 +63,14 @@ function formatDate(iso: string) {
     </div>
 
     <!-- Sin mensajes -->
-    <div v-if="messages.length === 0" class="rounded-2xl bg-white border border-slate-200 px-8 py-20 text-center shadow-sm dark:bg-slate-800 dark:border-[#66c0f4]/50">
-        <p class="text-4xl mb-3">📭</p>
-        <p class="text-slate-500 dark:text-slate-400">No hay mensajes de contacto aún</p>
+    <div
+        v-if="messages.length === 0"
+        class="rounded-2xl border border-slate-200 bg-white px-8 py-20 text-center shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
+    >
+        <p class="mb-3 text-4xl">📭</p>
+        <p class="text-slate-500 dark:text-slate-400">
+            No hay mensajes de contacto aún
+        </p>
     </div>
 
     <!-- Lista de mensajes -->
@@ -63,20 +79,41 @@ function formatDate(iso: string) {
             v-for="msg in messages"
             :key="msg.id"
             class="rounded-2xl border transition"
-            :class="msg.read
-                ? 'border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800'
-                : 'border-amber-500/40 bg-white shadow-[0_0_0_1px_rgba(245,158,11,0.2)] dark:bg-slate-800'"
+            :class="
+                msg.read
+                    ? 'border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800'
+                    : 'border-amber-500/40 bg-white shadow-[0_0_0_1px_rgba(245,158,11,0.2)] dark:bg-slate-800'
+            "
         >
-            <div class="flex flex-col gap-4 p-6 sm:flex-row sm:items-start sm:justify-between">
+            <div
+                class="flex flex-col gap-4 p-6 sm:flex-row sm:items-start sm:justify-between"
+            >
                 <!-- Info del remitente -->
-                <div class="flex-1 min-w-0">
-                    <div class="flex flex-wrap items-center gap-2 mb-1">
-                        <span class="font-semibold text-slate-900 dark:text-white">{{ msg.name }}</span>
-                        <span v-if="!msg.read" class="rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">Nuevo</span>
-                        <span class="text-xs text-slate-500">{{ formatDate(msg.created_at) }}</span>
+                <div class="min-w-0 flex-1">
+                    <div class="mb-1 flex flex-wrap items-center gap-2">
+                        <span
+                            class="font-semibold text-slate-900 dark:text-white"
+                            >{{ msg.name }}</span
+                        >
+                        <span
+                            v-if="!msg.read"
+                            class="rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase"
+                            >Nuevo</span
+                        >
+                        <span class="text-xs text-slate-500">{{
+                            formatDate(msg.created_at)
+                        }}</span>
                     </div>
-                    <a :href="`mailto:${msg.email}`" class="text-sm text-amber-400 hover:underline">{{ msg.email }}</a>
-                    <p class="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-slate-600 dark:text-slate-300">{{ msg.message }}</p>
+                    <a
+                        :href="`mailto:${msg.email}`"
+                        class="text-sm text-amber-400 hover:underline"
+                        >{{ msg.email }}</a
+                    >
+                    <p
+                        class="mt-3 text-sm leading-relaxed whitespace-pre-wrap text-slate-600 dark:text-slate-300"
+                    >
+                        {{ msg.message }}
+                    </p>
                 </div>
 
                 <!-- Acciones -->
@@ -88,7 +125,9 @@ function formatDate(iso: string) {
                     >
                         ✓ Marcar leído
                     </button>
-                    <span v-else class="text-xs text-slate-500 italic">Leído</span>
+                    <span v-else class="text-xs text-slate-500 italic"
+                        >Leído</span
+                    >
                     <button
                         class="rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500/20"
                         @click="destroy(msg.id)"

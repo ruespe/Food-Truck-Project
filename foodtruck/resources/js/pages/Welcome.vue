@@ -153,7 +153,7 @@ function isBebida(product: FeaturedProduct) {
                 v-if="location"
                 class="mb-6 text-center text-gray-500 dark:text-gray-400"
             >
-                📍 {{ location.name }} · {{ location.start_time }} –
+                📍{{ location.name }} · {{ location.start_time }} –
                 {{ location.end_time }}
             </p>
             <p v-else class="mb-6 text-center text-gray-400">

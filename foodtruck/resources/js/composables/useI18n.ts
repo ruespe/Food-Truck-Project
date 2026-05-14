@@ -157,7 +157,7 @@ const messages = {
         'orderDetail.products': 'Productos',
         'orderDetail.payment': 'Pago',
         'orderDetail.paymentMethod': 'Método de pago',
-        'orderDetail.readyBanner': '¡Tu pedido está listo para recoger! 🎉',
+        'orderDetail.readyBanner': '🎉 ¡Tu pedido está listo para recoger!',
         'orderDetail.reorder': 'Repetir pedido',
         'orderDetail.print': 'Imprimir recibo',
         // Payment success
@@ -421,7 +421,7 @@ const messages = {
         'orderDetail.products': 'Products',
         'orderDetail.payment': 'Payment',
         'orderDetail.paymentMethod': 'Payment method',
-        'orderDetail.readyBanner': 'Your order is ready for pickup! 🎉',
+        'orderDetail.readyBanner': '🎉 Your order is ready for pickup!',
         'orderDetail.reorder': 'Reorder',
         'orderDetail.print': 'Print receipt',
         // Payment success
@@ -682,7 +682,7 @@ const messages = {
         'orderDetail.products': 'Productes',
         'orderDetail.payment': 'Pagament',
         'orderDetail.paymentMethod': 'Mètode de pagament',
-        'orderDetail.readyBanner': 'La teva comanda està llesta per recollir! 🎉',
+        'orderDetail.readyBanner': '🎉 La teva comanda està llesta per recollir!',
         'orderDetail.reorder': 'Repetir comanda',
         'orderDetail.print': 'Imprimir rebut',
         // Payment success

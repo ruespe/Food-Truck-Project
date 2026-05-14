@@ -13,19 +13,41 @@ use Inertia\Response;
 
 class OrderController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $paginator = Order::with(['user', 'items.product'])
-            ->latest()
-            ->paginate(15);
+        $query = Order::with(['user', 'items.product'])->latest();
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('client')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->client . '%')
+                  ->orWhere('email', 'like', '%' . $request->client . '%');
+            });
+        }
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        $paginator = $query->paginate(15)->withQueryString();
 
         $paginator->getCollection()->transform(fn($order) => array_merge($order->toArray(), [
             'created_at' => $order->created_at->format('d/m/Y H:i'),
             'updated_at' => $order->updated_at->format('d/m/Y H:i'),
+            'ref'        => 'FT-' . str_pad($order->id, 4, '0', STR_PAD_LEFT),
         ]));
 
         return Inertia::render('admin/Orders/Index', [
-            'orders' => $paginator,
+            'orders'   => $paginator,
+            'filters'  => $request->only(['status', 'client', 'date_from', 'date_to']),
+            'statuses' => ['pending', 'confirmed', 'preparing', 'ready', 'delivered', 'cancelled'],
         ]);
     }
 

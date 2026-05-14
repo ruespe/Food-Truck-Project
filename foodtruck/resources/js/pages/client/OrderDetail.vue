@@ -228,9 +228,9 @@ onUnmounted(() => {
                         />
                         <div
                             v-else
-                            class="flex h-full w-full items-center justify-center text-2xl"
+                            class="flex h-full w-full items-center justify-center"
                         >
-                            🍔
+                            <span class="text-3xl">🍔</span>
                         </div>
                     </div>
                     <div class="min-w-0 flex-1">
