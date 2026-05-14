@@ -16,6 +16,7 @@ const props = defineProps<{
         start_time: string;
         end_time: string;
     }>;
+    today: string;
 }>();
 
 const showForm = ref(false);
@@ -83,6 +84,10 @@ function destroy(id: number) {
     if (confirm('¿Eliminar esta ubicación?')) {
         router.delete(`/admin/locations/${id}`);
     }
+}
+
+function selectToday(id: number) {
+    router.patch(`/admin/locations/${id}/select-today`);
 }
 </script>
 
@@ -253,7 +258,12 @@ function destroy(id: number) {
                     <tr
                         v-for="loc in locations"
                         :key="loc.id"
-                        class="transition hover:bg-slate-50 dark:hover:bg-slate-700/30"
+                        :class="[
+                            'transition hover:bg-slate-50 dark:hover:bg-slate-700/30',
+                            loc.date === today
+                                ? 'bg-amber-50/60 dark:bg-amber-500/5'
+                                : '',
+                        ]"
                     >
                         <td
                             class="px-6 py-4 font-medium text-slate-900 dark:text-white"
@@ -263,7 +273,21 @@ function destroy(id: number) {
                         <td
                             class="px-6 py-4 text-slate-600 dark:text-slate-300"
                         >
-                            {{ loc.date.split('-').reverse().join('/') }}
+                            <span class="flex items-center gap-2">
+                                {{
+                                    loc.date
+                                        ? loc.date
+                                              .split('-')
+                                              .reverse()
+                                              .join('/')
+                                        : '—'
+                                }}
+                                <span
+                                    v-if="loc.date === today"
+                                    class="rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold text-white uppercase"
+                                    >Hoy</span
+                                >
+                            </span>
                         </td>
                         <td
                             class="px-6 py-4 text-slate-600 dark:text-slate-300"
@@ -276,6 +300,19 @@ function destroy(id: number) {
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex gap-2">
+                                <button
+                                    v-if="loc.date !== today"
+                                    class="rounded-lg bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-600 transition hover:bg-amber-500/20 dark:text-amber-400"
+                                    @click="selectToday(loc.id)"
+                                >
+                                    📍 Seleccionar para hoy
+                                </button>
+                                <span
+                                    v-else
+                                    class="inline-flex items-center gap-1 rounded-lg bg-amber-500 px-3 py-1 text-xs font-bold text-white"
+                                >
+                                    ✓ Activa hoy
+                                </span>
                                 <button
                                     class="rounded-lg border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
                                     @click="openEdit(loc)"

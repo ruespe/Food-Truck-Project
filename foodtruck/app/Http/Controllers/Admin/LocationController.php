@@ -15,6 +15,7 @@ class LocationController extends Controller
     {
         return Inertia::render('admin/Locations/Index', [
             'locations' => Location::orderByDesc('date')->get(),
+            'today'     => today()->toDateString(),
         ]);
     }
 
@@ -66,5 +67,18 @@ class LocationController extends Controller
 
         return redirect()->route('admin.locations.index')
             ->with('success', 'Ubicación eliminada correctamente.');
+    }
+
+    public function selectToday(Location $location): RedirectResponse
+    {
+        // Remove today from any other location first
+        Location::whereDate('date', today())
+            ->where('id', '!=', $location->id)
+            ->update(['date' => null]);
+
+        $location->update(['date' => today()->toDateString()]);
+
+        return redirect()->route('admin.locations.index')
+            ->with('success', "'{$location->name}' seleccionada como ubicación de hoy.");
     }
 }

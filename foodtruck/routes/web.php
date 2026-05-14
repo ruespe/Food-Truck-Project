@@ -113,6 +113,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('locations', [Admin\LocationController::class, 'index'])->name('locations.index');
     Route::post('locations', [Admin\LocationController::class, 'store'])->name('locations.store');
     Route::patch('locations/{location}', [Admin\LocationController::class, 'update'])->name('locations.update');
+    Route::patch('locations/{location}/select-today', [Admin\LocationController::class, 'selectToday'])->name('locations.select-today');
     Route::delete('locations/{location}', [Admin\LocationController::class, 'destroy'])->name('locations.destroy');
 
     // Mensajes de contacto
