@@ -14,18 +14,31 @@ use Inertia\Response;
 
 class OrderController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $orders = auth()->user()
+        $filter = $request->query('filter', 'all'); // all | active | done
+
+        $query = auth()->user()
             ->orders()
             ->with(['items.product'])
-            ->latest()
-            ->get();
+            ->latest();
+
+        if ($filter === 'active') {
+            $query->whereIn('status', ['pending', 'confirmed', 'preparing', 'ready']);
+        } elseif ($filter === 'done') {
+            $query->whereIn('status', ['delivered', 'cancelled']);
+        }
+
+        $paginator = $query->paginate(10)->withQueryString();
+
+        $paginator->getCollection()->transform(fn($order) => array_merge($order->toArray(), [
+            'created_at' => $order->created_at->format('d/m/Y H:i'),
+            'ref'        => 'FT-' . str_pad($order->id, 4, '0', STR_PAD_LEFT),
+        ]));
 
         return Inertia::render('client/OrderHistory', [
-            'orders' => $orders->map(fn($order) => array_merge($order->toArray(), [
-                'created_at' => $order->created_at->format('d/m/Y H:i'),
-            ])),
+            'orders' => $paginator,
+            'filter' => $filter,
         ]);
     }
 
@@ -105,8 +118,10 @@ class OrderController extends Controller
 
         return Inertia::render('client/OrderDetail', [
             'order' => array_merge($order->toArray(), [
-                'created_at' => $order->created_at->format('d/m/Y H:i'),
-                'updated_at' => $order->updated_at->format('d/m/Y H:i'),
+                'created_at'     => $order->created_at->format('d/m/Y H:i'),
+                'updated_at'     => $order->updated_at->format('d/m/Y H:i'),
+                'ref'            => 'FT-' . str_pad($order->id, 4, '0', STR_PAD_LEFT),
+                'payment_method' => $order->payment_method ?? 'stripe',
             ]),
         ]);
     }

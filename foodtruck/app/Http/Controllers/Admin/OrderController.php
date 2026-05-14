@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Mail\OrderReadyClient;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -67,6 +69,11 @@ class OrderController extends Controller
         ]);
 
         $order->update(['status' => $request->status]);
+
+        if ($request->status === 'ready') {
+            $order->load(['user', 'items.product']);
+            Mail::to($order->user->email)->send(new OrderReadyClient($order));
+        }
 
         return back()->with('success', 'Estado actualizado correctamente.');
     }

@@ -21,6 +21,20 @@ class OrderSeeder extends Seeder
 
         $statuses       = ['confirmed', 'preparing', 'ready', 'delivered', 'cancelled'];
         $paymentMethods = ['stripe', 'cash'];
+        $testing        = User::where('email', 'testing@foodtruck.com')->first();
+
+        // 20 pedidos para testing@foodtruck.com
+        if ($testing) {
+            for ($i = 0; $i < 20; $i++) {
+                $this->createOrder(
+                    $testing,
+                    $products,
+                    $statuses[array_rand($statuses)],
+                    'stripe',
+                    rand(0, 90)
+                );
+            }
+        }
 
         // Pedidos fijos para cliente@foodtruck.com
         $clienteOrders = [
