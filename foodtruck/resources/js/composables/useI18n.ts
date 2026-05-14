@@ -148,6 +148,8 @@ const messages = {
         'orderDetail.back': '← Volver a mis pedidos',
         'orderDetail.cancel': 'Cancelar pedido',
         'orderDetail.cancelConfirm': '¿Seguro que quieres cancelar este pedido?',
+        'orderDetail.products': 'Productos',
+        'orderDetail.payment': 'Pago',
         // Payment success
         'payment.success.title': '¡Pago completado!',
         'payment.success.order': 'Pedido #',
@@ -400,6 +402,8 @@ const messages = {
         'orderDetail.back': '← Back to my orders',
         'orderDetail.cancel': 'Cancel order',
         'orderDetail.cancelConfirm': 'Are you sure you want to cancel this order?',
+        'orderDetail.products': 'Products',
+        'orderDetail.payment': 'Payment',
         // Payment success
         'payment.success.title': 'Payment complete!',
         'payment.success.order': 'Order #',
@@ -649,6 +653,8 @@ const messages = {
         'orderDetail.back': '← Tornar a les meves comandes',
         'orderDetail.cancel': 'Cancel·lar comanda',
         'orderDetail.cancelConfirm': 'Segur que vols cancel·lar aquesta comanda?',
+        'orderDetail.products': 'Productes',
+        'orderDetail.payment': 'Pagament',
         // Payment success
         'payment.success.title': 'Pagament completat!',
         'payment.success.order': 'Comanda #',
