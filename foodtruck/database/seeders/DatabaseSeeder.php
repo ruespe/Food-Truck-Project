@@ -11,17 +11,30 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Admin
-        User::factory()->admin()->create([
-            'name'     => 'Admin',
-            'email'    => 'admin@gmail.com',
-            'password' => Hash::make('password'),
+        User::firstOrCreate(['email' => 'admin@gmail.com'], [
+            'name'              => 'Admin',
+            'password'          => Hash::make('password'),
+            'role'              => 'admin',
+            'active'            => true,
+            'email_verified_at' => now(),
         ]);
 
         // Cliente de prueba (tendrá varios pedidos asignados)
-        User::factory()->create([
-            'name'     => 'Cliente Test',
-            'email'    => 'cliente@foodtruck.com',
-            'password' => Hash::make('password'),
+        User::firstOrCreate(['email' => 'cliente@foodtruck.com'], [
+            'name'              => 'Cliente Test',
+            'password'          => Hash::make('password'),
+            'role'              => 'client',
+            'active'            => true,
+            'email_verified_at' => now(),
+        ]);
+
+        // Usuario de testing: rol admin → accede al panel y salta restricción de horario
+        User::firstOrCreate(['email' => 'testing@foodtruck.com'], [
+            'name'              => 'Testing',
+            'password'          => Hash::make('password'),
+            'role'              => 'admin',
+            'active'            => true,
+            'email_verified_at' => now(),
         ]);
 
         $this->call([

@@ -81,6 +81,21 @@ class PaymentController extends Controller
         if ($order->status === 'pending') {
             $order->update(['status' => 'confirmed']);
             Payment::where('order_id', $order->id)->update(['status' => 'paid']);
+
+            // Enviar emails directamente (el webhook de Stripe no llega a localhost en desarrollo)
+            $order->load(['items.product', 'user']);
+            Mail::to($order->user->email)->send(new OrderConfirmedClient($order));
+            $adminEmail = config('mail.admin_address');
+            if ($adminEmail) {
+                sleep(10); // Evitar el límite de velocidad de Mailtrap sandbox
+                try {
+                    Mail::to($adminEmail)->send(new OrderConfirmedAdmin($order));
+                } catch (\Exception $e) {
+                    // En desarrollo, el email de admin puede fallar por rate limit de Mailtrap.
+                    // El pedido ya está confirmado y el cliente ya recibió su correo.
+                    \Illuminate\Support\Facades\Log::warning('Email admin no enviado: ' . $e->getMessage());
+                }
+            }
         }
 
         return Inertia::render('client/PaymentSuccess', [

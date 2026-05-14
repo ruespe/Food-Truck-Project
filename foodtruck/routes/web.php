@@ -17,8 +17,8 @@ Route::get('/', function () {
         'name'       => 'Mataró, Barcelona',
         'latitude'   => 41.5336796,
         'longitude'  => 2.4377341,
-        'start_time' => '12:00:00',
-        'end_time'   => '22:00:00',
+        'start_time' => '19:00:00',
+        'end_time'   => '07:00:00',
     ]);
 
     return inertia('Welcome', [

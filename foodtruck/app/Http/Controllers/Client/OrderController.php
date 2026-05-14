@@ -31,9 +31,11 @@ class OrderController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        // Verificar que el truck está abierto ahora
+        // Verificar que el truck está abierto ahora (los admins pueden pedir siempre)
         $location = \App\Models\Location::whereDate('date', today())->first();
-        if ($location) {
+        /** @var \App\Models\User $authUser */
+        $authUser = auth()->user();
+        if ($location && !$authUser->isAdmin()) {
             $now   = now()->format('H:i');
             $start = substr($location->start_time, 0, 5);
             $end   = substr($location->end_time, 0, 5);
@@ -41,7 +43,16 @@ class OrderController extends Controller
             $isOpen = $start > $end
                 ? ($now >= $start || $now <= $end)
                 : ($now >= $start && $now <= $end);
-            abort_unless($isOpen, 422, "El food truck está cerrado ahora. Horario de hoy: {$start} – {$end}.");
+            if (!$isOpen) {
+                $messages = [
+                    'es' => "El food truck está cerrado ahora. Horario de hoy: {$start} – {$end}.",
+                    'ca' => "El food truck està tancat ara. Horari d'avui: {$start} – {$end}.",
+                    'en' => "The food truck is closed now. Today's schedule: {$start} – {$end}.",
+                ];
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'closed' => $messages[app()->getLocale()] ?? $messages['en'],
+                ]);
+            }
         }
 
         $validated = $request->validate([
