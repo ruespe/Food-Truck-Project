@@ -26,7 +26,7 @@
 <body>
 <div class="wrapper">
     <div class="header">
-        <img src="{{ config('app.url') }}/logoFoodtruck.png" alt="FoodTruck" style="height:48px;width:auto;margin-bottom:8px;filter:brightness(0) invert(1);">
+        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logoFoodtruck.png'))) }}" alt="FoodTruck" style="height:48px;width:auto;margin-bottom:8px;">
         <h1>Nuevo pedido recibido: #FT-{{ $order->id }}</h1>
     </div>
 

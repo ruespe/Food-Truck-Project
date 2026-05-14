@@ -309,9 +309,9 @@ function submitContact() {
                                     {{ t('nav.adminPanel') }}
                                 </Link>
 
-                                <!-- Mis pedidos (solo clientes) -->
+                                <!-- Mis pedidos (clientes y admins) -->
                                 <Link
-                                    v-if="!isAdmin"
+                                    v-if="auth?.user"
                                     href="/orders"
                                     class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-foreground transition-colors duration-300 hover:bg-brand/10 hover:text-brand"
                                     @click="userOpen = false"
@@ -598,7 +598,6 @@ function submitContact() {
                                     >{{ t('nav.adminPanel') }}</Link
                                 >
                                 <Link
-                                    v-else
                                     href="/orders"
                                     class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand"
                                     @click="mobileOpen = false"
@@ -768,7 +767,6 @@ function submitContact() {
                                     >{{ t('nav.adminPanel') }}</Link
                                 >
                                 <Link
-                                    v-else
                                     href="/orders"
                                     class="rounded-full px-4 py-2.5 transition-colors duration-300 hover:bg-brand/10 hover:text-brand"
                                     @click="xsOpen = false"
