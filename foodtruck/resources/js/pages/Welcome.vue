@@ -147,7 +147,7 @@ function submitReview() {
 
     <!-- Features strip -->
     <section
-        class="border-t border-b border-orange-300 bg-orange-100 dark:border-orange-900/40 dark:bg-gray-900"
+        class="bg-orange-100 dark:bg-gray-900"
     >
         <div
             class="mx-auto grid max-w-5xl grid-cols-1 gap-6 px-4 py-10 text-center sm:grid-cols-3"
@@ -242,7 +242,8 @@ function submitReview() {
     </section>
 
     <!-- Carrusel de productos destacados -->
-    <section class="mx-auto max-w-4xl px-4 py-16">
+    <section class="bg-orange-50/70 py-16 dark:bg-orange-900/10">
+        <div class="mx-auto max-w-4xl px-4">
         <div class="mb-10 text-center">
             <h2 class="text-3xl font-bold text-gray-800 dark:text-white">
                 {{ t('home.popular') }}
@@ -394,10 +395,12 @@ function submitReview() {
         <p v-else class="text-center text-gray-500 dark:text-gray-400">
             {{ t('home.noProducts') }}
         </p>
+        </div>
     </section>
 
     <!-- Reseñas de clientes -->
-    <section class="mx-auto max-w-4xl px-4 py-16">
+    <section v-if="reviews && reviews.length > 0" class="border-t-2 border-b-2 border-amber-500 bg-amber-50/80 py-16 dark:border-amber-600 dark:bg-amber-900/10">
+        <div class="mx-auto max-w-4xl px-4">
         <div class="mb-10 text-center">
             <h2 class="text-3xl font-bold text-gray-800 dark:text-white">{{ t('reviews.title') }}</h2>
             <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ t('reviews.subtitle') }}</p>
@@ -542,6 +545,7 @@ function submitReview() {
             >
                 <a href="/login" class="font-medium text-amber-600 hover:underline dark:text-amber-400">{{ t('reviews.loginRequired') }}</a>
             </div>
+        </div>
         </div>
     </section>
 

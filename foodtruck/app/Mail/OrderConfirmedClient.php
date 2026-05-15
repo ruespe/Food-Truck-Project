@@ -24,7 +24,7 @@ class OrderConfirmedClient extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '¡Tu pedido en FoodTruck ha sido confirmado! 🍔 #FT-' . $this->order->id,
+            subject: '¡Tu pedido en FoodTruck ha sido confirmado! #FT-' . $this->order->id,
         );
     }
 

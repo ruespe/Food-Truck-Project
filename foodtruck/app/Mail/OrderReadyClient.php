@@ -24,7 +24,7 @@ class OrderReadyClient extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '¡Tu pedido está listo para recoger! 🎉 #FT-' . str_pad($this->order->id, 4, '0', STR_PAD_LEFT),
+            subject: '¡Tu pedido está listo para recoger! #FT-' . str_pad($this->order->id, 4, '0', STR_PAD_LEFT),
         );
     }
 
