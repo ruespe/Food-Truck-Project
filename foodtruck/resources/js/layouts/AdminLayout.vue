@@ -10,6 +10,7 @@ import {
     Moon,
     Package,
     ShoppingBag,
+    Star,
     Sun,
     ChevronDown,
     User,
@@ -38,6 +39,8 @@ function selectLocale(l: Locale) {
     langOpen.value = false;
 }
 
+const pendingReviews = computed(() => ((page.props as any).pending_reviews as number) ?? 0);
+
 const nav = computed(() => [
     { label: t('admin.nav.dashboard'), href: '/admin/', icon: LayoutDashboard },
     { label: t('admin.nav.products'), href: '/admin/products', icon: Package },
@@ -53,6 +56,7 @@ const nav = computed(() => [
         href: '/admin/contact',
         icon: MessageSquare,
     },
+    { label: t('admin.nav.reviews'), href: '/admin/reviews', icon: Star },
     { label: t('admin.nav.users'), href: '/admin/users', icon: Users },
 ]);
 
@@ -176,6 +180,12 @@ onBeforeUnmount(() => {
                             v-if="item.href === '/admin/orders' && pendingOrders > 0"
                             class="ml-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 text-[10px] font-bold text-white"
                             >{{ pendingOrders }}</span
+                        >
+                        <!-- Badge reseñas pendientes -->
+                        <span
+                            v-if="item.href === '/admin/reviews' && pendingReviews > 0"
+                            class="ml-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-purple-500 px-1 text-[10px] font-bold text-white"
+                            >{{ pendingReviews }}</span
                         >
                     </Link>
                 </div>
@@ -354,6 +364,10 @@ onBeforeUnmount(() => {
                             v-if="item.href === '/admin/orders' && pendingOrders > 0"
                             class="ml-auto flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 text-[10px] font-bold text-white"
                         >{{ pendingOrders }}</span>
+                        <span
+                            v-if="item.href === '/admin/reviews' && pendingReviews > 0"
+                            class="ml-auto flex h-4 min-w-4 items-center justify-center rounded-full bg-purple-500 px-1 text-[10px] font-bold text-white"
+                        >{{ pendingReviews }}</span>
                     </Link>
                 </nav>
 

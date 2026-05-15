@@ -6,6 +6,7 @@ use App\Http\Controllers\PaymentController;
 use App\Models\Location;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -30,6 +31,24 @@ Route::get('/', function () {
             ->take(6)
             ->get(['id', 'category_id', 'name', 'description', 'price', 'image']),
         'location'         => $location,
+        'reviews'          => Review::with('user')
+            ->where('visible', true)
+            ->orderByDesc('created_at')
+            ->take(5)
+            ->get()
+            ->map(fn($r) => [
+                'id'         => $r->id,
+                'user_name'  => $r->user->name,
+                'rating'     => $r->rating,
+                'comment'    => $r->comment,
+                'created_at' => $r->created_at->format('d/m/Y'),
+            ]),
+        'canReview'        => Auth::check()
+            ? Order::where('user_id', Auth::id())->where('status', 'delivered')->exists()
+            : false,
+        'userReview'       => Auth::check()
+            ? Review::where('user_id', Auth::id())->first()
+            : null,
     ]);
 })->name('home');
 
@@ -79,6 +98,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->middleware('admin')->name('dashboard.location');
 
     // Historial y detalle de pedidos
+    Route::post('/reviews', [Client\ReviewController::class, 'store'])->name('reviews.store');
+
     Route::get('/orders', [Client\OrderController::class, 'index'])->name('orders.index');
     Route::post('/orders', [Client\OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}', [Client\OrderController::class, 'show'])->name('orders.show');
@@ -122,6 +143,10 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::delete('contact/{contactMessage}', [Admin\ContactMessageController::class, 'destroy'])->name('contact.destroy');
 
     // Gestión de usuarios
+    Route::get('reviews', [Admin\ReviewController::class, 'index'])->name('reviews.index');
+    Route::patch('reviews/{review}/toggle-visible', [Admin\ReviewController::class, 'toggleVisible'])->name('reviews.toggle-visible');
+    Route::delete('reviews/{review}', [Admin\ReviewController::class, 'destroy'])->name('reviews.destroy');
+
     Route::get('users', [Admin\UserController::class, 'index'])->name('users.index');
     Route::patch('users/{user}/role', [Admin\UserController::class, 'updateRole'])->name('users.role');
     Route::patch('users/{user}/toggle-active', [Admin\UserController::class, 'toggleActive'])->name('users.toggle-active');

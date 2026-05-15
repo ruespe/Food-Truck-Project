@@ -44,6 +44,7 @@ class DatabaseSeeder extends Seeder
             LocationSeeder::class,
             OrderSeeder::class,
             ContactMessageSeeder::class,
+            ReviewSeeder::class,
         ]);
     }
 }

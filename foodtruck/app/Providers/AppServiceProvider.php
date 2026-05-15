@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use App\Models\ContactMessage;
+use App\Models\Review;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
 
         Inertia::share([
             'unread_messages' => fn () => ContactMessage::where('read', false)->count(),
+            'pending_reviews' => fn () => Review::where('visible', false)->count(),
         ]);
     }
 
