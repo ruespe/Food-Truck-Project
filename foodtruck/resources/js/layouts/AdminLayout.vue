@@ -144,16 +144,8 @@ onBeforeUnmount(() => {
                     >
                 </Link>
 
-                <!-- Hamburger (mobile only) -->
-                <button
-                    class="rounded-lg p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 sm:hidden dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
-                    @click="mobileOpen = true"
-                >
-                    <Menu class="h-5 w-5" />
-                </button>
-
                 <!-- Nav links (desktop) -->
-                <div class="hidden items-center gap-1 sm:flex">
+                <div class="hidden items-center gap-1 min-[1134px]:flex">
                     <Link
                         v-for="item in nav"
                         :key="item.href"
@@ -190,6 +182,14 @@ onBeforeUnmount(() => {
 
                 <!-- Right controls -->
                 <div class="flex items-center gap-2">
+                    <!-- Hamburger (mobile / mid) -->
+                    <button
+                        class="rounded-lg p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 min-[1134px]:hidden dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
+                        @click="mobileOpen = true"
+                    >
+                        <Menu class="h-5 w-5" />
+                    </button>
+
                     <button
                         class="rounded-full p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
                         @click="
@@ -208,7 +208,7 @@ onBeforeUnmount(() => {
                     </button>
 
                     <!-- Language selector -->
-                    <div ref="langRef" class="relative hidden sm:block">
+                    <div ref="langRef" class="relative hidden min-[1134px]:block">
                         <button
                             class="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-500 transition hover:border-amber-500 hover:text-amber-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-amber-500 dark:hover:text-amber-400"
                             @click="langOpen = !langOpen"

@@ -45,11 +45,12 @@ class DashboardController extends Controller
 
         return Inertia::render('admin/Dashboard', [
             'stats' => [
-                'total_orders'   => Order::count(),
+                'total_orders'    => Order::count(),
                 'confirmed_orders' => Order::where('status', 'confirmed')->count(),
-                'total_products' => Product::count(),
-                'total_clients'  => User::where('role', 'client')->count(),
-                'revenue'        => Order::whereNotIn('status', ['cancelled'])->sum('total_price'),
+                'total_products'  => Product::count(),
+                'total_clients'   => User::where('role', 'client')->count(),
+                'pending_orders'  => Order::where('status', 'delivered')->count(),
+                'revenue'         => Order::whereNotIn('status', ['cancelled'])->sum('total_price'),
             ],
             'revenue_chart' => [
                 'labels' => $days->keys()->map(fn($d) => \Carbon\Carbon::parse($d)->format('d/m'))->values(),

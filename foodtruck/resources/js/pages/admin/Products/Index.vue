@@ -66,6 +66,7 @@ function toggleStock(id: number) {
     <div
         class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
     >
+        <div class="overflow-x-auto">
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-slate-200 dark:border-[#66c0f4]">
@@ -209,6 +210,7 @@ function toggleStock(id: number) {
                 </tr>
             </tbody>
         </table>
+        </div>
 
         <!-- Pagination -->
         <div

@@ -130,6 +130,7 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
 
     <!-- Table -->
     <div class="rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-[#66c0f4]/50 overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-slate-200 dark:border-[#66c0f4] text-left">
@@ -235,5 +236,6 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
                 </tr>
             </tbody>
         </table>
+        </div>
     </div>
 </template>

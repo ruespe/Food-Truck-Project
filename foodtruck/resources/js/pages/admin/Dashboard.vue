@@ -54,6 +54,7 @@ const props = defineProps<{
         confirmed_orders: number;
         total_products: number;
         total_clients: number;
+        pending_orders: number; // delivered
         revenue: number;
     };
     revenue_chart?: {
@@ -291,7 +292,7 @@ function saveLocation() {
     </div>
 
     <!-- Stat cards -->
-    <div class="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+    <div class="mb-8 grid gap-4 sm:grid-cols-2 min-[1134px]:grid-cols-6">
         <div
             class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
         >
@@ -371,6 +372,25 @@ function saveLocation() {
                 <p
                     class="text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                 >
+                    {{ t('admin.dash.pendingOrders') }}
+                </p>
+                <div class="rounded-lg bg-teal-500/10 p-1.5">
+                    <Check
+                        class="h-4 w-4 text-teal-500 dark:text-teal-400"
+                    />
+                </div>
+            </div>
+            <p class="text-3xl font-extrabold text-teal-600 dark:text-teal-400">
+                {{ stats.pending_orders }}
+            </p>
+        </div>
+        <div
+            class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
+        >
+            <div class="mb-3 flex items-center justify-between">
+                <p
+                    class="text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
+                >
                     {{ t('admin.dash.revenue') }}
                 </p>
                 <div class="rounded-lg bg-green-500/10 p-1.5">
@@ -388,10 +408,10 @@ function saveLocation() {
     </div>
 
     <!-- Gráficas -->
-    <div class="mb-8 grid gap-6 lg:grid-cols-5">
+    <div class="mb-8 grid gap-6 min-[1134px]:grid-cols-5">
         <!-- Ingresos últimos 14 días -->
         <div
-            class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-3 dark:border-[#66c0f4]/50 dark:bg-slate-800"
+            class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm min-[1134px]:col-span-3 dark:border-[#66c0f4]/50 dark:bg-slate-800"
         >
             <div class="mb-4 flex items-center justify-between">
                 <div>
@@ -411,7 +431,7 @@ function saveLocation() {
 
         <!-- Productos más vendidos -->
         <div
-            class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-2 dark:border-[#66c0f4]/50 dark:bg-slate-800"
+            class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm min-[1134px]:col-span-2 dark:border-[#66c0f4]/50 dark:bg-slate-800"
         >
             <div class="mb-4 flex items-center justify-between">
                 <div>
@@ -471,7 +491,7 @@ function saveLocation() {
             </span>
         </div>
 
-        <div class="grid lg:grid-cols-2">
+        <div class="grid min-[1134px]:grid-cols-2">
             <!-- Mapa -->
             <div
                 style="
