@@ -5,6 +5,7 @@ import {
     LayoutDashboard,
     LogOut,
     MapPin,
+    Menu,
     MessageSquare,
     Moon,
     Package,
@@ -13,16 +14,29 @@ import {
     ChevronDown,
     User,
     Users,
+    X,
 } from 'lucide-vue-next';
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
 import { useAppearance } from '@/composables/useAppearance';
 import { useCart } from '@/composables/useCart';
-import { useI18n } from '@/composables/useI18n';
+import { useI18n, localeNames } from '@/composables/useI18n';
+import type { Locale } from '@/composables/useI18n';
+import LocaleFlag from '@/components/LocaleFlag.vue';
 
 const page = usePage();
 const currentUrl = computed(() => page.url);
 const { resolvedAppearance, updateAppearance } = useAppearance();
-const { t } = useI18n();
+const { t, locale, setLocale } = useI18n();
+
+const locales: Locale[] = ['es', 'ca', 'en'];
+const langOpen = ref(false);
+const langRef = ref<HTMLElement | null>(null);
+const mobileOpen = ref(false);
+
+function selectLocale(l: Locale) {
+    setLocale(l);
+    langOpen.value = false;
+}
 
 const nav = computed(() => [
     { label: t('admin.nav.dashboard'), href: '/admin/', icon: LayoutDashboard },
@@ -73,6 +87,9 @@ const userRef = ref<HTMLElement | null>(null);
 function handleOutsideClick(e: MouseEvent) {
     if (userRef.value && !userRef.value.contains(e.target as Node)) {
         userOpen.value = false;
+    }
+    if (langRef.value && !langRef.value.contains(e.target as Node)) {
+        langOpen.value = false;
     }
 }
 
@@ -127,7 +144,15 @@ onBeforeUnmount(() => {
                     >
                 </Link>
 
-                <!-- Nav links -->
+                <!-- Hamburger (mobile only) -->
+                <button
+                    class="rounded-lg p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 sm:hidden dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
+                    @click="mobileOpen = true"
+                >
+                    <Menu class="h-5 w-5" />
+                </button>
+
+                <!-- Nav links (desktop) -->
                 <div class="hidden items-center gap-1 sm:flex">
                     <Link
                         v-for="item in nav"
@@ -182,12 +207,34 @@ onBeforeUnmount(() => {
                         <Moon v-else class="h-4 w-4" />
                     </button>
 
-                    <Link
-                        href="/"
-                        class="hidden items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-500 transition hover:border-amber-500 hover:text-amber-600 sm:flex dark:border-slate-700 dark:text-slate-400 dark:hover:border-amber-500 dark:hover:text-amber-400"
-                    >
-                        Ver web
-                    </Link>
+                    <!-- Language selector -->
+                    <div ref="langRef" class="relative hidden sm:block">
+                        <button
+                            class="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-500 transition hover:border-amber-500 hover:text-amber-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-amber-500 dark:hover:text-amber-400"
+                            @click="langOpen = !langOpen"
+                        >
+                            <LocaleFlag :locale="locale" flagClass="h-4 w-6 rounded-sm" />
+                            <span>{{ localeNames[locale] }}</span>
+                            <svg class="h-3 w-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div
+                            v-show="langOpen"
+                            class="absolute right-0 mt-1.5 w-36 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800"
+                        >
+                            <button
+                                v-for="l in locales"
+                                :key="l"
+                                class="flex w-full items-center gap-2 px-3 py-2 text-sm text-gray-700 transition hover:bg-amber-50 hover:text-amber-600 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-amber-400"
+                                :class="l === locale ? 'font-semibold text-amber-600 dark:text-amber-400' : ''"
+                                @click="selectLocale(l)"
+                            >
+                                <LocaleFlag :locale="l" flagClass="h-4 w-6 rounded-sm" />
+                                <span>{{ t(`lang.${l}` as any) }}</span>
+                            </button>
+                        </div>
+                    </div>
 
                     <div v-if="user" ref="userRef" class="relative">
                         <button
@@ -236,9 +283,105 @@ onBeforeUnmount(() => {
         </header>
 
         <!-- Main content -->
-        <main class="flex-1 overflow-auto p-8">
+        <main class="flex-1 overflow-auto p-4 sm:p-8">
             <slot />
         </main>
+
+        <!-- Mobile offcanvas backdrop -->
+        <Transition
+            enter-active-class="transition-opacity duration-300"
+            enter-from-class="opacity-0"
+            enter-to-class="opacity-100"
+            leave-active-class="transition-opacity duration-200"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
+        >
+            <div
+                v-if="mobileOpen"
+                class="fixed inset-0 z-40 bg-black/50 sm:hidden"
+                @click="mobileOpen = false"
+            />
+        </Transition>
+
+        <!-- Mobile offcanvas drawer -->
+        <Transition
+            enter-active-class="transition-transform duration-300 ease-out"
+            enter-from-class="-translate-x-full"
+            enter-to-class="translate-x-0"
+            leave-active-class="transition-transform duration-200 ease-in"
+            leave-from-class="translate-x-0"
+            leave-to-class="-translate-x-full"
+        >
+            <div
+                v-if="mobileOpen"
+                class="fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-white shadow-2xl sm:hidden dark:bg-slate-900"
+            >
+                <!-- Drawer header -->
+                <div class="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-slate-700">
+                    <Link href="/" class="flex items-center gap-2.5" @click="mobileOpen = false">
+                        <img src="/logoFoodtruck.png" alt="FoodTruck" class="h-9 w-auto" />
+                        <span class="rounded-md bg-amber-500/10 px-2 py-0.5 text-xs font-semibold text-amber-400">Admin</span>
+                    </Link>
+                    <button
+                        class="rounded-lg p-1.5 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-slate-800 dark:hover:text-white"
+                        @click="mobileOpen = false"
+                    >
+                        <X class="h-5 w-5" />
+                    </button>
+                </div>
+
+                <!-- Drawer nav -->
+                <nav class="flex-1 overflow-y-auto px-3 py-4">
+                    <Link
+                        v-for="item in nav"
+                        :key="item.href"
+                        :href="item.href"
+                        :class="[
+                            'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition mb-1',
+                            isActive(item.href)
+                                ? 'bg-amber-500 text-white'
+                                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white',
+                        ]"
+                        @click="mobileOpen = false"
+                    >
+                        <component :is="item.icon" class="h-4 w-4 flex-shrink-0" />
+                        {{ item.label }}
+                        <span
+                            v-if="item.href === '/admin/contact' && unreadMessages > 0"
+                            class="ml-auto flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white"
+                        >{{ unreadMessages }}</span>
+                        <span
+                            v-if="item.href === '/admin/orders' && pendingOrders > 0"
+                            class="ml-auto flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 text-[10px] font-bold text-white"
+                        >{{ pendingOrders }}</span>
+                    </Link>
+                </nav>
+
+                <!-- Drawer footer -->
+                <div class="border-t border-gray-100 px-3 py-4 dark:border-slate-700">
+                    <!-- Language selector -->
+                    <div class="mb-3 flex gap-2">
+                        <button
+                            v-for="l in locales"
+                            :key="l"
+                            class="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-gray-200 py-1.5 text-xs font-medium transition dark:border-slate-600"
+                            :class="l === locale ? 'border-amber-500 bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400' : 'text-gray-500 hover:border-amber-400 hover:text-amber-600 dark:text-slate-400'"
+                            @click="selectLocale(l)"
+                        >
+                            <LocaleFlag :locale="l" flagClass="h-3.5 w-5 rounded-sm" />
+                            <span>{{ t(`lang.${l}` as any) }}</span>
+                        </button>
+                    </div>
+                    <button
+                        class="flex w-full items-center gap-2.5 rounded-xl px-4 py-2.5 text-sm text-red-400 transition hover:bg-red-500/10"
+                        @click="logout"
+                    >
+                        <LogOut class="h-4 w-4" />
+                        {{ t('admin.nav.logout') }}
+                    </button>
+                </div>
+            </div>
+        </Transition>
 
         <!-- Toast nuevo pedido -->
         <Transition

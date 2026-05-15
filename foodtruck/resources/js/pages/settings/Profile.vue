@@ -33,16 +33,17 @@ const user = computed(
 </script>
 
 <template>
-    <Head title="Mi perfil" />
+    <Head :title="t('settings.profile.pageTitle')" />
 
+    <div class="min-h-screen bg-orange-50 dark:bg-gray-950">
     <div class="mx-auto max-w-3xl px-4 py-10">
         <!-- Header -->
         <div class="mb-8">
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-                Ajustes de cuenta
+                {{ t('settings.profile.heading') }}
             </h1>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                Gestiona tu perfil y preferencias
+                {{ t('settings.profile.subheading') }}
             </p>
         </div>
 
@@ -76,7 +77,7 @@ const user = computed(
                 <h2
                     class="mb-5 flex items-center gap-2 text-sm font-semibold tracking-wide text-amber-600 uppercase dark:text-amber-400"
                 >
-                    <User class="h-4 w-4" /> Información personal
+                    <User class="h-4 w-4" /> {{ t('settings.profile.sectionTitle') }}
                 </h2>
 
                 <Form
@@ -88,7 +89,7 @@ const user = computed(
                         <label
                             for="name"
                             class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300"
-                            >Nombre completo</label
+                            >{{ t('settings.profile.nameLabel') }}</label
                         >
                         <input
                             id="name"
@@ -96,7 +97,7 @@ const user = computed(
                             :value="user.name"
                             required
                             autocomplete="name"
-                            placeholder="Tu nombre"
+                            :placeholder="t('settings.profile.namePlaceholder')"
                             class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-gray-900 placeholder-gray-400 transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:border-amber-400"
                         />
                         <InputError class="mt-1.5" :message="errors.name" />
@@ -106,7 +107,7 @@ const user = computed(
                         <label
                             for="email"
                             class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300"
-                            >Correo electrónico</label
+                            >{{ t('settings.profile.emailLabel') }}</label
                         >
                         <div class="relative">
                             <Mail
@@ -119,7 +120,7 @@ const user = computed(
                                 :value="user.email"
                                 required
                                 autocomplete="username"
-                                placeholder="tu@email.com"
+                                :placeholder="t('settings.profile.emailPlaceholder')"
                                 class="w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pr-4 pl-10 text-gray-900 placeholder-gray-400 transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:border-amber-400"
                             />
                         </div>
@@ -130,19 +131,19 @@ const user = computed(
                         v-if="mustVerifyEmail && !user.email_verified_at"
                         class="rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800 dark:border-yellow-700/50 dark:bg-yellow-900/20 dark:text-yellow-400"
                     >
-                        Tu correo no está verificado.
+                        {{ t('settings.profile.unverified') }}
                         <Link
                             :href="send()"
                             as="button"
                             class="ml-1 font-semibold underline hover:text-yellow-900 dark:hover:text-yellow-300"
                         >
-                            Reenviar verificación
+                            {{ t('settings.profile.resend') }}
                         </Link>
                         <div
                             v-if="status === 'verification-link-sent'"
                             class="mt-1 flex items-center gap-1 font-medium text-green-600 dark:text-green-400"
                         >
-                            <CheckCircle class="h-4 w-4" /> Enlace enviado.
+                            <CheckCircle class="h-4 w-4" /> {{ t('settings.profile.linkSent') }}
                         </div>
                     </div>
 
@@ -157,8 +158,7 @@ const user = computed(
                                 v-show="recentlySuccessful"
                                 class="flex items-center gap-1.5 text-sm font-medium text-green-600 dark:text-green-400"
                             >
-                                <CheckCircle class="h-4 w-4" /> Guardado
-                                correctamente
+                                <CheckCircle class="h-4 w-4" /> {{ t('settings.profile.savedMsg') }}
                             </p>
                         </Transition>
                         <button
@@ -166,7 +166,7 @@ const user = computed(
                             :disabled="processing"
                             class="ml-auto rounded-xl bg-amber-500 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600 disabled:opacity-50"
                         >
-                            Guardar cambios
+                            {{ t('settings.profile.saveBtn') }}
                         </button>
                     </div>
                 </Form>
@@ -304,5 +304,6 @@ const user = computed(
                 <DeleteUser />
             </div>
         </div>
+    </div>
     </div>
 </template>

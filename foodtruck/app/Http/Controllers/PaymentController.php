@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Mail\OrderConfirmedAdmin;
 use App\Mail\OrderConfirmedClient;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
@@ -85,17 +84,6 @@ class PaymentController extends Controller
             // Enviar emails directamente (el webhook de Stripe no llega a localhost en desarrollo)
             $order->load(['items.product', 'user']);
             Mail::to($order->user->email)->send(new OrderConfirmedClient($order));
-            $adminEmail = config('mail.admin_address');
-            if ($adminEmail) {
-                sleep(10); // Evitar el límite de velocidad de Mailtrap sandbox
-                try {
-                    Mail::to($adminEmail)->send(new OrderConfirmedAdmin($order));
-                } catch (\Exception $e) {
-                    // En desarrollo, el email de admin puede fallar por rate limit de Mailtrap.
-                    // El pedido ya está confirmado y el cliente ya recibió su correo.
-                    \Illuminate\Support\Facades\Log::warning('Email admin no enviado: ' . $e->getMessage());
-                }
-            }
         }
 
         return Inertia::render('client/PaymentSuccess', [
@@ -146,14 +134,7 @@ class PaymentController extends Controller
                     Mail::to($order->user->email)
                         ->later(now()->addSeconds(2), new OrderConfirmedClient($order));
 
-                    // Encolar email al admin con 10s de retraso (evita rate limit de Mailtrap)
-                    $adminEmail = config('mail.admin_address');
-                    if ($adminEmail) {
-                        Mail::to($adminEmail)
-                            ->later(now()->addSeconds(10), new OrderConfirmedAdmin($order));
-                    }
-
-                    \Illuminate\Support\Facades\Log::info('Emails encolados — pedido #' . $order->id);
+                    \Illuminate\Support\Facades\Log::info('Email encolado — pedido #' . $order->id);
                 }
             }
         }

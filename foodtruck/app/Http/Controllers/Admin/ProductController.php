@@ -67,6 +67,9 @@ class ProductController extends Controller
             );
             $data['image']     = $uploaded['secure_url'];
             $data['public_id'] = $uploaded['public_id'];
+        } else {
+            // No se subió imagen nueva: conservar la existente
+            unset($data['image']);
         }
 
         $product->update($data);
