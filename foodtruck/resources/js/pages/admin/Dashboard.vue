@@ -171,13 +171,13 @@ const topProductsOptions = computed(() => ({
 
 const statusColor: Record<string, string> = {
     confirmed:
-        'bg-blue-500/10 text-blue-400 ring-1 ring-inset ring-blue-500/20',
+        'bg-blue-100 text-blue-700 ring-1 ring-inset ring-blue-300 dark:bg-blue-500/10 dark:text-blue-400 dark:ring-blue-500/20',
     preparing:
-        'bg-orange-500/10 text-orange-400 ring-1 ring-inset ring-orange-500/20',
-    ready: 'bg-green-500/10 text-green-400 ring-1 ring-inset ring-green-500/20',
+        'bg-orange-100 text-orange-700 ring-1 ring-inset ring-orange-300 dark:bg-orange-500/10 dark:text-orange-400 dark:ring-orange-500/20',
+    ready: 'bg-green-100 text-green-700 ring-1 ring-inset ring-green-300 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20',
     delivered:
-        'bg-slate-500/10 text-slate-400 ring-1 ring-inset ring-slate-500/30',
-    cancelled: 'bg-red-500/10 text-red-400 ring-1 ring-inset ring-red-500/20',
+        'bg-slate-100 text-slate-600 ring-1 ring-inset ring-slate-300 dark:bg-slate-500/10 dark:text-slate-400 dark:ring-slate-500/30',
+    cancelled: 'bg-red-100 text-red-700 ring-1 ring-inset ring-red-300 dark:bg-red-500/10 dark:text-red-400 dark:ring-red-500/20',
 };
 
 function statusLabel(status: string): string {

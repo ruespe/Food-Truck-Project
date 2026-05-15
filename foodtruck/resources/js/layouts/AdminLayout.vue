@@ -75,10 +75,36 @@ function handleOutsideClick(e: MouseEvent) {
         userOpen.value = false;
     }
 }
-onMounted(() => document.addEventListener('mousedown', handleOutsideClick));
-onBeforeUnmount(() =>
-    document.removeEventListener('mousedown', handleOutsideClick),
-);
+
+// Polling notifications
+const pendingOrders = ref(0);
+const newOrderToast = ref(false);
+let pollingInterval: ReturnType<typeof setInterval> | null = null;
+
+async function fetchNotifications() {
+    try {
+        const res = await fetch('/admin/api/notifications', {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        pendingOrders.value = data.pending_orders ?? 0;
+        if ((data.new_orders ?? 0) > 0) {
+            newOrderToast.value = true;
+            setTimeout(() => { newOrderToast.value = false; }, 6000);
+        }
+    } catch {}
+}
+
+onMounted(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+    fetchNotifications();
+    pollingInterval = setInterval(fetchNotifications, 20000);
+});
+onBeforeUnmount(() => {
+    document.removeEventListener('mousedown', handleOutsideClick);
+    if (pollingInterval) clearInterval(pollingInterval);
+});
 </script>
 
 <template>
@@ -127,6 +153,12 @@ onBeforeUnmount(() =>
                             "
                             class="ml-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white"
                             >{{ unreadMessages }}</span
+                        >
+                        <!-- Badge pedidos pendientes -->
+                        <span
+                            v-if="item.href === '/admin/orders' && pendingOrders > 0"
+                            class="ml-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 text-[10px] font-bold text-white"
+                            >{{ pendingOrders }}</span
                         >
                     </Link>
                 </div>
@@ -207,5 +239,43 @@ onBeforeUnmount(() =>
         <main class="flex-1 overflow-auto p-8">
             <slot />
         </main>
+
+        <!-- Toast nuevo pedido -->
+        <Transition
+            enter-active-class="transition duration-300 ease-out"
+            enter-from-class="translate-y-4 opacity-0"
+            enter-to-class="translate-y-0 opacity-100"
+            leave-active-class="transition duration-200 ease-in"
+            leave-from-class="translate-y-0 opacity-100"
+            leave-to-class="translate-y-4 opacity-0"
+        >
+            <div
+                v-if="newOrderToast"
+                class="fixed bottom-6 right-6 z-50 flex items-start gap-3 rounded-xl border border-amber-200 bg-white px-5 py-4 shadow-2xl dark:border-amber-500/30 dark:bg-slate-900"
+            >
+                <span class="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-500/20">
+                    <!-- SVG campana -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                </span>
+                <div class="flex-1">
+                    <p class="text-sm font-semibold text-gray-900 dark:text-white">¡Nuevo pedido!</p>
+                    <p class="text-xs text-gray-500 dark:text-slate-400">Ha llegado un nuevo pedido confirmado.</p>
+                    <a
+                        href="/admin/orders"
+                        class="mt-1 inline-block text-xs font-medium text-amber-600 hover:underline dark:text-amber-400"
+                        @click="newOrderToast = false"
+                    >Ver pedidos →</a>
+                </div>
+                <button
+                    class="ml-1 mt-0.5 text-gray-400 transition hover:text-gray-600 dark:hover:text-slate-200"
+                    @click="newOrderToast = false"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+        </Transition>
     </div>
 </template>

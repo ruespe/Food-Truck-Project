@@ -30,6 +30,13 @@ const messages = {
         'home.welcome': 'Bienvenido a',
         'home.subtitle': 'Comida fresca y artesanal en la calle. Bocadillos, hamburguesas, tapas y mucho más.',
         'home.cta': 'Ver el menú →',
+        // Welcome – Features strip
+        'home.feat1Title': 'Horario de apertura',
+        'home.feat1Desc': 'Abrimos de viernes a domingo de 19:00 a 07:00.',
+        'home.feat2Title': 'La comida',
+        'home.feat2Desc': 'Comida económica y de calidad para todos.',
+        'home.feat3Title': 'Ubicación',
+        'home.feat3Desc': 'Nos encontramos en el polígono industrial de Mataró.',
         // Welcome – Popular
         'home.popular': 'Lo más popular',
         'home.loading': 'Cargando productos...',
@@ -294,6 +301,13 @@ const messages = {
         'lang.en': 'English',
         'home.subtitle': 'Fresh handcrafted street food. Sandwiches, burgers, tapas and much more.',
         'home.cta': 'See the menu →',
+        // Welcome – Features strip
+        'home.feat1Title': 'Opening hours',
+        'home.feat1Desc': 'Open Friday to Sunday from 19:00 to 07:00.',
+        'home.feat2Title': 'The food',
+        'home.feat2Desc': 'Affordable quality food for everyone.',
+        'home.feat3Title': 'Location',
+        'home.feat3Desc': 'We are located in the Mataró industrial park.',
         // Welcome – Popular
         'home.popular': 'Most popular',
         'home.loading': 'Loading products...',
@@ -555,6 +569,13 @@ const messages = {
         'home.welcome': 'Benvingut a',
         'home.subtitle': 'Menjar fresc i artesà al carrer. Entrepans, hamburgueses, tapes i molt més.',
         'home.cta': 'Veure el menú →',
+        // Welcome – Features strip
+        'home.feat1Title': 'Horaris d\'apertura',
+        'home.feat1Desc': 'Obrim de divendres a diumenge de 19:00 a 07:00.',
+        'home.feat2Title': 'El menjar',
+        'home.feat2Desc': 'Menjar econòmic i de qualitat per a tothom.',
+        'home.feat3Title': 'Ubicació',
+        'home.feat3Desc': 'Ens trobem al polígon industrial de Mataró.',
         // Welcome – Popular
         'home.popular': 'El més popular',
         'home.loading': 'Carregant productes...',

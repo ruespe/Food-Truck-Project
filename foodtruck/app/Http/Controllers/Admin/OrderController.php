@@ -47,7 +47,7 @@ class OrderController extends Controller
         return Inertia::render('admin/Orders/Index', [
             'orders'   => $paginator,
             'filters'  => $request->only(['status', 'client', 'date_from', 'date_to']),
-            'statuses' => ['pending', 'confirmed', 'preparing', 'ready', 'delivered', 'cancelled'],
+            'statuses' => ['confirmed', 'preparing', 'ready', 'delivered', 'cancelled'],
         ]);
     }
 

@@ -126,6 +126,24 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::patch('users/{user}/role', [Admin\UserController::class, 'updateRole'])->name('users.role');
     Route::patch('users/{user}/toggle-active', [Admin\UserController::class, 'toggleActive'])->name('users.toggle-active');
     Route::delete('users/{user}', [Admin\UserController::class, 'destroy'])->name('users.destroy');
+
+    // API de notificaciones (polling)
+    Route::get('api/notifications', function () {
+        $pendingStatuses = ['confirmed', 'preparing', 'ready'];
+        $pendingOrders = \App\Models\Order::whereIn('status', $pendingStatuses)->count();
+
+        $lastSeen = session('admin_notifications_last_seen', now()->subSeconds(25)->toDateTimeString());
+        $newOrders = \App\Models\Order::where('status', 'confirmed')
+            ->where('created_at', '>', $lastSeen)
+            ->count();
+
+        session(['admin_notifications_last_seen' => now()->toDateTimeString()]);
+
+        return response()->json([
+            'pending_orders' => $pendingOrders,
+            'new_orders'     => $newOrders,
+        ]);
+    })->name('api.notifications');
 });
 
 require __DIR__ . '/settings.php';
