@@ -218,8 +218,51 @@ function selectToday(id: number) {
     </div>
 
     <!-- Listado de ubicaciones -->
+
+    <!-- Mobile cards -->
+    <div class="sm:hidden space-y-3">
+        <div v-if="locations.length === 0" class="rounded-2xl border border-slate-200 bg-white dark:border-[#66c0f4]/50 dark:bg-slate-800 px-6 py-10 text-center text-slate-500">
+            No hay ubicaciones registradas
+        </div>
+        <div
+            v-for="loc in locations"
+            :key="loc.id"
+            :class="[
+                'rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800 p-4 space-y-3',
+                loc.date === today ? 'bg-amber-50/60 dark:bg-amber-500/5 border-amber-300 dark:border-amber-500/30' : ''
+            ]"
+        >
+            <div class="flex items-start justify-between gap-2">
+                <p class="font-medium text-slate-900 dark:text-white">{{ loc.name }}</p>
+                <span v-if="loc.date === today" class="flex-shrink-0 rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold text-white uppercase">Hoy</span>
+            </div>
+            <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-600 dark:text-slate-300">
+                <span>📅 {{ loc.date ? loc.date.split('-').reverse().join('/') : '—' }}</span>
+                <span>🕐 {{ loc.start_time.slice(0, 5) }} – {{ loc.end_time.slice(0, 5) }}</span>
+                <span class="font-mono text-slate-400">{{ loc.latitude }}, {{ loc.longitude }}</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <button
+                    v-if="loc.date !== today"
+                    class="rounded-lg bg-amber-500/10 px-3 py-1.5 text-xs font-medium text-amber-600 transition hover:bg-amber-500/20 dark:text-amber-400"
+                    @click="selectToday(loc.id)"
+                >📍 Seleccionar para hoy</button>
+                <span v-else class="inline-flex items-center gap-1 rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-bold text-white">✓ Activa hoy</span>
+                <button
+                    class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
+                    @click="openEdit(loc)"
+                >Editar</button>
+                <button
+                    class="rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500/20"
+                    @click="destroy(loc.id)"
+                >Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop table -->
     <div
-        class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
+        class="hidden sm:block overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
     >
         <div class="overflow-x-auto">
             <table class="w-full text-sm">

@@ -63,8 +63,84 @@ function toggleStock(id: number) {
         </Link>
     </div>
 
+    <!-- Mobile cards -->
+    <div class="sm:hidden space-y-3">
+        <div v-if="products.data.length === 0" class="rounded-2xl border border-slate-200 bg-white dark:border-[#66c0f4]/50 dark:bg-slate-800 px-6 py-10 text-center text-slate-400 dark:text-slate-500">
+            {{ t('admin.prod.empty') }}
+        </div>
+        <div
+            v-for="product in products.data"
+            :key="product.id"
+            class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800 p-4 space-y-3"
+        >
+            <div class="flex items-center gap-3">
+                <div
+                    :class="[
+                        'relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-xl',
+                        (product.category?.name as any)?.es === 'Bebidas' ? 'bg-white' : 'bg-slate-700'
+                    ]"
+                >
+                    <img
+                        v-if="product.image"
+                        :src="product.image?.startsWith('http') ? product.image : `/storage/${product.image}`"
+                        :alt="td(product.name)"
+                        :class="[
+                            'h-full w-full',
+                            (product.category?.name as any)?.es === 'Bebidas' ? 'object-contain p-1' : 'object-cover',
+                            !product.stock ? 'brightness-50' : ''
+                        ]"
+                    />
+                    <div v-else class="flex h-full w-full items-center justify-center bg-slate-700" :class="!product.stock ? 'opacity-40' : ''">
+                        <ImagePlaceholder class="h-8 w-8 text-slate-400" />
+                    </div>
+                    <div v-if="!product.stock" class="absolute inset-0 flex items-center justify-center bg-red-600/60">
+                        <span class="text-center text-[9px] leading-tight font-bold text-white">{{ t('admin.prod.noStock') }}</span>
+                    </div>
+                </div>
+                <div class="min-w-0">
+                    <p class="font-medium text-slate-900 dark:text-white truncate">{{ td(product.name) }}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">{{ td(product.category?.name) }}</p>
+                </div>
+                <div class="ml-auto text-right flex-shrink-0">
+                    <p class="font-semibold text-amber-400">{{ parseFloat(String(product.price)).toFixed(2) }} €</p>
+                    <span :class="product.available ? 'text-green-400' : 'text-red-400'" class="text-xs">
+                        {{ product.available ? t('admin.prod.yes') : t('admin.prod.no') }}
+                    </span>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <Link
+                    :href="`/admin/products/${product.id}/edit`"
+                    class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
+                >{{ t('admin.prod.edit') }}</Link>
+                <button
+                    class="rounded-lg px-3 py-1.5 text-xs font-medium transition"
+                    :class="!product.stock ? 'bg-green-500/15 text-green-400 hover:bg-green-500/25' : 'bg-orange-500/15 text-orange-400 hover:bg-orange-500/25'"
+                    @click="toggleStock(product.id)"
+                >
+                    {{ !product.stock ? t('admin.prod.restock') : t('admin.prod.outOfStock') }}
+                </button>
+                <button
+                    class="rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500/20"
+                    @click="destroy(product.id)"
+                >{{ t('admin.prod.delete') }}</button>
+            </div>
+        </div>
+        <!-- Pagination mobile -->
+        <div v-if="products.last_page > 1" class="flex items-center justify-between px-1 py-2">
+            <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('admin.prod.page') }} {{ products.current_page }} {{ t('admin.prod.of') }} {{ products.last_page }}</p>
+            <div class="flex gap-1">
+                <template v-for="link in products.links" :key="link.label">
+                    <Link v-if="link.url" :href="link.url" preserve-scroll :class="['flex h-8 min-w-8 items-center justify-center rounded-lg px-2 text-xs font-medium transition', link.active ? 'bg-amber-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-amber-500/10 hover:text-amber-500 dark:bg-slate-700 dark:text-slate-300 dark:hover:text-amber-400']" v-html="link.label" />
+                    <span v-else class="flex h-8 min-w-8 items-center justify-center rounded-lg px-2 text-xs font-medium text-slate-600" v-html="link.label" />
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop table -->
     <div
-        class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
+        class="hidden sm:block overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
     >
         <div class="overflow-x-auto">
         <table class="w-full text-sm">

@@ -670,15 +670,42 @@ function saveLocation() {
     </div>
 
     <!-- Recent orders -->
-    <div
-        class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
-    >
+    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800">
         <div class="border-b border-slate-200 px-6 py-4 dark:border-[#66c0f4]">
             <h2 class="font-semibold text-slate-900 dark:text-white">
                 {{ t('admin.dash.recentOrders') }}
             </h2>
         </div>
-        <div class="overflow-x-auto">
+
+        <!-- Mobile cards -->
+        <div class="sm:hidden divide-y divide-slate-100 dark:divide-slate-700/50">
+            <div v-if="recent_orders.length === 0" class="px-6 py-10 text-center text-slate-400 dark:text-slate-500">
+                {{ t('admin.dash.noRecentOrders') }}
+            </div>
+            <div
+                v-for="order in recent_orders"
+                :key="order.id"
+                class="p-4 space-y-2"
+            >
+                <div class="flex items-center justify-between gap-2">
+                    <span class="font-mono text-xs text-slate-400">#{{ order.id }}</span>
+                    <span
+                        :class="[
+                            'rounded-full px-2.5 py-1 text-xs font-semibold',
+                            statusColor[order.status] ?? 'bg-slate-500/10 text-slate-500 dark:text-slate-400',
+                        ]"
+                    >{{ statusLabel(order.status) ?? order.status }}</span>
+                </div>
+                <p class="font-medium text-slate-900 dark:text-white">{{ order.user }}</p>
+                <div class="flex items-center justify-between">
+                    <span class="font-semibold text-amber-600 dark:text-amber-400">{{ parseFloat(String(order.total_price)).toFixed(2) }} EUR</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400">{{ order.created_at }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop table -->
+        <div class="hidden sm:block overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
                     <tr class="border-b border-slate-200 dark:border-[#66c0f4]">

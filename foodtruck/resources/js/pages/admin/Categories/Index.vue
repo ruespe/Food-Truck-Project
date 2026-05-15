@@ -228,8 +228,34 @@ const inputClass =
         </form>
     </div>
 
+    <!-- Mobile cards -->
+    <div class="sm:hidden space-y-3">
+        <div v-if="categories.length === 0" class="rounded-2xl border border-slate-200 bg-white dark:border-[#66c0f4]/50 dark:bg-slate-800 px-6 py-10 text-center text-slate-500">
+            No hay categorías aún
+        </div>
+        <div
+            v-for="cat in categories"
+            :key="cat.id"
+            class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800 p-4 space-y-2"
+        >
+            <p class="font-medium text-slate-900 dark:text-white">{{ cat.name?.es ?? cat.name }}</p>
+            <p class="text-sm text-slate-500 dark:text-slate-400">{{ cat.description?.es ?? '—' }}</p>
+            <div class="flex gap-2 pt-1">
+                <button
+                    class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
+                    @click="openEdit(cat)"
+                >Editar</button>
+                <button
+                    class="rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500/20"
+                    @click="destroy(cat.id)"
+                >Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop table -->
     <div
-        class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
+        class="hidden sm:block overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
     >
         <table class="w-full text-sm">
             <thead>

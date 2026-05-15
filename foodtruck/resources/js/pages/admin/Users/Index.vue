@@ -128,8 +128,81 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
         </select>
     </div>
 
-    <!-- Table -->
-    <div class="rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-[#66c0f4]/50 overflow-hidden shadow-sm">
+    <!-- Mobile cards -->
+    <div class="sm:hidden space-y-3">
+        <div v-if="filtered.length === 0" class="rounded-2xl border border-slate-200 bg-white dark:border-[#66c0f4]/50 dark:bg-slate-800 px-6 py-10 text-center text-slate-400 dark:text-slate-500">
+            No se encontraron usuarios con esos filtros
+        </div>
+        <div
+            v-for="user in filtered"
+            :key="user.id"
+            :class="['rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800 p-4 space-y-3', !user.active && 'opacity-60']"
+        >
+            <div class="flex items-center gap-3">
+                <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-sm font-bold text-amber-600 dark:text-amber-400">
+                    {{ user.name.charAt(0).toUpperCase() }}
+                </div>
+                <div class="min-w-0">
+                    <p class="font-medium text-slate-900 dark:text-white truncate">
+                        {{ user.name }}
+                        <span v-if="user.id === currentUserId" class="ml-1 rounded-full bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500 dark:text-slate-400">Tú</span>
+                    </p>
+                    <p class="text-xs text-slate-400 truncate">{{ user.email }}</p>
+                    <span v-if="!user.verified" class="inline-block mt-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/30 px-1.5 py-0.5 text-[10px] font-semibold text-yellow-500">Sin verificar</span>
+                </div>
+            </div>
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+                <div class="flex items-center gap-2">
+                    <select
+                        :value="user.role"
+                        :disabled="user.id === currentUserId || changingRole === user.id"
+                        class="rounded-lg border px-2 py-1 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:cursor-not-allowed disabled:opacity-50 transition"
+                        :class="user.role === 'admin'
+                            ? 'border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400 dark:bg-amber-500/10 dark:border-amber-500/30'
+                            : 'border-blue-500/40 bg-blue-500/10 text-blue-600 dark:text-blue-400 dark:bg-blue-500/10 dark:border-blue-500/30'"
+                        @change="updateRole(user.id, ($event.target as HTMLSelectElement).value)"
+                    >
+                        <option value="admin">Admin</option>
+                        <option value="client">Cliente</option>
+                    </select>
+                    <RefreshCw v-if="changingRole === user.id" class="h-3 w-3 animate-spin text-amber-500" />
+                    <span
+                        :class="user.active
+                            ? 'bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/30'
+                            : 'bg-red-500/10 text-red-500 border-red-500/30'"
+                        class="rounded-full border px-2.5 py-0.5 text-xs font-semibold"
+                    >
+                        {{ user.active ? 'Activo' : 'Inactivo' }}
+                    </span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500 dark:text-slate-400">{{ user.orders_count }} pedidos</span>
+                    <button
+                        :disabled="user.id === currentUserId"
+                        :title="user.active ? 'Desactivar cuenta' : 'Activar cuenta'"
+                        :class="user.active ? 'border-orange-500/30 text-orange-500 hover:bg-orange-500/10' : 'border-green-500/30 text-green-500 hover:bg-green-500/10'"
+                        class="rounded-lg border px-2.5 py-1.5 text-xs font-medium transition disabled:cursor-not-allowed disabled:opacity-40"
+                        @click="toggleActive(user.id)"
+                    >
+                        <UserX v-if="user.active" class="h-3.5 w-3.5" />
+                        <User v-else class="h-3.5 w-3.5" />
+                    </button>
+                    <button
+                        :disabled="user.id === currentUserId"
+                        title="Eliminar usuario"
+                        class="rounded-lg border border-red-500/30 px-2.5 py-1.5 text-xs font-medium text-red-500 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-40"
+                        @click="destroy(user.id, user.name)"
+                    >
+                        <Trash2 class="h-3.5 w-3.5" />
+                    </button>
+                </div>
+            </div>
+            <p class="text-xs text-slate-400">Registro: {{ user.created_at }}</p>
+        </div>
+    </div>
+
+    <!-- Desktop table -->
+    <div class="hidden sm:block rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-[#66c0f4]/50 overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
         <table class="w-full text-sm">
             <thead>

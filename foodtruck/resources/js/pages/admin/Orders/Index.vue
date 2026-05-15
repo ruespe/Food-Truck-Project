@@ -210,8 +210,64 @@ function updateStatus(orderId: number, status: string) {
         </div>
     </div>
 
+    <!-- Mobile cards -->
+    <div class="sm:hidden space-y-3">
+        <div v-if="orders.data.length === 0" class="rounded-2xl border border-slate-200 bg-white dark:border-[#66c0f4]/50 dark:bg-slate-800 px-6 py-10 text-center text-slate-400 dark:text-slate-500">
+            No hay pedidos con los filtros aplicados
+        </div>
+        <div
+            v-for="order in orders.data"
+            :key="order.id"
+            class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800 p-4 space-y-3"
+        >
+            <div class="flex items-start justify-between gap-2">
+                <span class="font-mono text-xs text-amber-500 dark:text-amber-400">{{ order.ref }}</span>
+                <select
+                    :value="order.status"
+                    :class="[
+                        'rounded-lg border-0 px-2.5 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-amber-500 focus:outline-none',
+                        statusColor[order.status] ?? 'bg-slate-700 text-slate-300',
+                    ]"
+                    @change="updateStatus(order.id, ($event.target as HTMLSelectElement).value)"
+                >
+                    <option v-for="s in statuses" :key="s" :value="s" class="bg-slate-800 text-white">{{ statusLabel(s) }}</option>
+                </select>
+            </div>
+            <div>
+                <p class="font-medium text-slate-900 dark:text-white">{{ order.user.name }}</p>
+                <p class="text-xs text-slate-500">{{ order.user.email }}</p>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 truncate">
+                <span v-for="(item, i) in order.items" :key="i">
+                    {{ item.quantity }}× {{ td(item.product.name) }}<span v-if="i < order.items.length - 1">, </span>
+                </span>
+            </p>
+            <div class="flex items-center justify-between">
+                <span class="font-bold text-amber-600 dark:text-amber-400">{{ parseFloat(String(order.total_price)).toFixed(2) }} €</span>
+                <span class="text-xs text-slate-400">{{ order.created_at }}</span>
+            </div>
+            <Link
+                :href="`/admin/orders/${order.id}`"
+                class="block w-full rounded-lg bg-slate-100 px-3 py-2 text-center text-xs font-medium text-slate-600 transition hover:bg-amber-500/10 hover:text-amber-600 dark:bg-slate-700 dark:text-slate-300 dark:hover:text-amber-400"
+            >
+                Ver detalle →
+            </Link>
+        </div>
+        <!-- Pagination mobile -->
+        <div v-if="orders.last_page > 1" class="flex items-center justify-between px-1 py-2">
+            <p class="text-xs text-slate-500 dark:text-slate-400">Página {{ orders.current_page }} de {{ orders.last_page }}</p>
+            <div class="flex gap-1">
+                <template v-for="link in orders.links" :key="link.label">
+                    <Link v-if="link.url" :href="link.url" preserve-scroll :class="['flex h-8 min-w-8 items-center justify-center rounded-lg px-2 text-xs font-medium transition', link.active ? 'bg-amber-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-amber-500/10 hover:text-amber-600 dark:bg-slate-700 dark:text-slate-300 dark:hover:text-amber-400']" v-html="link.label" />
+                    <span v-else class="flex h-8 min-w-8 items-center justify-center rounded-lg px-2 text-xs font-medium text-slate-300 dark:text-slate-600" v-html="link.label" />
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop table -->
     <div
-        class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
+        class="hidden sm:block overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
     >
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
