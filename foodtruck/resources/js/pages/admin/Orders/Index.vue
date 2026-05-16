@@ -127,10 +127,10 @@ function updateStatus(orderId: number, status: string) {
     <div class="mb-6 flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold text-slate-900 dark:text-white">
-                Pedidos
+                {{ t('admin.orders.title') }}
             </h1>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                {{ orders.total }} pedidos en total
+                {{ orders.total }} {{ t('admin.orders.subtitle') }}
             </p>
         </div>
     </div>
@@ -158,7 +158,7 @@ function updateStatus(orderId: number, status: string) {
                 <input
                     v-model="filterClient"
                     type="text"
-                    placeholder="Buscar cliente..."
+                    :placeholder="t('admin.orders.searchPlaceholder')"
                     class="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pr-3 pl-9 text-sm text-slate-900 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:placeholder-slate-400"
                 />
             </div>
@@ -168,7 +168,7 @@ function updateStatus(orderId: number, status: string) {
                 v-model="filterStatus"
                 class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white"
             >
-                <option value="">Todos los estados</option>
+                <option value="">{{ t('admin.orders.allStatuses') }}</option>
                 <option v-for="s in statuses" :key="s" :value="s">
                     {{ statusLabel(s) }}
                 </option>
@@ -213,7 +213,7 @@ function updateStatus(orderId: number, status: string) {
     <!-- Mobile cards -->
     <div class="sm:hidden space-y-3">
         <div v-if="orders.data.length === 0" class="rounded-2xl border border-slate-200 bg-white dark:border-[#66c0f4]/50 dark:bg-slate-800 px-6 py-10 text-center text-slate-400 dark:text-slate-500">
-            No hay pedidos con los filtros aplicados
+            {{ t('admin.orders.empty') }}
         </div>
         <div
             v-for="order in orders.data"
@@ -250,12 +250,12 @@ function updateStatus(orderId: number, status: string) {
                 :href="`/admin/orders/${order.id}`"
                 class="block w-full rounded-lg bg-slate-100 px-3 py-2 text-center text-xs font-medium text-slate-600 transition hover:bg-amber-500/10 hover:text-amber-600 dark:bg-slate-700 dark:text-slate-300 dark:hover:text-amber-400"
             >
-                Ver detalle →
+                {{ t('admin.orders.viewDetail') }}
             </Link>
         </div>
         <!-- Pagination mobile -->
         <div v-if="orders.last_page > 1" class="flex items-center justify-between px-1 py-2">
-            <p class="text-xs text-slate-500 dark:text-slate-400">Página {{ orders.current_page }} de {{ orders.last_page }}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">{{ t('admin.orders.page') }} {{ orders.current_page }} {{ t('admin.orders.of') }} {{ orders.last_page }}</p>
             <div class="flex gap-1">
                 <template v-for="link in orders.links" :key="link.label">
                     <Link v-if="link.url" :href="link.url" preserve-scroll :class="['flex h-8 min-w-8 items-center justify-center rounded-lg px-2 text-xs font-medium transition', link.active ? 'bg-amber-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-amber-500/10 hover:text-amber-600 dark:bg-slate-700 dark:text-slate-300 dark:hover:text-amber-400']" v-html="link.label" />
@@ -281,27 +281,27 @@ function updateStatus(orderId: number, status: string) {
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
-                            Cliente
+                            {{ t('admin.orders.colClient') }}
                         </th>
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
-                            Productos
+                            {{ t('admin.orders.colProducts') }}
                         </th>
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
-                            Total
+                            {{ t('admin.orders.colTotal') }}
                         </th>
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
-                            Estado
+                            {{ t('admin.orders.colStatus') }}
                         </th>
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
-                            Fecha
+                            {{ t('admin.orders.colDate') }}
                         </th>
                         <th class="px-6 py-3"></th>
                     </tr>
@@ -381,7 +381,7 @@ function updateStatus(orderId: number, status: string) {
                                 :href="`/admin/orders/${order.id}`"
                                 class="rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-medium whitespace-nowrap text-slate-600 transition hover:bg-amber-500/10 hover:text-amber-600 dark:bg-slate-700 dark:text-slate-300 dark:hover:text-amber-400"
                             >
-                                Ver detalle →
+                                {{ t('admin.orders.viewDetail') }}
                             </Link>
                         </td>
                     </tr>
@@ -390,7 +390,7 @@ function updateStatus(orderId: number, status: string) {
                             colspan="7"
                             class="px-6 py-12 text-center text-slate-400 dark:text-slate-500"
                         >
-                            No hay pedidos con los filtros aplicados
+                            {{ t('admin.orders.empty') }}
                         </td>
                     </tr>
                 </tbody>
@@ -403,7 +403,7 @@ function updateStatus(orderId: number, status: string) {
             class="flex items-center justify-between border-t border-slate-200 px-6 py-4 dark:border-[#66c0f4]"
         >
             <p class="text-xs text-slate-500 dark:text-slate-400">
-                Página {{ orders.current_page }} de {{ orders.last_page }}
+                {{ t('admin.orders.page') }} {{ orders.current_page }} {{ t('admin.orders.of') }} {{ orders.last_page }}
             </p>
             <div class="flex gap-1">
                 <template v-for="link in orders.links" :key="link.label">

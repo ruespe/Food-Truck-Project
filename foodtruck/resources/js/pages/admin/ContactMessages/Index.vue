@@ -2,8 +2,11 @@
 import { Head, router } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import AdminLayout from '@/layouts/AdminLayout.vue';
+import { useI18n } from '@/composables/useI18n';
 
 defineOptions({ layout: AdminLayout });
+
+const { t } = useI18n();
 
 const props = defineProps<{
     messages: Array<{
@@ -23,7 +26,7 @@ function markRead(id: number) {
 }
 
 function destroy(id: number) {
-    if (confirm('¿Eliminar este mensaje?')) {
+    if (confirm(t('admin.msg.deleteConfirm'))) {
         router.delete(`/admin/contact/${id}`, { preserveScroll: true });
     }
 }
@@ -45,18 +48,15 @@ function formatDate(iso: string) {
     <div class="mb-6 flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold text-slate-900 dark:text-white">
-                Mensajes de contacto
+                {{ t('admin.msg.title') }}
             </h1>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                {{ messages.length }} mensaje{{
-                    messages.length !== 1 ? 's' : ''
-                }}
-                en total
+                {{ messages.length }} {{ messages.length !== 1 ? t('admin.msg.totalSuffixPlural') : t('admin.msg.totalSuffix') }}
                 <span
                     v-if="unread > 0"
                     class="ml-2 rounded-full bg-amber-500 px-2 py-0.5 text-xs font-bold text-white"
                 >
-                    {{ unread }} sin leer
+                    {{ unread }} {{ t('admin.msg.unread') }}
                 </span>
             </p>
         </div>
@@ -69,7 +69,7 @@ function formatDate(iso: string) {
     >
         <p class="mb-3 text-4xl">📭</p>
         <p class="text-slate-500 dark:text-slate-400">
-            No hay mensajes de contacto aún
+            {{ t('admin.msg.empty') }}
         </p>
     </div>
 
@@ -98,7 +98,7 @@ function formatDate(iso: string) {
                         <span
                             v-if="!msg.read"
                             class="rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase"
-                            >Nuevo</span
+                            >{{ t('admin.msg.new') }}</span
                         >
                         <span class="text-xs text-slate-500">{{
                             formatDate(msg.created_at)
@@ -123,16 +123,16 @@ function formatDate(iso: string) {
                         class="rounded-lg bg-green-500/15 px-3 py-1.5 text-xs font-medium text-green-400 transition hover:bg-green-500/25"
                         @click="markRead(msg.id)"
                     >
-                        ✓ Marcar leído
+                        {{ t('admin.msg.markRead') }}
                     </button>
                     <span v-else class="text-xs text-slate-500 italic"
-                        >Leído</span
+                        >{{ t('admin.msg.read') }}</span
                     >
                     <button
                         class="rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500/20"
                         @click="destroy(msg.id)"
                     >
-                        Eliminar
+                        {{ t('admin.msg.delete') }}
                     </button>
                 </div>
             </div>

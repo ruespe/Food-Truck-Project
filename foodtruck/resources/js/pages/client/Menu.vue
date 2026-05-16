@@ -110,6 +110,7 @@ function addToCart(product: Product) {
         </div>
     </Transition>
 
+    <div class="min-h-screen bg-orange-50 dark:bg-orange-950/20">
     <div class="mx-auto max-w-6xl px-4 py-10">
         <div class="mb-6">
             <h1 class="text-3xl font-bold text-gray-800 dark:text-white">
@@ -280,5 +281,6 @@ function addToCart(product: Product) {
                 {{ t('menu.seeCart') }} ({{ count }})
             </a>
         </div>
+    </div>
     </div>
 </template>

@@ -275,20 +275,7 @@ function saveLocation() {
                 {{ t('admin.dash.subtitle') }}
             </p>
         </div>
-        <button
-            class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs text-slate-500 transition hover:border-amber-400 hover:text-amber-600 dark:border-[#66c0f4] dark:bg-slate-800 dark:text-slate-400 dark:hover:text-amber-400"
-            @click="refreshData"
-        >
-            <TrendingUp class="h-3.5 w-3.5" />
-            {{ t('admin.dash.refresh') }} ·
-            {{
-                lastRefresh.toLocaleTimeString('es-ES', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                })
-            }}
-        </button>
+
     </div>
 
     <!-- Stat cards -->

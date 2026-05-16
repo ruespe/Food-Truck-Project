@@ -2,8 +2,11 @@
 import { Head, router, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import AdminLayout from '@/layouts/AdminLayout.vue';
+import { useI18n } from '@/composables/useI18n';
 
 defineOptions({ layout: AdminLayout });
+
+const { t } = useI18n();
 
 const props = defineProps<{
     reviews: Array<{
@@ -27,7 +30,7 @@ function toggleVisible(id: number) {
 }
 
 function destroy(id: number, name: string) {
-    if (confirm(`¿Eliminar la reseña de ${name}?`)) {
+    if (confirm(`${t('admin.rev.deleteConfirmPrefix')} ${name}?`)) {
         router.delete(`/admin/reviews/${id}`, { preserveScroll: true });
     }
 }
@@ -47,14 +50,14 @@ function destroy(id: number, name: string) {
     <!-- Header -->
     <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Reseñas</h1>
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-white">{{ t('admin.rev.title') }}</h1>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                {{ reviews.length }} reseña{{ reviews.length !== 1 ? 's' : '' }} en total
+                {{ reviews.length }} {{ reviews.length !== 1 ? t('admin.rev.totalSuffixPlural') : t('admin.rev.totalSuffix') }}
                 <span
                     v-if="pending > 0"
                     class="ml-2 rounded-full bg-purple-500 px-2 py-0.5 text-xs font-bold text-white"
                 >
-                    {{ pending }} pendiente{{ pending !== 1 ? 's' : '' }}
+                    {{ pending }} {{ pending !== 1 ? t('admin.rev.pendingSuffixPlural') : t('admin.rev.pendingSuffix') }}
                 </span>
             </p>
         </div>
@@ -66,7 +69,7 @@ function destroy(id: number, name: string) {
         class="rounded-2xl border border-slate-200 bg-white px-8 py-20 text-center shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800"
     >
         <p class="mb-3 text-4xl">⭐</p>
-        <p class="text-slate-500 dark:text-slate-400">No hay reseñas todavía</p>
+        <p class="text-slate-500 dark:text-slate-400">{{ t('admin.rev.empty') }}</p>
     </div>
 
     <!-- Lista -->
@@ -94,13 +97,13 @@ function destroy(id: number, name: string) {
                             v-if="!review.visible"
                             class="rounded-full bg-purple-500 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase"
                         >
-                            Pendiente
+                            {{ t('admin.rev.pendingBadge') }}
                         </span>
                         <span
                             v-else
                             class="rounded-full bg-green-500/20 px-2 py-0.5 text-[10px] font-bold tracking-wide text-green-500 uppercase"
                         >
-                            Visible
+                            {{ t('admin.rev.visibleBadge') }}
                         </span>
                         <span class="text-xs text-slate-500">{{ review.created_at }}</span>
                     </div>
@@ -122,7 +125,7 @@ function destroy(id: number, name: string) {
                     >
                         "{{ review.comment }}"
                     </p>
-                    <p v-else class="text-sm italic text-slate-400">Sin comentario</p>
+                    <p v-else class="text-sm italic text-slate-400">{{ t('admin.rev.noComment') }}</p>
                 </div>
 
                 <!-- Acciones -->
@@ -136,13 +139,13 @@ function destroy(id: number, name: string) {
                         "
                         @click="toggleVisible(review.id)"
                     >
-                        {{ review.visible ? '✕ Ocultar' : '✓ Aprobar' }}
+                        {{ review.visible ? t('admin.rev.hide') : t('admin.rev.approve') }}
                     </button>
                     <button
                         class="rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500/20"
                         @click="destroy(review.id, review.user_name)"
                     >
-                        Eliminar
+                        {{ t('admin.rev.delete') }}
                     </button>
                 </div>
             </div>

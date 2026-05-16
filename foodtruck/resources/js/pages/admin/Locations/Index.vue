@@ -3,8 +3,11 @@ import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import MapLocation from '@/components/MapLocation.vue';
 import AdminLayout from '@/layouts/AdminLayout.vue';
+import { useI18n } from '@/composables/useI18n';
 
 defineOptions({ layout: AdminLayout });
+
+const { t } = useI18n();
 
 const props = defineProps<{
     locations: Array<{
@@ -36,8 +39,8 @@ const form = useForm({
 function openCreate() {
     editId.value = null;
     form.reset();
-    mapLat.value = 40.4153;
-    mapLng.value = -3.7074;
+    mapLat.value = 41.5381;
+    mapLng.value = 2.4449;
     showForm.value = true;
 }
 
@@ -81,7 +84,7 @@ function submit() {
 }
 
 function destroy(id: number) {
-    if (confirm('¿Eliminar esta ubicación?')) {
+    if (confirm(t('admin.loc.deleteConfirm'))) {
         router.delete(`/admin/locations/${id}`);
     }
 }
@@ -97,17 +100,17 @@ function selectToday(id: number) {
     <div class="mb-6 flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold text-slate-900 dark:text-white">
-                Ubicación del truck
+                {{ t('admin.loc.title') }}
             </h1>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                Programa dónde estará el food truck cada día
+                {{ t('admin.loc.subtitle') }}
             </p>
         </div>
         <button
             class="rounded-xl bg-amber-500 px-4 py-2 text-sm font-bold text-white transition hover:bg-amber-600"
             @click="openCreate"
         >
-            + Nueva ubicación
+            {{ t('admin.loc.new') }}
         </button>
     </div>
 
@@ -118,19 +121,19 @@ function selectToday(id: number) {
     >
         <form class="space-y-3" @submit.prevent="submit">
             <h2 class="mb-2 font-semibold text-slate-900 dark:text-white">
-                {{ editId ? 'Editar ubicación' : 'Nueva ubicación' }}
+                {{ editId ? t('admin.loc.formEdit') : t('admin.loc.formCreate') }}
             </h2>
             <input
                 v-model="form.name"
                 type="text"
-                placeholder="Nombre del lugar"
+                :placeholder="t('admin.loc.namePlaceholder')"
                 required
                 class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white"
             />
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="text-xs text-slate-500 dark:text-slate-400"
-                        >Latitud</label
+                        >{{ t('admin.loc.latitude') }}</label
                     >
                     <input
                         :value="parseFloat(String(form.latitude)).toFixed(7)"
@@ -141,7 +144,7 @@ function selectToday(id: number) {
                 </div>
                 <div>
                     <label class="text-xs text-slate-500 dark:text-slate-400"
-                        >Longitud</label
+                        >{{ t('admin.loc.longitude') }}</label
                     >
                     <input
                         :value="parseFloat(String(form.longitude)).toFixed(7)"
@@ -161,8 +164,8 @@ function selectToday(id: number) {
                 <div>
                     <label
                         class="mb-1 block text-xs text-slate-500 dark:text-slate-400"
-                        >Apertura
-                        <span class="text-slate-400">(min. 19:00)</span></label
+                        >{{ t('admin.loc.openTime') }}
+                        <span class="text-slate-400">{{ t('admin.loc.openTimeHint') }}</span></label
                     >
                     <input
                         v-model="form.start_time"
@@ -174,8 +177,8 @@ function selectToday(id: number) {
                 <div>
                     <label
                         class="mb-1 block text-xs text-slate-500 dark:text-slate-400"
-                        >Cierre
-                        <span class="text-slate-400">(máx. 07:00)</span></label
+                        >{{ t('admin.loc.closeTime') }}
+                        <span class="text-slate-400">{{ t('admin.loc.closeTimeHint') }}</span></label
                     >
                     <input
                         v-model="form.end_time"
@@ -186,21 +189,21 @@ function selectToday(id: number) {
                 </div>
             </div>
             <p class="text-xs text-slate-500 dark:text-slate-500">
-                Arrastra el pin en el mapa para ajustar la ubicación exacta.
+                {{ t('admin.loc.mapHint') }}
             </p>
             <div class="flex gap-2">
                 <button
                     type="submit"
                     class="rounded-xl bg-amber-500 px-5 py-2 text-sm font-bold text-white transition hover:bg-amber-600"
                 >
-                    Guardar
+                    {{ t('admin.loc.save') }}
                 </button>
                 <button
                     type="button"
                     class="rounded-xl border border-slate-200 px-5 py-2 text-sm text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700"
                     @click="showForm = false"
                 >
-                    Cancelar
+                    {{ t('admin.loc.cancel') }}
                 </button>
             </div>
         </form>
@@ -222,7 +225,7 @@ function selectToday(id: number) {
     <!-- Mobile cards -->
     <div class="sm:hidden space-y-3">
         <div v-if="locations.length === 0" class="rounded-2xl border border-slate-200 bg-white dark:border-[#66c0f4]/50 dark:bg-slate-800 px-6 py-10 text-center text-slate-500">
-            No hay ubicaciones registradas
+            {{ t('admin.loc.empty') }}
         </div>
         <div
             v-for="loc in locations"
@@ -234,7 +237,7 @@ function selectToday(id: number) {
         >
             <div class="flex items-start justify-between gap-2">
                 <p class="font-medium text-slate-900 dark:text-white">{{ loc.name }}</p>
-                <span v-if="loc.date === today" class="flex-shrink-0 rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold text-white uppercase">Hoy</span>
+                <span v-if="loc.date === today" class="flex-shrink-0 rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold text-white uppercase">{{ t('admin.loc.today') }}</span>
             </div>
             <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-600 dark:text-slate-300">
                 <span>📅 {{ loc.date ? loc.date.split('-').reverse().join('/') : '—' }}</span>
@@ -246,16 +249,16 @@ function selectToday(id: number) {
                     v-if="loc.date !== today"
                     class="rounded-lg bg-amber-500/10 px-3 py-1.5 text-xs font-medium text-amber-600 transition hover:bg-amber-500/20 dark:text-amber-400"
                     @click="selectToday(loc.id)"
-                >📍 Seleccionar para hoy</button>
-                <span v-else class="inline-flex items-center gap-1 rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-bold text-white">✓ Activa hoy</span>
+                >{{ t('admin.loc.selectToday') }}</button>
+                <span v-else class="inline-flex items-center gap-1 rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-bold text-white">{{ t('admin.loc.activeToday') }}</span>
                 <button
                     class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
                     @click="openEdit(loc)"
-                >Editar</button>
+                >{{ t('admin.loc.edit') }}</button>
                 <button
                     class="rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500/20"
                     @click="destroy(loc.id)"
-                >Eliminar</button>
+                >{{ t('admin.loc.delete') }}</button>
             </div>
         </div>
     </div>
@@ -271,27 +274,27 @@ function selectToday(id: number) {
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
-                            Lugar
+                            {{ t('admin.loc.colPlace') }}
                         </th>
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
-                            Fecha
+                            {{ t('admin.loc.colDate') }}
                         </th>
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
-                            Horario
+                            {{ t('admin.loc.colSchedule') }}
                         </th>
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
-                            Coordenadas
+                            {{ t('admin.loc.colCoords') }}
                         </th>
                         <th
                             class="px-6 py-3 text-left text-xs font-medium tracking-wide text-slate-500 uppercase dark:text-slate-400"
                         >
-                            Acciones
+                            {{ t('admin.loc.colActions') }}
                         </th>
                     </tr>
                 </thead>
@@ -328,7 +331,7 @@ function selectToday(id: number) {
                                 <span
                                     v-if="loc.date === today"
                                     class="rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold text-white uppercase"
-                                    >Hoy</span
+                                    >{{ t('admin.loc.today') }}</span
                                 >
                             </span>
                         </td>
@@ -348,25 +351,25 @@ function selectToday(id: number) {
                                     class="rounded-lg bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-600 transition hover:bg-amber-500/20 dark:text-amber-400"
                                     @click="selectToday(loc.id)"
                                 >
-                                    📍 Seleccionar para hoy
+                                    {{ t('admin.loc.selectToday') }}
                                 </button>
                                 <span
                                     v-else
                                     class="inline-flex items-center gap-1 rounded-lg bg-amber-500 px-3 py-1 text-xs font-bold text-white"
                                 >
-                                    ✓ Activa hoy
+                                    {{ t('admin.loc.activeToday') }}
                                 </span>
                                 <button
                                     class="rounded-lg border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
                                     @click="openEdit(loc)"
                                 >
-                                    Editar
+                                    {{ t('admin.loc.edit') }}
                                 </button>
                                 <button
                                     class="rounded-lg bg-red-500/10 px-3 py-1 text-xs font-medium text-red-400 transition hover:bg-red-500/20"
                                     @click="destroy(loc.id)"
                                 >
-                                    Eliminar
+                                    {{ t('admin.loc.delete') }}
                                 </button>
                             </div>
                         </td>
@@ -376,7 +379,7 @@ function selectToday(id: number) {
                             colspan="5"
                             class="px-6 py-10 text-center text-slate-500"
                         >
-                            No hay ubicaciones registradas
+                            {{ t('admin.loc.empty') }}
                         </td>
                     </tr>
                 </tbody>

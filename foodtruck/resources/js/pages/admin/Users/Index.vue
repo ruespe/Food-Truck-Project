@@ -3,8 +3,11 @@ import AdminLayout from '@/layouts/AdminLayout.vue';
 import { Head, router, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import { ShieldCheck, User, UserX, Trash2, RefreshCw } from 'lucide-vue-next';
+import { useI18n } from '@/composables/useI18n';
 
 defineOptions({ layout: AdminLayout });
+
+const { t } = useI18n();
 
 const props = defineProps<{
     users: Array<{
@@ -42,7 +45,7 @@ function toggleActive(userId: number) {
 
 // ── Delete ────────────────────────────────────────────────────────────────────
 function destroy(userId: number, name: string) {
-    if (confirm(`¿Eliminar al usuario "${name}"? Esta acción no se puede deshacer.`)) {
+    if (confirm(`${t('admin.users.deleteConfirmPrefix')} "${name}"${t('admin.users.deleteConfirmSuffix')}`)) {
         router.delete(`/admin/users/${userId}`, { preserveScroll: true });
     }
 }
@@ -81,8 +84,8 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
     <!-- Header -->
     <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Usuarios</h1>
-            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Gestiona los usuarios y sus permisos</p>
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-white">{{ t('admin.users.title') }}</h1>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{{ t('admin.users.subtitle') }}</p>
         </div>
 
         <!-- Stats chips -->
@@ -94,10 +97,10 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
                 {{ totalAdmins }} admin
             </span>
             <span class="rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-600 dark:text-blue-400">
-                {{ totalClients }} clientes
+                {{ totalClients }} {{ t('admin.users.clients') }}
             </span>
             <span v-if="totalInactive > 0" class="rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-500">
-                {{ totalInactive }} inactivos
+                {{ totalInactive }} {{ t('admin.users.inactive') }}
             </span>
         </div>
     </div>
@@ -107,31 +110,31 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
         <input
             v-model="search"
             type="search"
-            placeholder="Buscar por nombre o email…"
+            :placeholder="t('admin.users.searchPlaceholder')"
             class="rounded-xl border border-slate-200 dark:border-[#66c0f4] bg-white dark:bg-slate-800 px-4 py-2 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 min-w-[220px]"
         />
         <select
             v-model="filterRole"
             class="rounded-xl border border-slate-200 dark:border-[#66c0f4] bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
         >
-            <option value="all">Todos los roles</option>
-            <option value="admin">Admin</option>
-            <option value="client">Cliente</option>
+            <option value="all">{{ t('admin.users.allRoles') }}</option>
+            <option value="admin">{{ t('admin.users.roleAdmin') }}</option>
+            <option value="client">{{ t('admin.users.roleClient') }}</option>
         </select>
         <select
             v-model="filterActive"
             class="rounded-xl border border-slate-200 dark:border-[#66c0f4] bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
         >
-            <option value="all">Todos los estados</option>
-            <option value="active">Activos</option>
-            <option value="inactive">Inactivos</option>
+            <option value="all">{{ t('admin.users.allStatuses') }}</option>
+            <option value="active">{{ t('admin.users.filterActive') }}</option>
+            <option value="inactive">{{ t('admin.users.filterInactive') }}</option>
         </select>
     </div>
 
     <!-- Mobile cards -->
     <div class="sm:hidden space-y-3">
         <div v-if="filtered.length === 0" class="rounded-2xl border border-slate-200 bg-white dark:border-[#66c0f4]/50 dark:bg-slate-800 px-6 py-10 text-center text-slate-400 dark:text-slate-500">
-            No se encontraron usuarios con esos filtros
+            {{ t('admin.users.empty') }}
         </div>
         <div
             v-for="user in filtered"
@@ -145,10 +148,10 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
                 <div class="min-w-0">
                     <p class="font-medium text-slate-900 dark:text-white truncate">
                         {{ user.name }}
-                        <span v-if="user.id === currentUserId" class="ml-1 rounded-full bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500 dark:text-slate-400">Tú</span>
+                        <span v-if="user.id === currentUserId" class="ml-1 rounded-full bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500 dark:text-slate-400">{{ t('admin.users.you') }}</span>
                     </p>
                     <p class="text-xs text-slate-400 truncate">{{ user.email }}</p>
-                    <span v-if="!user.verified" class="inline-block mt-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/30 px-1.5 py-0.5 text-[10px] font-semibold text-yellow-500">Sin verificar</span>
+                    <span v-if="!user.verified" class="inline-block mt-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/30 px-1.5 py-0.5 text-[10px] font-semibold text-yellow-500">{{ t('admin.users.unverified') }}</span>
                 </div>
             </div>
             <div class="flex items-center justify-between gap-2 flex-wrap">
@@ -162,8 +165,8 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
                             : 'border-blue-500/40 bg-blue-500/10 text-blue-600 dark:text-blue-400 dark:bg-blue-500/10 dark:border-blue-500/30'"
                         @change="updateRole(user.id, ($event.target as HTMLSelectElement).value)"
                     >
-                        <option value="admin">Admin</option>
-                        <option value="client">Cliente</option>
+                        <option value="admin">{{ t('admin.users.roleAdmin') }}</option>
+                        <option value="client">{{ t('admin.users.roleClient') }}</option>
                     </select>
                     <RefreshCw v-if="changingRole === user.id" class="h-3 w-3 animate-spin text-amber-500" />
                     <span
@@ -172,14 +175,14 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
                             : 'bg-red-500/10 text-red-500 border-red-500/30'"
                         class="rounded-full border px-2.5 py-0.5 text-xs font-semibold"
                     >
-                        {{ user.active ? 'Activo' : 'Inactivo' }}
+                        {{ user.active ? t('admin.users.activeStatus') : t('admin.users.inactiveStatus') }}
                     </span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="text-xs text-slate-500 dark:text-slate-400">{{ user.orders_count }} pedidos</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400">{{ user.orders_count }} {{ t('admin.users.orders') }}</span>
                     <button
                         :disabled="user.id === currentUserId"
-                        :title="user.active ? 'Desactivar cuenta' : 'Activar cuenta'"
+                        :title="user.active ? t('admin.users.deactivate') : t('admin.users.activate')"
                         :class="user.active ? 'border-orange-500/30 text-orange-500 hover:bg-orange-500/10' : 'border-green-500/30 text-green-500 hover:bg-green-500/10'"
                         class="rounded-lg border px-2.5 py-1.5 text-xs font-medium transition disabled:cursor-not-allowed disabled:opacity-40"
                         @click="toggleActive(user.id)"
@@ -189,7 +192,7 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
                     </button>
                     <button
                         :disabled="user.id === currentUserId"
-                        title="Eliminar usuario"
+                        :title="t('admin.users.deleteUser')"
                         class="rounded-lg border border-red-500/30 px-2.5 py-1.5 text-xs font-medium text-red-500 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-40"
                         @click="destroy(user.id, user.name)"
                     >
@@ -197,7 +200,7 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
                     </button>
                 </div>
             </div>
-            <p class="text-xs text-slate-400">Registro: {{ user.created_at }}</p>
+            <p class="text-xs text-slate-400">{{ t('admin.users.colCreated') }}: {{ user.created_at }}</p>
         </div>
     </div>
 
@@ -207,12 +210,12 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-slate-200 dark:border-[#66c0f4] text-left">
-                    <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Usuario</th>
-                    <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Rol</th>
-                    <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Estado</th>
-                    <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400 text-center">Pedidos</th>
-                    <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Registro</th>
-                    <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400 text-right">Acciones</th>
+                    <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ t('admin.users.colUser') }}</th>
+                    <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ t('admin.users.colRole') }}</th>
+                    <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ t('admin.users.colStatus') }}</th>
+                    <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400 text-center">{{ t('admin.users.colOrders') }}</th>
+                    <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ t('admin.users.colCreated') }}</th>
+                    <th class="px-6 py-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400 text-right">{{ t('admin.users.colActions') }}</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 dark:divide-slate-700/50">
@@ -227,10 +230,10 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
                             <div>
                                 <p class="font-medium text-slate-900 dark:text-white">
                                     {{ user.name }}
-                                    <span v-if="user.id === currentUserId" class="ml-1 rounded-full bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500 dark:text-slate-400">Tú</span>
+                                    <span v-if="user.id === currentUserId" class="ml-1 rounded-full bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500 dark:text-slate-400">{{ t('admin.users.you') }}</span>
                                 </p>
                                 <p class="text-xs text-slate-400">{{ user.email }}</p>
-                                <span v-if="!user.verified" class="inline-block mt-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/30 px-1.5 py-0.5 text-[10px] font-semibold text-yellow-500">Sin verificar</span>
+                                <span v-if="!user.verified" class="inline-block mt-0.5 rounded-full bg-yellow-500/10 border border-yellow-500/30 px-1.5 py-0.5 text-[10px] font-semibold text-yellow-500">{{ t('admin.users.unverified') }}</span>
                             </div>
                         </div>
                     </td>
@@ -246,8 +249,8 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
                                 : 'border-blue-500/40 bg-blue-500/10 text-blue-600 dark:text-blue-400 dark:bg-blue-500/10 dark:border-blue-500/30'"
                             @change="updateRole(user.id, ($event.target as HTMLSelectElement).value)"
                         >
-                            <option value="admin">Admin</option>
-                            <option value="client">Cliente</option>
+                            <option value="admin">{{ t('admin.users.roleAdmin') }}</option>
+                            <option value="client">{{ t('admin.users.roleClient') }}</option>
                         </select>
                         <RefreshCw v-if="changingRole === user.id" class="inline ml-1 h-3 w-3 animate-spin text-amber-500" />
                     </td>
@@ -260,7 +263,7 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
                                 : 'bg-red-500/10 text-red-500 border-red-500/30'"
                             class="rounded-full border px-2.5 py-0.5 text-xs font-semibold"
                         >
-                            {{ user.active ? 'Activo' : 'Inactivo' }}
+                            {{ user.active ? t('admin.users.activeStatus') : t('admin.users.inactiveStatus') }}
                         </span>
                     </td>
 
@@ -278,7 +281,7 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
                             <!-- Toggle active -->
                             <button
                                 :disabled="user.id === currentUserId"
-                                :title="user.active ? 'Desactivar cuenta' : 'Activar cuenta'"
+                                :title="user.active ? t('admin.users.deactivate') : t('admin.users.activate')"
                                 :class="user.active
                                     ? 'border-orange-500/30 text-orange-500 hover:bg-orange-500/10'
                                     : 'border-green-500/30 text-green-500 hover:bg-green-500/10'"
@@ -292,7 +295,7 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
                             <!-- Delete -->
                             <button
                                 :disabled="user.id === currentUserId"
-                                title="Eliminar usuario"
+                                :title="t('admin.users.deleteUser')"
                                 class="rounded-lg border border-red-500/30 px-2.5 py-1.5 text-xs font-medium text-red-500 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-40"
                                 @click="destroy(user.id, user.name)"
                             >
@@ -304,7 +307,7 @@ const totalInactive = computed(() => props.users.filter((u) => !u.active).length
 
                 <tr v-if="filtered.length === 0">
                     <td colspan="6" class="px-6 py-12 text-center text-slate-400 dark:text-slate-500">
-                        No se encontraron usuarios con esos filtros
+                        {{ t('admin.users.empty') }}
                     </td>
                 </tr>
             </tbody>

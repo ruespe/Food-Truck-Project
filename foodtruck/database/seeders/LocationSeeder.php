@@ -12,12 +12,12 @@ class LocationSeeder extends Seeder
     {
         $locations = [
             [
-                'name'       => 'Plaça de Catalunya, Barcelona',
-                'latitude'   => 41.3870154,
-                'longitude'  => 2.1700471,
+                'name'       => 'Polígon Industrial, Mataró',
+                'latitude'   => 41.532272,
+                'longitude'  => 2.4294393,
                 'date'       => Carbon::now()->subDays(14)->toDateString(),
                 'start_time' => '19:00:00',
-                'end_time'   => '02:00:00',
+                'end_time'   => '07:00:00',
             ],
             [
                 'name'       => 'Parc de la Ciutadella, Barcelona',
@@ -28,7 +28,7 @@ class LocationSeeder extends Seeder
                 'end_time'   => '03:00:00',
             ],
             [
-                'name'       => 'Barceloneta Beach, Barcelona',
+                'name'       => 'Platja de la Barceloneta, Barcelona',
                 'latitude'   => 41.3780000,
                 'longitude'  => 2.1920000,
                 'date'       => Carbon::now()->subDays(3)->toDateString(),
