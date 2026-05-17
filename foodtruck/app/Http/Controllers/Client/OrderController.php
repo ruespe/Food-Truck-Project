@@ -99,10 +99,11 @@ class OrderController extends Controller
 
         foreach ($lines as $line) {
             OrderItem::create([
-                'order_id'   => $order->id,
-                'product_id' => $line['product']->id,
-                'quantity'   => $line['quantity'],
-                'price'      => $line['price'],
+                'order_id'     => $order->id,
+                'product_id'   => $line['product']->id,
+                'product_name' => $line['product']->name,
+                'quantity'     => $line['quantity'],
+                'price'        => $line['price'],
             ]);
         }
 

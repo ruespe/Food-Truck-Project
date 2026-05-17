@@ -12,13 +12,17 @@ class Review extends Model
         'rating',
         'comment',
         'visible',
+        'rejected',
+        'rejected_at',
     ];
 
     protected function casts(): array
     {
         return [
-            'rating'  => 'integer',
-            'visible' => 'boolean',
+            'rating'      => 'integer',
+            'visible'     => 'boolean',
+            'rejected'    => 'boolean',
+            'rejected_at' => 'datetime',
         ];
     }
 

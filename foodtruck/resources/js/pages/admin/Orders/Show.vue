@@ -103,13 +103,13 @@ function updateStatus(status: string) {
                             class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-700"
                         >
                             <img
-                                v-if="item.product.image"
+                                v-if="item.product?.image"
                                 :src="
                                     item.product.image?.startsWith('http')
                                         ? item.product.image
                                         : `/storage/${item.product.image}`
                                 "
-                                :alt="td(item.product.name)"
+                                :alt="item.product ? td(item.product.name) : td(item.product_name)"
                                 class="h-full w-full object-cover"
                             />
                             <div
@@ -127,12 +127,12 @@ function updateStatus(status: string) {
                             <p
                                 class="truncate font-medium text-slate-900 dark:text-white"
                             >
-                                {{ td(item.product.name) }}
+                                {{ item.product ? td(item.product.name) : td(item.product_name) }}
                             </p>
                             <p
                                 class="mt-0.5 line-clamp-1 text-xs text-slate-400"
                             >
-                                {{ td(item.product.description) }}
+                                {{ item.product ? td(item.product.description) : '' }}
                             </p>
                             <p
                                 class="mt-1 text-xs text-slate-500 dark:text-slate-400"

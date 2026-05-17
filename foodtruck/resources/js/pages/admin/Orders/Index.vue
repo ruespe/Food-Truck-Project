@@ -17,7 +17,8 @@ type Order = {
     user: { name: string; email: string };
     items: Array<{
         quantity: number;
-        product: { name: Record<string, string> };
+        product_name: Record<string, string>;
+        product: { name: Record<string, string> } | null;
     }>;
 };
 
@@ -239,7 +240,7 @@ function updateStatus(orderId: number, status: string) {
             </div>
             <p class="text-xs text-slate-500 dark:text-slate-400 truncate">
                 <span v-for="(item, i) in order.items" :key="i">
-                    {{ item.quantity }}× {{ td(item.product.name) }}<span v-if="i < order.items.length - 1">, </span>
+                    {{ item.quantity }}× {{ item.product ? td(item.product.name) : td(item.product_name) }}<span v-if="i < order.items.length - 1">, </span>
                 </span>
             </p>
             <div class="flex items-center justify-between">
@@ -333,7 +334,7 @@ function updateStatus(orderId: number, status: string) {
                             class="max-w-xs truncate px-6 py-4 text-slate-500 dark:text-slate-400"
                         >
                             <span v-for="(item, i) in order.items" :key="i">
-                                {{ item.quantity }}× {{ td(item.product.name)
+                                {{ item.quantity }}× {{ item.product ? td(item.product.name) : td(item.product_name)
                                 }}<span v-if="i < order.items.length - 1"
                                     >,
                                 </span>

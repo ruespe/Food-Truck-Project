@@ -22,6 +22,7 @@ class ReviewController extends Controller
                 'rating'     => $r->rating,
                 'comment'    => $r->comment,
                 'visible'    => $r->visible,
+                'rejected'   => $r->rejected,
                 'created_at' => $r->created_at->format('d/m/Y H:i'),
             ]);
 
@@ -30,13 +31,18 @@ class ReviewController extends Controller
         ]);
     }
 
-    public function toggleVisible(Review $review): RedirectResponse
+    public function approve(Review $review): RedirectResponse
     {
-        $review->update(['visible' => ! $review->visible]);
+        $review->update(['visible' => true, 'rejected' => false, 'rejected_at' => null]);
 
-        $label = $review->visible ? 'aprobada' : 'ocultada';
+        return back()->with('success', 'Reseña aprobada y publicada.');
+    }
 
-        return back()->with('success', "Reseña {$label}.");
+    public function reject(Review $review): RedirectResponse
+    {
+        $review->update(['visible' => false, 'rejected' => true, 'rejected_at' => now()]);
+
+        return back()->with('success', 'Reseña rechazada.');
     }
 
     public function destroy(Review $review): RedirectResponse

@@ -206,6 +206,8 @@ const messages = {
         'admin.rev.noComment': 'Sin comentario',
         'admin.rev.hide': '✕ Ocultar',
         'admin.rev.approve': '✓ Aprobar',
+        'admin.rev.reject': '✕ Rechazar',
+        'admin.rev.rejectedBadge': 'Rechazada',
         'admin.rev.delete': 'Eliminar',
         'admin.rev.deleteConfirmPrefix': '¿Eliminar la reseña de',
         // Admin users
@@ -262,6 +264,8 @@ const messages = {
         'reviews.needsDelivered': 'Solo clientes con pedidos entregados pueden dejar una reseña.',
         'reviews.loginRequired': 'Inicia sesión para dejar una reseña.',
         'reviews.pending': 'Tu reseña está pendiente de aprobación.',
+        'reviews.approved': '¡Gracias! Tu reseña está publicada.',
+        'reviews.rejected': 'Tu reseña fue rechazada. Completa otro pedido para intentarlo de nuevo.',
         'reviews.noReviews': 'Sé el primero en dejar una reseña.',
         // Admin products
         'admin.prod.title': 'Productos',
@@ -620,6 +624,8 @@ const messages = {
         'admin.rev.noComment': 'No comment',
         'admin.rev.hide': '✕ Hide',
         'admin.rev.approve': '✓ Approve',
+        'admin.rev.reject': '✕ Reject',
+        'admin.rev.rejectedBadge': 'Rejected',
         'admin.rev.delete': 'Delete',
         'admin.rev.deleteConfirmPrefix': 'Delete review from',
         // Admin users
@@ -676,6 +682,8 @@ const messages = {
         'reviews.needsDelivered': 'Only customers with delivered orders can leave a review.',
         'reviews.loginRequired': 'Log in to leave a review.',
         'reviews.pending': 'Your review is pending approval.',
+        'reviews.approved': 'Thank you! Your review is published.',
+        'reviews.rejected': 'Your review was rejected. Complete another order to try again.',
         'reviews.noReviews': 'Be the first to leave a review.',
         // Admin products
         'admin.prod.title': 'Products',
@@ -1031,6 +1039,8 @@ const messages = {
         'admin.rev.noComment': 'Sense comentari',
         'admin.rev.hide': '✕ Ocultar',
         'admin.rev.approve': '✓ Aprovar',
+        'admin.rev.reject': '✕ Rebutjar',
+        'admin.rev.rejectedBadge': 'Rebutjada',
         'admin.rev.delete': 'Eliminar',
         'admin.rev.deleteConfirmPrefix': 'Eliminar la ressenya de',
         // Admin users
@@ -1087,6 +1097,8 @@ const messages = {
         'reviews.needsDelivered': 'Només els clients amb comandes lliurades poden deixar una ressenya.',
         'reviews.loginRequired': 'Inicia sessió per deixar una ressenya.',
         'reviews.pending': 'La teva ressenya està pendent d\'aprovació.',
+        'reviews.approved': 'Gràcies! La teva ressenya està publicada.',
+        'reviews.rejected': 'La teva ressenya va ser rebutjada. Completa una altra comanda per tornar-ho a intentar.',
         'reviews.noReviews': 'Sigues el primer a deixar una ressenya.',
         // Admin products
         'admin.prod.title': 'Productes',

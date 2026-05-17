@@ -31,9 +31,10 @@ class DashboardController extends Controller
             $days[$date] = round((float) ($revenueByDay[$date] ?? 0), 2);
         }
 
-        // Productos más vendidos — top 8
+        // Productos más vendidos — top 8 (excluir productos eliminados)
         $topProducts = OrderItem::select('product_id', DB::raw('SUM(quantity) as total_sold'))
             ->with('product:id,name')
+            ->whereNotNull('product_id')
             ->groupBy('product_id')
             ->orderByDesc('total_sold')
             ->take(8)

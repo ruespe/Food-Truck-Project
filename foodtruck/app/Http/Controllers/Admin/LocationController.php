@@ -25,13 +25,15 @@ class LocationController extends Controller
             'name'       => 'required|string|max:255',
             'latitude'   => 'required|numeric|between:-90,90',
             'longitude'  => 'required|numeric|between:-180,180',
-            'date'       => 'required|date',
+            'date'       => 'required|date|unique:locations,date',
             'start_time' => ['required', 'date_format:H:i', function ($attr, $val, $fail) {
                 if ($val < '19:00') $fail('La apertura debe ser a partir de las 19:00.');
             }],
             'end_time'   => ['required', 'date_format:H:i', function ($attr, $val, $fail) {
                 if ($val > '07:00' && $val < '19:00') $fail('El cierre debe ser antes de las 07:00 (madrugada).');
             }],
+        ], [
+            'date.unique' => 'Ya existe una ubicación para esa fecha.',
         ]);
 
         Location::create($request->all());
@@ -46,13 +48,15 @@ class LocationController extends Controller
             'name'       => 'required|string|max:255',
             'latitude'   => 'required|numeric|between:-90,90',
             'longitude'  => 'required|numeric|between:-180,180',
-            'date'       => 'required|date',
+            'date'       => 'required|date|unique:locations,date,' . $location->id,
             'start_time' => ['required', 'date_format:H:i', function ($attr, $val, $fail) {
                 if ($val < '19:00') $fail('La apertura debe ser a partir de las 19:00.');
             }],
             'end_time'   => ['required', 'date_format:H:i', function ($attr, $val, $fail) {
                 if ($val > '07:00' && $val < '19:00') $fail('El cierre debe ser antes de las 07:00 (madrugada).');
             }],
+        ], [
+            'date.unique' => 'Ya existe una ubicación para esa fecha.',
         ]);
 
         $location->update($request->all());

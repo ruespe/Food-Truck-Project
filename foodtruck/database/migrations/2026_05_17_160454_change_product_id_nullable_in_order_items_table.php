@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('order_items', function (Blueprint $table) {
+            // Drop the existing RESTRICT foreign key
+            $table->dropForeign(['product_id']);
+            // Make column nullable and set ON DELETE SET NULL
+            $table->unsignedBigInteger('product_id')->nullable()->change();
+            $table->foreign('product_id')->references('id')->on('products')->nullOnDelete();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('order_items', function (Blueprint $table) {
+            $table->dropForeign(['product_id']);
+            $table->unsignedBigInteger('product_id')->nullable(false)->change();
+            $table->foreign('product_id')->references('id')->on('products')->restrictOnDelete();
+        });
+    }
+};

@@ -21,12 +21,13 @@ const props = defineProps<{
             id: number;
             quantity: number;
             price: number;
+            product_name: Record<string, string>;
             product: {
                 id: number;
                 name: Record<string, string>;
                 image: string | null;
                 price: number;
-            };
+            } | null;
         }>;
         payment: { status: string; transaction_id: string | null } | null;
     };
@@ -94,6 +95,7 @@ function cancelOrder() {
 
 function reorder() {
     props.order.items.forEach((item) => {
+        if (!item.product) return; // product deleted, skip
         add(
             {
                 id: item.product.id,
@@ -221,7 +223,7 @@ onUnmounted(() => {
                         class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-700"
                     >
                         <img
-                            v-if="item.product.image"
+                            v-if="item.product?.image"
                             :src="item.product.image"
                             :alt="td(item.product.name)"
                             class="h-full w-full object-cover"
@@ -237,7 +239,7 @@ onUnmounted(() => {
                         <p
                             class="truncate font-semibold text-gray-800 dark:text-white"
                         >
-                            {{ td(item.product.name) }}
+                            {{ item.product ? td(item.product.name) : td(item.product_name) }}
                         </p>
                         <p class="mt-0.5 text-sm text-gray-400">
                             {{ item.quantity }} ×
@@ -353,8 +355,38 @@ onUnmounted(() => {
     .no-print {
         display: none !important;
     }
+
+    html,
     body {
         background: white !important;
+        color: black !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    * {
+        color: black !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    [class*='border'],
+    [class*='ring'],
+    [class*='divide'] > * {
+        border-color: #d1d5db !important;
+    }
+
+    .text-amber-500 {
+        color: #d97706 !important;
+    }
+
+    .flex.flex-col {
+        display: block !important;
+    }
+
+    main {
+        display: block !important;
     }
 }
 </style>

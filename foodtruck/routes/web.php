@@ -14,13 +14,15 @@ use Laravel\Fortify\Features;
 // ─── Pública ─────────────────────────────────────────────────────────────────
 
 Route::get('/', function () {
-    $location = Location::whereDate('date', today())->first() ?? new Location([
-        'name'       => 'Mataró, Barcelona',
-        'latitude'   => 41.5336796,
-        'longitude'  => 2.4377341,
-        'start_time' => '19:00:00',
-        'end_time'   => '07:00:00',
-    ]);
+    $location = Location::whereDate('date', today())->first()
+        ?? Location::whereNotNull('date')->latest('date')->first()
+        ?? new Location([
+            'name'       => 'Polígon Industrial, Mataró',
+            'latitude'   => 41.5322720,
+            'longitude'  => 2.4294393,
+            'start_time' => '19:00:00',
+            'end_time'   => '07:00:00',
+        ]);
 
     return inertia('Welcome', [
         'canRegister'      => Features::enabled(Features::registration()),
@@ -43,11 +45,25 @@ Route::get('/', function () {
                 'comment'    => $r->comment,
                 'created_at' => $r->created_at->format('d/m/Y'),
             ]),
-        'canReview'        => Auth::check()
-            ? Order::where('user_id', Auth::id())->where('status', 'delivered')->exists()
-            : false,
+        'canReview'        => (function () {
+            if (! Auth::check()) return false;
+            $userId = Auth::id();
+            $existingReview = Review::where('user_id', $userId)->first();
+            // Si tiene reseña aprobada o pendiente, no puede
+            if ($existingReview && ! $existingReview->rejected) return false;
+            // Si tiene reseña rechazada, necesita un pedido entregado DESPUÉS del rechazo
+            if ($existingReview && $existingReview->rejected) {
+                return Order::where('user_id', $userId)
+                    ->where('status', 'delivered')
+                    ->where('updated_at', '>', $existingReview->rejected_at)
+                    ->exists();
+            }
+            // Sin reseña: necesita al menos un pedido entregado
+            return Order::where('user_id', $userId)->where('status', 'delivered')->exists();
+        })(),
         'userReview'       => Auth::check()
             ? Review::where('user_id', Auth::id())->first()
+                ?->only(['rating', 'comment', 'visible', 'rejected'])
             : null,
     ]);
 })->name('home');
@@ -144,7 +160,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
 
     // Gestión de usuarios
     Route::get('reviews', [Admin\ReviewController::class, 'index'])->name('reviews.index');
-    Route::patch('reviews/{review}/toggle-visible', [Admin\ReviewController::class, 'toggleVisible'])->name('reviews.toggle-visible');
+    Route::patch('reviews/{review}/approve', [Admin\ReviewController::class, 'approve'])->name('reviews.approve');
+    Route::patch('reviews/{review}/reject', [Admin\ReviewController::class, 'reject'])->name('reviews.reject');
     Route::delete('reviews/{review}', [Admin\ReviewController::class, 'destroy'])->name('reviews.destroy');
 
     Route::get('users', [Admin\UserController::class, 'index'])->name('users.index');

@@ -11,12 +11,13 @@ interface OrderItem {
     id: number;
     quantity: number;
     price: number;
+    product_name: Record<string, string>;
     product: {
         id: number;
         name: Record<string, string>;
         price: number;
         image: string | null;
-    };
+    } | null;
 }
 
 interface Order {
@@ -70,6 +71,7 @@ function setFilter(f: string) {
 
 function reorder(order: Order) {
     order.items.forEach((item) => {
+        if (!item.product) return; // product deleted, skip
         add(
             {
                 id: item.product.id,
@@ -159,7 +161,7 @@ function reorder(order: Order) {
                         >
                             <li v-for="item in order.items" :key="item.id">
                                 {{ item.quantity }} ×
-                                {{ td(item.product.name) }} —
+                                {{ item.product ? td(item.product.name) : td(item.product_name) }} —
                                 {{
                                     (
                                         parseFloat(String(item.price)) *

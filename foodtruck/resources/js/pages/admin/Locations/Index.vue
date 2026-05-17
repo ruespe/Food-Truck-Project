@@ -31,7 +31,7 @@ const form = useForm({
     name: '',
     latitude: 41.5381,
     longitude: 2.4449,
-    date: new Date().toISOString().slice(0, 10),
+    date: '',
     start_time: '19:00',
     end_time: '07:00',
 });
@@ -39,6 +39,7 @@ const form = useForm({
 function openCreate() {
     editId.value = null;
     form.reset();
+    form.date = '';
     mapLat.value = 41.5381;
     mapLng.value = 2.4449;
     showForm.value = true;
@@ -130,6 +131,7 @@ function selectToday(id: number) {
                 required
                 class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white"
             />
+            <p v-if="form.errors.name" class="text-xs text-red-400">{{ form.errors.name }}</p>
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="text-xs text-slate-500 dark:text-slate-400"
@@ -160,6 +162,7 @@ function selectToday(id: number) {
                 required
                 class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white"
             />
+            <p v-if="form.errors.date" class="text-xs text-red-400">{{ form.errors.date }}</p>
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label
@@ -173,6 +176,7 @@ function selectToday(id: number) {
                         required
                         class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                     />
+                    <p v-if="form.errors.start_time" class="text-xs text-red-400">{{ form.errors.start_time }}</p>
                 </div>
                 <div>
                     <label
@@ -186,6 +190,7 @@ function selectToday(id: number) {
                         required
                         class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-900 focus:border-amber-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                     />
+                    <p v-if="form.errors.end_time" class="text-xs text-red-400">{{ form.errors.end_time }}</p>
                 </div>
             </div>
             <p class="text-xs text-slate-500 dark:text-slate-500">

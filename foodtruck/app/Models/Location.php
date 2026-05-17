@@ -26,4 +26,9 @@ class Location extends Model
             'date'      => 'date:Y-m-d',
         ];
     }
+
+    public function getDateAttribute($value): ?string
+    {
+        return $value ? \Carbon\Carbon::parse($value)->format('Y-m-d') : null;
+    }
 }

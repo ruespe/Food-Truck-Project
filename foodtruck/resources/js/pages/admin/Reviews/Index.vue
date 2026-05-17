@@ -16,6 +16,7 @@ const props = defineProps<{
         rating: number;
         comment: string | null;
         visible: boolean;
+        rejected: boolean;
         created_at: string;
     }>;
 }>();
@@ -23,10 +24,14 @@ const props = defineProps<{
 const page = usePage();
 const flash = computed(() => (page.props as any).flash as { success?: string } | undefined);
 
-const pending = computed(() => props.reviews.filter((r) => !r.visible).length);
+const pending = computed(() => props.reviews.filter((r) => !r.visible && !r.rejected).length);
 
-function toggleVisible(id: number) {
-    router.patch(`/admin/reviews/${id}/toggle-visible`, {}, { preserveScroll: true });
+function approve(id: number) {
+    router.patch(`/admin/reviews/${id}/approve`, {}, { preserveScroll: true });
+}
+
+function reject(id: number) {
+    router.patch(`/admin/reviews/${id}/reject`, {}, { preserveScroll: true });
 }
 
 function destroy(id: number, name: string) {
@@ -81,7 +86,9 @@ function destroy(id: number, name: string) {
             :class="
                 review.visible
                     ? 'border-slate-200 bg-white shadow-sm dark:border-[#66c0f4]/50 dark:bg-slate-800'
-                    : 'border-purple-500/40 bg-white shadow-[0_0_0_1px_rgba(168,85,247,0.15)] dark:bg-slate-800'
+                    : review.rejected
+                        ? 'border-red-500/40 bg-white shadow-[0_0_0_1px_rgba(239,68,68,0.15)] dark:bg-slate-800'
+                        : 'border-purple-500/40 bg-white shadow-[0_0_0_1px_rgba(168,85,247,0.15)] dark:bg-slate-800'
             "
         >
             <div class="flex flex-col gap-4 p-6 sm:flex-row sm:items-start sm:justify-between">
@@ -94,10 +101,16 @@ function destroy(id: number, name: string) {
                         </span>
                         <span class="font-semibold text-slate-900 dark:text-white">{{ review.user_name }}</span>
                         <span
-                            v-if="!review.visible"
+                            v-if="!review.visible && !review.rejected"
                             class="rounded-full bg-purple-500 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase"
                         >
                             {{ t('admin.rev.pendingBadge') }}
+                        </span>
+                        <span
+                            v-else-if="review.rejected"
+                            class="rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase"
+                        >
+                            {{ t('admin.rev.rejectedBadge') }}
                         </span>
                         <span
                             v-else
@@ -131,15 +144,25 @@ function destroy(id: number, name: string) {
                 <!-- Acciones -->
                 <div class="flex shrink-0 gap-2 sm:flex-col sm:items-end">
                     <button
-                        class="rounded-lg px-3 py-1.5 text-xs font-medium transition"
-                        :class="
-                            review.visible
-                                ? 'bg-slate-500/15 text-slate-500 hover:bg-slate-500/25'
-                                : 'bg-green-500/15 text-green-400 hover:bg-green-500/25'
-                        "
-                        @click="toggleVisible(review.id)"
+                        v-if="!review.visible"
+                        class="rounded-lg bg-green-500/15 px-3 py-1.5 text-xs font-medium text-green-400 transition hover:bg-green-500/25"
+                        @click="approve(review.id)"
                     >
-                        {{ review.visible ? t('admin.rev.hide') : t('admin.rev.approve') }}
+                        {{ t('admin.rev.approve') }}
+                    </button>
+                    <button
+                        v-if="!review.rejected && !review.visible"
+                        class="rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500/20"
+                        @click="reject(review.id)"
+                    >
+                        {{ t('admin.rev.reject') }}
+                    </button>
+                    <button
+                        v-if="review.visible"
+                        class="rounded-lg bg-slate-500/15 px-3 py-1.5 text-xs font-medium text-slate-500 transition hover:bg-slate-500/25"
+                        @click="reject(review.id)"
+                    >
+                        {{ t('admin.rev.hide') }}
                     </button>
                     <button
                         class="rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500/20"

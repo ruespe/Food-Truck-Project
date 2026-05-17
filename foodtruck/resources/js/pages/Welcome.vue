@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import CloudinaryImage from '@/components/CloudinaryImage.vue';
 import ImagePlaceholder from '@/components/ImagePlaceholder.vue';
@@ -38,12 +38,10 @@ const props = defineProps<{
     } | null;
     reviews?: Review[];
     canReview?: boolean;
-    userReview?: { rating: number; comment: string | null; visible: boolean } | null;
+    userReview?: { rating: number; comment: string | null; visible: boolean; rejected: boolean } | null;
 }>();
 
 const { t } = useI18n();
-const page = usePage();
-const isAuth = computed(() => !!(page.props.auth as any)?.user);
 
 function isBebida(product: FeaturedProduct) {
     return (product.category?.name as any)?.es === 'Bebidas';
@@ -484,19 +482,11 @@ function submitReview() {
 
         <!-- Formulario de reseña -->
         <div class="mx-auto max-w-lg">
-            <!-- Usuario con pedido entregado -->
+            <!-- Usuario con pedido entregado y sin reseña activa -->
             <div v-if="canReview" class="rounded-2xl border border-orange-200 bg-orange-50 p-6 dark:border-orange-900/30 dark:bg-gray-800">
                 <h3 class="mb-4 text-center text-lg font-bold text-gray-800 dark:text-white">
-                    {{ userReview ? t('reviews.editTitle') : t('reviews.formTitle') }}
+                    {{ t('reviews.formTitle') }}
                 </h3>
-
-                <!-- Aviso reseña pendiente -->
-                <div
-                    v-if="userReview && !userReview.visible"
-                    class="mb-4 rounded-lg border border-purple-500/30 bg-purple-500/10 px-4 py-2.5 text-center text-sm text-purple-400"
-                >
-                    {{ t('reviews.pending') }}
-                </div>
 
                 <form @submit.prevent="submitReview" class="space-y-4">
                     <!-- Estrellas interactivas -->
@@ -533,17 +523,33 @@ function submitReview() {
                         :disabled="reviewForm.rating === 0 || reviewForm.processing"
                         class="w-full rounded-xl bg-amber-500 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                        {{ userReview ? t('reviews.update') : t('reviews.submit') }}
+                        {{ t('reviews.submit') }}
                     </button>
                 </form>
             </div>
 
-            <!-- No autenticado -->
+            <!-- Reseña pendiente de aprobación -->
             <div
-                v-else-if="!isAuth"
-                class="rounded-2xl border border-gray-200 bg-gray-50 px-6 py-5 text-center text-sm text-gray-500 dark:border-slate-700 dark:bg-gray-800 dark:text-slate-400"
+                v-else-if="userReview && !userReview.visible && !userReview.rejected"
+                class="rounded-2xl border border-purple-500/30 bg-purple-500/10 px-6 py-5 text-center text-sm text-purple-400 dark:border-purple-500/20 dark:bg-purple-500/5"
             >
-                <a href="/login" class="font-medium text-amber-600 hover:underline dark:text-amber-400">{{ t('reviews.loginRequired') }}</a>
+                {{ t('reviews.pending') }}
+            </div>
+
+            <!-- Reseña aprobada -->
+            <div
+                v-else-if="userReview && userReview.visible"
+                class="rounded-2xl border border-green-500/30 bg-green-500/10 px-6 py-5 text-center text-sm text-green-500 dark:border-green-500/20 dark:bg-green-500/5"
+            >
+                {{ t('reviews.approved') }}
+            </div>
+
+            <!-- Reseña rechazada, necesita otro pedido -->
+            <div
+                v-else-if="userReview && userReview.rejected"
+                class="rounded-2xl border border-red-500/30 bg-red-500/10 px-6 py-5 text-center text-sm text-red-400 dark:border-red-500/20 dark:bg-red-500/5"
+            >
+                {{ t('reviews.rejected') }}
             </div>
         </div>
         </div>
